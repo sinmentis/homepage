@@ -1,0 +1,10 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+  font: 16px/1.6 system-ui, sans-serif; }
+main { padding: 2rem; max-width: 36rem; text-align: center; }
+h1 { font-size: clamp(2rem, 6vw, 3rem); margin: 0 0 .25rem; }
+.tag { opacity: .7; margin: 0 0 1.5rem; }
+nav a { text-decoration: none; padding: .4rem .8rem; border: 1px solid currentColor;
+  border-radius: .5rem; opacity: .8; }
+nav a:hover { opacity: 1; }
