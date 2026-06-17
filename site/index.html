@@ -3,23 +3,130 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Shun Lyu</title>
+  <title>Shun Lyu — Software Engineer</title>
+  <meta name="description" content="Shun Lyu — Software Engineer in Auckland, New Zealand. Cloud-native development, CI/CD automation, and developer productivity.">
   <link rel="stylesheet" href="/vendor/primer/light.css">
   <link rel="stylesheet" href="/vendor/primer/dark.css">
   <link rel="stylesheet" href="/vendor/primer/primer.css">
-  <link rel="stylesheet" href="/style.css?v=2">
+  <link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
-  <main class="page home-hero">
-    <div>
-      <h1>Shun Lyu</h1>
-      <p class="f3">Engineer. Building small useful things.</p>
-      <nav class="site-nav" style="justify-content:center">
-        <a class="btn" href="/resume/">Résumé</a>
-        <a class="btn" href="https://github.com/sinmentis">GitHub</a>
-        <a class="btn" href="https://www.linkedin.com/in/shunlyu">LinkedIn</a>
+  <!-- ====================== App bar ====================== -->
+  <header class="appbar" id="appbar">
+    <div class="appbar__inner">
+      <a class="brand" href="/" aria-label="Shun Lyu — home">
+        <span class="brand__mark" aria-hidden="true">SL</span>
+        <span class="brand__name">Shun&nbsp;Lyu</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a class="navlink" href="/resume/">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+          Résumé
+        </a>
+        <a class="navlink" href="https://github.com/sinmentis" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+          <span class="hide-sm">GitHub</span>
+        </a>
+        <a class="navlink" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+          <span class="hide-sm">LinkedIn</span>
+        </a>
       </nav>
     </div>
+  </header>
+
+  <main class="site-main">
+    <!-- ====================== Hero ====================== -->
+    <section class="hero">
+      <div class="hero__inner">
+        <span class="badge badge--neutral hero__eyebrow">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="width:13px;height:13px"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
+          Auckland · New Zealand
+        </span>
+
+        <h1 class="hero__title">Shun&nbsp;Lyu</h1>
+        <p class="hero__lead">Engineer. Building small useful things.</p>
+        <p class="muted" style="margin-top:.5rem">Currently a Software&nbsp;Engineer at Microsoft.</p>
+
+        <div class="hero__cta">
+          <a class="btn-ui btn-ui--primary btn-ui--lg" href="/resume/">
+            <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+            View Résumé
+          </a>
+          <a class="btn-ui btn-ui--lg" href="https://github.com/sinmentis" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            GitHub
+          </a>
+          <a class="btn-ui btn-ui--lg" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <!-- What I work on -->
+      <div class="hero__inner">
+        <div class="focus-grid">
+          <article class="card focus-card">
+            <span class="focus-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+            </span>
+            <h2 class="focus-card__title">Cloud-Native &amp; CI/CD</h2>
+            <p class="focus-card__body">Reliable pipelines and automation — from GitHub Actions to containerized, multi-platform builds.</p>
+          </article>
+
+          <article class="card focus-card">
+            <span class="focus-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>
+            </span>
+            <h2 class="focus-card__title">Platforms &amp; Embedded</h2>
+            <p class="focus-card__body">From the Linux kernel and Android AOSP down to embedded firmware in C and C++.</p>
+          </article>
+
+          <article class="card focus-card">
+            <span class="focus-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+            </span>
+            <h2 class="focus-card__title">Developer Productivity</h2>
+            <p class="focus-card__body">Tooling, static analysis, and build systems that cut feedback loops and speed teams up.</p>
+          </article>
+        </div>
+
+        <div class="stack-row" aria-label="Core technologies">
+          <span class="eyebrow">Working with</span>
+          <span class="chip">C</span>
+          <span class="chip">C++</span>
+          <span class="chip">C#/.NET</span>
+          <span class="chip">Python</span>
+          <span class="chip">Docker</span>
+          <span class="chip">Linux</span>
+          <span class="chip">GitHub Actions</span>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- ====================== Footer ====================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>© <span id="year">2026</span> Shun Lyu</span>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="/resume/">Résumé</a>
+        <a href="https://github.com/sinmentis" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Subtle app-bar hairline once the page is scrolled (premium detail).
+    (function () {
+      var bar = document.getElementById('appbar');
+      var onScroll = function () { bar.classList.toggle('is-stuck', window.scrollY > 4); };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
