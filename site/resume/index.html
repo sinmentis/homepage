@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/vendor/primer/primer.css">
   <link rel="stylesheet" href="/style.css?v=3">
   <link rel="stylesheet" href="/home.css?v=1">
-  <link rel="stylesheet" href="/resume.css?v=1">
+  <link rel="stylesheet" href="/resume.css?v=2">
 
   <!-- No-FOUC: apply saved theme + enable JS-only reveal states before paint -->
   <script>
@@ -128,86 +128,182 @@
           </header>
 
           <!-- Summary -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">Summary</h2>
-            <p class="rx-summary">Software Engineer with <strong>7+ years</strong> across embedded systems,
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">Summary</h2>
+            <p class="rx-summary reveal" style="--i:1">Software Engineer with <strong>7+ years</strong> across embedded systems,
             Linux platforms, and cloud infrastructure. Currently on the <strong>Microsoft Azure</strong> team
             building distributed systems and infrastructure automation. Strong technical depth in
             C, C++, C#, and Python, with a proven track record improving service reliability and
             developer productivity across embedded and cloud platforms.</p>
+            <ul class="rx-stats reveal" style="--i:2" aria-label="Career at a glance">
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
+                <span class="rx-stat__label">Years experience</span>
+              </li>
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="4">4</span>
+                <span class="rx-stat__label">Companies</span>
+              </li>
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="3">3</span>
+                <span class="rx-stat__label">Domains</span>
+              </li>
+            </ul>
           </section>
 
           <!-- Experience -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">Experience</h2>
+          <section class="rx-section" id="exp-en">
+            <h2 class="rx-section__title reveal">Experience</h2>
+
+            <!-- Interactive career timeline — overview + jump-to navigation -->
+            <nav class="rx-timeline reveal" aria-label="Career timeline — select a role to jump to it">
+              <div class="rx-timeline__scroll">
+                <ol class="rx-timeline__track" style="--rx-count:4">
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-en-fp"
+                      aria-label="2020 to 2022 — Electrical Software Engineer at Fisher &amp; Paykel">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2020</span>
+                      <span class="rx-timeline__org">Fisher &amp; Paykel</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-en-navico"
+                      aria-label="2022 to 2024 — Linux Platform Software Developer at Navico Group">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2022</span>
+                      <span class="rx-timeline__org">Navico</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-en-crown"
+                      aria-label="2024 to 2026 — Software Engineer at Crown Equipment">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2024</span>
+                      <span class="rx-timeline__org">Crown</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item rx-timeline__item--current">
+                    <button type="button" class="rx-timeline__node" data-target="r-en-microsoft"
+                      aria-label="2026 to Present — Software Engineer, Azure Infrastructure at Microsoft">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2026</span>
+                      <span class="rx-timeline__org">Microsoft</span>
+                      <span class="rx-timeline__now">Now</span>
+                    </button>
+                  </li>
+                </ol>
+              </div>
+            </nav>
+
             <div class="rx-roles">
 
-              <article class="rx-role rx-role--current">
+              <article class="rx-role rx-role--current reveal" style="--i:1" id="r-en-microsoft" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">Software Engineer, Azure Infrastructure</h3>
-                  <span class="rx-role__when">Apr 2026 – Present</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">Apr 2026 – Present</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-microsoft">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">Toggle role details</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>Auckland, New Zealand</p>
-                <ul class="rx-role__points">
-                  <li>Build and operate cloud infrastructure for Microsoft Azure — designing distributed systems and services for scale, reliability, and performance.</li>
-                  <li>Develop infrastructure automation and internal tooling that streamlines provisioning, deployment, and day-to-day operations.</li>
-                  <li>Drive reliability engineering practices — observability, automated recovery, and safe, progressive rollouts across services.</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">Tech</span>
-                  <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">Distributed Systems</span>
+                <div class="rx-role__detail" id="d-en-microsoft">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>Build and operate cloud infrastructure for Microsoft Azure — designing distributed systems and services for scale, reliability, and performance.</li>
+                    <li>Develop infrastructure automation and internal tooling that streamlines provisioning, deployment, and day-to-day operations.</li>
+                    <li>Drive reliability engineering practices — observability, automated recovery, and safe, progressive rollouts across services.</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">Tech</span>
+                    <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">Distributed Systems</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:2" id="r-en-crown" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">Software Engineer</h3>
-                  <span class="rx-role__when">Jun 2024 – Mar 2026</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">Jun 2024 – Mar 2026</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-crown">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">Toggle role details</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>Robotics Technology Centre<span class="rx-role__sep">·</span>Auckland</p>
-                <ul class="rx-role__points">
-                  <li>Led adoption of the C#/.NET ecosystem in internal Android projects; pioneered MAUI/Android local optimizations and automated build flows.</li>
-                  <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# apps, including containerized Android builds.</li>
-                  <li>Automated dependency management, package publishing, and test orchestration.</li>
-                  <li>Built static-analysis and performance-measurement frameworks (C++, C#, Python).</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">Tech</span>
-                  <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                <div class="rx-role__detail" id="d-en-crown">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>Led adoption of the C#/.NET ecosystem in internal Android projects; pioneered MAUI/Android local optimizations and automated build flows.</li>
+                    <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# apps, including containerized Android builds.</li>
+                    <li>Automated dependency management, package publishing, and test orchestration.</li>
+                    <li>Built static-analysis and performance-measurement frameworks (C++, C#, Python).</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">Tech</span>
+                    <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:3" id="r-en-navico" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">Linux Platform Software Developer</h3>
-                  <span class="rx-role__when">May 2022 – Jun 2024</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">May 2022 – Jun 2024</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-navico">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">Toggle role details</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>Auckland</p>
-                <ul class="rx-role__points">
-                  <li>Designed and implemented modules on ARM-based Linux hardware; debugged bootloaders and kernels for platform stability.</li>
-                  <li>Introduced Docker to the development workflow.</li>
-                  <li>Standardized build pipelines; containerized toolchains for embedded Linux and AOSP.</li>
-                  <li>Automated provisioning and integration testing (Python/Bash).</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">Tech</span>
-                  <span class="chip">Linux Kernel</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                <div class="rx-role__detail" id="d-en-navico">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>Designed and implemented modules on ARM-based Linux hardware; debugged bootloaders and kernels for platform stability.</li>
+                    <li>Introduced Docker to the development workflow.</li>
+                    <li>Standardized build pipelines; containerized toolchains for embedded Linux and AOSP.</li>
+                    <li>Automated provisioning and integration testing (Python/Bash).</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">Tech</span>
+                    <span class="chip">Linux Kernel</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:4" id="r-en-fp" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">Electrical Software Engineer</h3>
-                  <span class="rx-role__when">Jan 2020 – May 2022</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">Jan 2020 – May 2022</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-fp">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">Toggle role details</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>Dunedin / Auckland</p>
-                <ul class="rx-role__points">
-                  <li>Pioneered Docker-based development environments for UI &amp; sensing teams.</li>
-                  <li>Delivered next-generation connected appliances: embedded Linux, bare-metal firmware, and QT UI.</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">Tech</span>
-                  <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
+                <div class="rx-role__detail" id="d-en-fp">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>Pioneered Docker-based development environments for UI &amp; sensing teams.</li>
+                    <li>Delivered next-generation connected appliances: embedded Linux, bare-metal firmware, and QT UI.</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">Tech</span>
+                    <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
@@ -215,10 +311,10 @@
           </section>
 
           <!-- Skills -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">Skills</h2>
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">Skills</h2>
             <div class="rx-skills">
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:1">
                 <span class="rx-skill__label">Languages</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>C</span>
@@ -229,7 +325,7 @@
                   <span class="tech-chip"><span class="dot"></span>Bash</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:2">
                 <span class="rx-skill__label">Cloud &amp; Infrastructure</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>Azure</span>
@@ -241,7 +337,7 @@
                   <span class="tech-chip"><span class="dot"></span>Distributed Systems</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:3">
                 <span class="rx-skill__label">Platforms</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>Linux (kernel &amp; userspace)</span>
@@ -250,7 +346,7 @@
                   <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:4">
                 <span class="rx-skill__label">Specializations</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>System Reliability</span>
@@ -262,44 +358,23 @@
           </section>
 
           <!-- Education -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">Education</h2>
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">Education</h2>
             <div class="rx-edu">
-              <div class="rx-edu__item">
+              <div class="rx-edu__item reveal" style="--i:1">
                 <div class="rx-edu__main">
                   <span class="rx-edu__degree">Master of Fintech and Investment Management</span>
                   <span class="rx-edu__org"> — Lincoln University, New Zealand</span>
                 </div>
                 <span class="rx-edu__when">Jul 2025</span>
               </div>
-              <div class="rx-edu__item">
+              <div class="rx-edu__item reveal" style="--i:2">
                 <div class="rx-edu__main">
                   <span class="rx-edu__degree">BE (Hons), Computer Engineering</span>
                   <span class="rx-edu__org"> — University of Canterbury, New Zealand · minors: Communication &amp; Network Engineering</span>
                 </div>
                 <span class="rx-edu__when">Nov 2019</span>
               </div>
-            </div>
-          </section>
-
-          <!-- Projects -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">Selected Projects</h2>
-            <div class="rx-projects">
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">Workflow Optimization <span class="rx-proj__tag">Internal</span></h3>
-                <p class="rx-proj__body">Led the Jenkins → GitHub Actions migration; cut feedback-cycle time by 40%; explored AI-driven workflow analysis.</p>
-              </article>
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">Steam &amp; Microwave Oven <span class="rx-proj__tag">Fisher &amp; Paykel</span></h3>
-                <p class="rx-proj__body">Control algorithms and embedded Linux UI for the company's first steam/microwave combo, from concept to launch.</p>
-              </article>
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">Ultra-Wide Marine Display <span class="rx-proj__tag">Simrad NSX</span></h3>
-                <p class="rx-proj__body">Led software integration for the first ultra-wide marine display —
-                <a href="https://www.simrad-yachting.com/nsx-ultrawide/" target="_blank" rel="noopener">Simrad NSX Ultrawide</a>;
-                microprocessor-platform migration; redesigned the upper-layer architecture.</p>
-              </article>
             </div>
           </section>
         </div>
@@ -346,84 +421,180 @@
           </header>
 
           <!-- 概述 -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">概述</h2>
-            <p class="rx-summary">拥有 <strong>7 年以上</strong>经验的软件工程师，横跨嵌入式系统、Linux 平台和云基础设施。
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">概述</h2>
+            <p class="rx-summary reveal" style="--i:1">拥有 <strong>7 年以上</strong>经验的软件工程师，横跨嵌入式系统、Linux 平台和云基础设施。
             目前在 <strong>微软 Azure</strong> 团队负责分布式系统和基础设施自动化。精通 C、C++、C# 和 Python，
             在嵌入式和云平台上均有提升服务可靠性和开发者生产力的成功记录。</p>
+            <ul class="rx-stats reveal" style="--i:2" aria-label="职业概览">
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
+                <span class="rx-stat__label">年经验</span>
+              </li>
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="4">4</span>
+                <span class="rx-stat__label">家公司</span>
+              </li>
+              <li class="rx-stat">
+                <span class="rx-stat__num" data-count="3">3</span>
+                <span class="rx-stat__label">个领域</span>
+              </li>
+            </ul>
           </section>
 
           <!-- 工作经历 -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">工作经历</h2>
+          <section class="rx-section" id="exp-zh">
+            <h2 class="rx-section__title reveal">工作经历</h2>
+
+            <!-- 交互式职业时间线 — 概览 + 快速跳转 -->
+            <nav class="rx-timeline reveal" aria-label="职业时间线 — 选择某段经历可跳转">
+              <div class="rx-timeline__scroll">
+                <ol class="rx-timeline__track" style="--rx-count:4">
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-zh-fp"
+                      aria-label="2020 至 2022 — Fisher & Paykel 电子软件工程师">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2020</span>
+                      <span class="rx-timeline__org">Fisher &amp; Paykel</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-zh-navico"
+                      aria-label="2022 至 2024 — Navico Group Linux 平台软件开发工程师">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2022</span>
+                      <span class="rx-timeline__org">Navico</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item">
+                    <button type="button" class="rx-timeline__node" data-target="r-zh-crown"
+                      aria-label="2024 至 2026 — Crown Equipment 软件工程师">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2024</span>
+                      <span class="rx-timeline__org">Crown</span>
+                    </button>
+                  </li>
+                  <li class="rx-timeline__item rx-timeline__item--current">
+                    <button type="button" class="rx-timeline__node" data-target="r-zh-microsoft"
+                      aria-label="2026 至今 — Microsoft 软件工程师，Azure 基础设施">
+                      <span class="rx-timeline__dot"></span>
+                      <span class="rx-timeline__year">2026</span>
+                      <span class="rx-timeline__org">Microsoft</span>
+                      <span class="rx-timeline__now">至今</span>
+                    </button>
+                  </li>
+                </ol>
+              </div>
+            </nav>
+
             <div class="rx-roles">
 
-              <article class="rx-role rx-role--current">
+              <article class="rx-role rx-role--current reveal" style="--i:1" id="r-zh-microsoft" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">软件工程师，Azure 基础设施</h3>
-                  <span class="rx-role__when">2026.4 – 至今</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">2026.4 – 至今</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-microsoft">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">展开 / 收起详情</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>新西兰，奥克兰</p>
-                <ul class="rx-role__points">
-                  <li>为微软 Azure 构建并运维云基础设施——设计面向规模、可靠性与性能的分布式系统与服务。</li>
-                  <li>开发基础设施自动化与内部工具，简化资源配置、部署与日常运维流程。</li>
-                  <li>推进可靠性工程实践——可观测性、自动恢复，以及安全、渐进式的服务发布。</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">技术栈</span>
-                  <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">分布式系统</span>
+                <div class="rx-role__detail" id="d-zh-microsoft">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>为微软 Azure 构建并运维云基础设施——设计面向规模、可靠性与性能的分布式系统与服务。</li>
+                    <li>开发基础设施自动化与内部工具，简化资源配置、部署与日常运维流程。</li>
+                    <li>推进可靠性工程实践——可观测性、自动恢复，以及安全、渐进式的服务发布。</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">技术栈</span>
+                    <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">分布式系统</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:2" id="r-zh-crown" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">软件工程师</h3>
-                  <span class="rx-role__when">2024.6 – 2026.3</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">2024.6 – 2026.3</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-crown">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">展开 / 收起详情</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>机器人技术中心<span class="rx-role__sep">·</span>奥克兰</p>
-                <ul class="rx-role__points">
-                  <li>主导在公司内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 本地优化与自动化构建流程。</li>
-                  <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
-                  <li>自动化依赖管理、包发布与测试编排。</li>
-                  <li>搭建跨语言的静态分析与性能度量框架（C++、C#、Python）。</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">技术栈</span>
-                  <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                <div class="rx-role__detail" id="d-zh-crown">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>主导在公司内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 本地优化与自动化构建流程。</li>
+                    <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
+                    <li>自动化依赖管理、包发布与测试编排。</li>
+                    <li>搭建跨语言的静态分析与性能度量框架（C++、C#、Python）。</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">技术栈</span>
+                    <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:3" id="r-zh-navico" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">Linux 平台软件开发工程师</h3>
-                  <span class="rx-role__when">2022.5 – 2024.6</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">2022.5 – 2024.6</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-navico">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">展开 / 收起详情</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>奥克兰</p>
-                <ul class="rx-role__points">
-                  <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统；调试 bootloader 与内核以保障平台稳定性。</li>
-                  <li>将 Docker 引入开发流程。</li>
-                  <li>标准化构建流水线；为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
-                  <li>用 Python/Bash 自动化环境准备与集成测试。</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">技术栈</span>
-                  <span class="chip">Linux 内核</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                <div class="rx-role__detail" id="d-zh-navico">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统；调试 bootloader 与内核以保障平台稳定性。</li>
+                    <li>将 Docker 引入开发流程。</li>
+                    <li>标准化构建流水线；为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
+                    <li>用 Python/Bash 自动化环境准备与集成测试。</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">技术栈</span>
+                    <span class="chip">Linux 内核</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
-              <article class="rx-role">
+              <article class="rx-role reveal" style="--i:4" id="r-zh-fp" tabindex="-1">
                 <div class="rx-role__head">
                   <h3 class="rx-role__title">电子软件工程师</h3>
-                  <span class="rx-role__when">2020.1 – 2022.5</span>
+                  <div class="rx-role__meta">
+                    <span class="rx-role__when">2020.1 – 2022.5</span>
+                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-fp">
+                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
+                      <span class="visually-hidden">展开 / 收起详情</span>
+                    </button>
+                  </div>
                 </div>
                 <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>但尼丁 / 奥克兰</p>
-                <ul class="rx-role__points">
-                  <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境。</li>
-                  <li>参与新一代联网家电的核心交付：嵌入式 Linux、裸机固件、QT 界面。</li>
-                </ul>
-                <div class="rx-tech">
-                  <span class="rx-tech__label">技术栈</span>
-                  <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
+                <div class="rx-role__detail" id="d-zh-fp">
+                  <div class="rx-role__detail-inner">
+                  <ul class="rx-role__points">
+                    <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境。</li>
+                    <li>参与新一代联网家电的核心交付：嵌入式 Linux、裸机固件、QT 界面。</li>
+                  </ul>
+                  <div class="rx-tech">
+                    <span class="rx-tech__label">技术栈</span>
+                    <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
+                  </div>
+                  </div>
                 </div>
               </article>
 
@@ -431,10 +602,10 @@
           </section>
 
           <!-- 技能 -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">技能</h2>
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">技能</h2>
             <div class="rx-skills">
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:1">
                 <span class="rx-skill__label">编程语言</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>C</span>
@@ -445,7 +616,7 @@
                   <span class="tech-chip"><span class="dot"></span>Bash</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:2">
                 <span class="rx-skill__label">云与基础设施</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>Azure</span>
@@ -457,7 +628,7 @@
                   <span class="tech-chip"><span class="dot"></span>分布式系统</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:3">
                 <span class="rx-skill__label">平台</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>Linux（内核与用户态）</span>
@@ -466,7 +637,7 @@
                   <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
                 </div>
               </div>
-              <div class="rx-skill">
+              <div class="rx-skill reveal" style="--i:4">
                 <span class="rx-skill__label">专长</span>
                 <div class="rx-skill__chips">
                   <span class="tech-chip"><span class="dot"></span>系统可靠性</span>
@@ -478,44 +649,23 @@
           </section>
 
           <!-- 教育 -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">教育</h2>
+          <section class="rx-section">
+            <h2 class="rx-section__title reveal">教育</h2>
             <div class="rx-edu">
-              <div class="rx-edu__item">
+              <div class="rx-edu__item reveal" style="--i:1">
                 <div class="rx-edu__main">
                   <span class="rx-edu__degree">金融科技与投资管理硕士</span>
                   <span class="rx-edu__org"> — 林肯大学（新西兰）</span>
                 </div>
                 <span class="rx-edu__when">2025.7</span>
               </div>
-              <div class="rx-edu__item">
+              <div class="rx-edu__item reveal" style="--i:2">
                 <div class="rx-edu__main">
                   <span class="rx-edu__degree">工程荣誉学士，计算机工程</span>
                   <span class="rx-edu__org"> — 坎特伯雷大学（新西兰）· 辅修：通信与网络工程</span>
                 </div>
                 <span class="rx-edu__when">2019.11</span>
               </div>
-            </div>
-          </section>
-
-          <!-- 代表项目 -->
-          <section class="rx-section reveal">
-            <h2 class="rx-section__title">代表项目</h2>
-            <div class="rx-projects">
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">工作流优化 <span class="rx-proj__tag">内部</span></h3>
-                <p class="rx-proj__body">主导 Jenkins → GitHub Actions 迁移；将反馈周期缩短 40%；探索 AI 驱动的工作流分析。</p>
-              </article>
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">蒸箱与微波炉 <span class="rx-proj__tag">Fisher &amp; Paykel</span></h3>
-                <p class="rx-proj__body">为公司首款蒸烤/微波一体机开发控制算法与嵌入式 Linux 界面，从概念到量产。</p>
-              </article>
-              <article class="rx-proj">
-                <h3 class="rx-proj__name">超宽船用显示屏 <span class="rx-proj__tag">Simrad NSX</span></h3>
-                <p class="rx-proj__body">主导首款超宽船用显示屏的软件集成 —
-                <a href="https://www.simrad-yachting.com/nsx-ultrawide/" target="_blank" rel="noopener">Simrad NSX Ultrawide</a>；
-                微处理器平台迁移；重构上层软件架构。</p>
-              </article>
             </div>
           </section>
         </div>
@@ -611,6 +761,132 @@
         reveals.forEach(function (el) { io.observe(el); });
       }
 
+      /* ---- Count-up stats (animate on first reveal) ---- */
+      function countUp(el) {
+        if (el.getAttribute('data-counted') === '1') return;
+        el.setAttribute('data-counted', '1');
+        var target = parseFloat(el.getAttribute('data-count')) || 0;
+        var suffix = el.getAttribute('data-suffix') || '';
+        if (reduce) { el.textContent = target + suffix; return; }
+        var dur = 1200, start = null;
+        function step(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(step);
+      }
+      var counters = [].slice.call(document.querySelectorAll('[data-count]'));
+      if (reduce || !('IntersectionObserver' in window)) {
+        counters.forEach(countUp);
+      } else {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); }
+          });
+        }, { threshold: 0.6 });
+        counters.forEach(function (el) { cio.observe(el); });
+      }
+
+      /* ---- Expandable role details ---- */
+      function setRoleExpanded(role, open) {
+        if (!role) return;
+        role.classList.toggle('is-collapsed', !open);
+        var btn = role.querySelector('.rx-role__toggle');
+        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      [].slice.call(document.querySelectorAll('.rx-role__toggle')).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var role = btn.closest('.rx-role');
+          setRoleExpanded(role, btn.getAttribute('aria-expanded') !== 'true');
+        });
+      });
+
+      /* ---- Interactive career timeline (scrollspy + jump-to, per language) ---- */
+      var timelineApis = [];
+      function initTimeline(scope) {
+        var timeline = scope.querySelector('.rx-timeline');
+        if (!timeline) return null;
+        var scroller = timeline.querySelector('.rx-timeline__scroll');
+        var nodes = [].slice.call(timeline.querySelectorAll('.rx-timeline__node'));
+        var roles = nodes.map(function (n) { return document.getElementById(n.getAttribute('data-target')); });
+        var current = -1;
+
+        function setActive(idx) {
+          if (idx < 0 || idx === current) return;
+          current = idx;
+          nodes.forEach(function (n, i) {
+            var on = i === idx;
+            n.classList.toggle('is-active', on);
+            if (on) n.setAttribute('aria-current', 'step'); else n.removeAttribute('aria-current');
+          });
+          roles.forEach(function (r, i) { if (r) r.classList.toggle('is-active', i === idx); });
+          if (scroller && scroller.scrollWidth > scroller.clientWidth + 4) {
+            var node = nodes[idx];
+            scroller.scrollTo({
+              left: node.offsetLeft - (scroller.clientWidth - node.offsetWidth) / 2,
+              behavior: reduce ? 'auto' : 'smooth'
+            });
+          }
+        }
+
+        function update() {
+          if (scope.offsetParent === null) return; /* hidden language — skip */
+          var bar = document.getElementById('appbar');
+          var line = (bar ? bar.offsetHeight : 56) + 96;
+          var best = null, bestTop = -Infinity, below = null, belowTop = Infinity;
+          roles.forEach(function (r) {
+            if (!r) return;
+            var top = r.getBoundingClientRect().top;
+            if (top <= line) { if (top > bestTop) { bestTop = top; best = r; } }
+            else { if (top < belowTop) { belowTop = top; below = r; } }
+          });
+          var idx = roles.indexOf(best || below);
+          if (idx >= 0) setActive(idx);
+        }
+
+        nodes.forEach(function (n, i) {
+          n.addEventListener('click', function () {
+            var r = roles[i];
+            if (!r) return;
+            setRoleExpanded(r, true);
+            setActive(i);
+            try { r.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+            catch (e) { r.scrollIntoView(); }
+            try { r.focus({ preventScroll: true }); } catch (e) {}
+          });
+        });
+
+        /* Roving arrow-key navigation between milestones */
+        timeline.addEventListener('keydown', function (e) {
+          var i = nodes.indexOf(document.activeElement);
+          if (i === -1) return;
+          var to = -1;
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') to = Math.min(i + 1, nodes.length - 1);
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = Math.max(i - 1, 0);
+          else if (e.key === 'Home') to = 0;
+          else if (e.key === 'End') to = nodes.length - 1;
+          if (to !== -1) { e.preventDefault(); nodes[to].focus(); }
+        });
+
+        return { update: update };
+      }
+      [].slice.call(document.querySelectorAll('.lang-en, .lang-zh')).forEach(function (scope) {
+        var api = initTimeline(scope);
+        if (api) timelineApis.push(api);
+      });
+      var rxTicking = false;
+      function rxSpy() { rxTicking = false; timelineApis.forEach(function (a) { a.update(); }); }
+      function rxScroll() { if (!rxTicking) { rxTicking = true; requestAnimationFrame(rxSpy); } }
+      if (timelineApis.length) {
+        window.addEventListener('scroll', rxScroll, { passive: true });
+        window.addEventListener('resize', rxScroll, { passive: true });
+        rxSpy();
+      }
+
       /* ---- Language toggle (EN / 中文) ---- */
       var wrap = document.getElementById('wrap');
       var langButtons = [].slice.call(document.querySelectorAll('.segmented button'));
@@ -623,6 +899,8 @@
         /* guarantee revealed blocks in the now-visible language are shown */
         var active = wrap.querySelector(lang === 'zh' ? '.lang-zh' : '.lang-en');
         if (active) showAll([].slice.call(active.querySelectorAll('.reveal')));
+        /* refresh the timeline's active milestone for the now-visible language */
+        if (typeof rxSpy === 'function') rxSpy();
       }
       langButtons.forEach(function (b) {
         b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
