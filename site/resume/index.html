@@ -4,13 +4,48 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shun Lyu — Résumé</title>
-  <meta name="description" content="Résumé of Shun Lyu — Software Engineer, Auckland, New Zealand.">
+  <meta name="description" content="Résumé of Shun Lyu — Software Engineer, Azure Infrastructure at Microsoft. 7+ years across embedded systems, Linux platforms, and cloud infrastructure. Auckland, New Zealand.">
+  <meta name="author" content="Shun Lyu">
+  <meta name="theme-color" content="#0969da">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Shun Lyu — Résumé">
+  <meta property="og:description" content="Software Engineer, Azure Infrastructure at Microsoft. 7+ years from embedded systems to cloud infrastructure. Auckland, New Zealand.">
+  <meta property="og:url" content="https://shunlyu.com/resume/">
+  <meta property="og:site_name" content="Shun Lyu">
+
+  <!-- Inline SVG favicon (matches homepage) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230969da'/%3E%3Ctext x='16' y='22' font-family='ui-monospace,monospace' font-size='14' font-weight='700' fill='white' text-anchor='middle'%3ESL%3C/text%3E%3C/svg%3E">
+
+  <!-- Modern type — Inter / JetBrains Mono (same as homepage) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+  <!-- Design system -->
   <link rel="stylesheet" href="/vendor/primer/light.css">
   <link rel="stylesheet" href="/vendor/primer/dark.css">
   <link rel="stylesheet" href="/vendor/primer/primer.css">
   <link rel="stylesheet" href="/style.css?v=3">
+  <link rel="stylesheet" href="/home.css?v=1">
+  <link rel="stylesheet" href="/resume.css?v=1">
+
+  <!-- No-FOUC: apply saved theme + enable JS-only reveal states before paint -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        var m = localStorage.getItem('theme');
+        if (m === 'light' || m === 'dark') d.setAttribute('data-color-mode', m);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
+  <a class="visually-hidden" href="#main">Skip to content</a>
+
   <!-- ====================== App bar ====================== -->
   <header class="appbar" id="appbar">
     <div class="appbar__inner">
@@ -19,283 +54,607 @@
         <span class="brand__name">Shun&nbsp;Lyu</span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <a class="navlink" href="https://github.com/sinmentis" target="_blank" rel="noopener" aria-label="GitHub">
+        <a class="navlink" href="/">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.231c0-.532.242-1.035.657-1.367l5.25-4.2ZM8 1.829l-5.25 4.2a.25.25 0 0 0-.094.196v7.025c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.094a.25.25 0 0 0 .25-.25V6.225a.25.25 0 0 0-.094-.196L8 1.829Z"/></svg>
+          <span class="hide-sm">Home</span>
+        </a>
+        <a class="navlink navlink--icon" href="https://github.com/sinmentis" target="_blank" rel="noopener" aria-label="GitHub">
           <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-          <span class="hide-sm">GitHub</span>
         </a>
-        <a class="navlink" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <a class="navlink navlink--icon" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-          <span class="hide-sm">LinkedIn</span>
         </a>
-        <button class="navlink" type="button" id="printBtn" aria-label="Print or save as PDF">
+        <span class="nav__sep" aria-hidden="true"></span>
+        <button class="navlink" type="button" data-print aria-label="Print or save as PDF">
           <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
           <span class="hide-sm">PDF</span>
         </button>
-        <div class="segmented" role="group" aria-label="Language">
+        <div class="segmented" role="group" aria-label="Language / 语言">
           <button type="button" data-lang="en" aria-pressed="true">EN</button>
           <button type="button" data-lang="zh" aria-pressed="false">中文</button>
         </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme" title="Toggle theme (system / light / dark)">
+          <svg class="icon" data-mode="auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <svg class="icon" data-mode="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="icon" data-mode="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
       </nav>
     </div>
   </header>
 
-  <main class="site-main">
+  <main class="site-main" id="main">
     <div class="wrap resume-page" id="wrap" data-lang="en">
-      <article class="markdown-body resume">
-        <!-- ====================== ENGLISH ====================== -->
+      <article class="resume">
+
+        <!-- ================================================================
+             ENGLISH
+             ================================================================ -->
         <div class="lang-en">
-          <header class="resume__header">
-            <h1>Shun Lyu</h1>
-            <p class="meta">
-              <span class="meta-item">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.75 0h2.5C10.216 0 11 .784 11 1.75V3h3.25c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25v-8.5C0 3.784.784 3 1.75 3H5V1.75C5 .784 5.784 0 6.75 0ZM5 4.5H1.75a.25.25 0 0 0-.25.25V8h13V4.75a.25.25 0 0 0-.25-.25H5Zm9.5 5H8.5v1.5h-1V9.5h-6v3.75c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Zm-5-6.5v-1.25a.25.25 0 0 0-.25-.25h-2.5a.25.25 0 0 0-.25.25V3Z"/></svg>
-                Software Engineer
-              </span>
-              <span class="meta-sep" aria-hidden="true">·</span>
-              <span class="meta-item">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
-                Auckland, New Zealand
-              </span>
-              <span class="meta-sep" aria-hidden="true">·</span>
-              <a class="meta-item" href="https://github.com/sinmentis" target="_blank" rel="noopener">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-                github.com/sinmentis
-              </a>
-              <a class="meta-item" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">
-                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                in/shunlyu
-              </a>
-            </p>
+          <header class="rx-header">
+            <div class="rx-header__mark" aria-hidden="true"><span>SL</span></div>
+            <div class="rx-header__body">
+              <div class="rx-header__top">
+                <div>
+                  <span class="hx-eyebrow rx-eyebrow">Résumé</span>
+                  <h1 class="rx-name">Shun Lyu</h1>
+                  <p class="rx-title">Software Engineer, Azure Infrastructure <span class="rx-at">@ Microsoft</span></p>
+                </div>
+                <div class="rx-actions">
+                  <button class="btn-ui btn-ui--primary" type="button" data-print>
+                    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
+                    Download PDF
+                  </button>
+                </div>
+              </div>
+              <ul class="rx-meta">
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
+                  Auckland, New Zealand
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+                  <a href="https://github.com/sinmentis" target="_blank" rel="noopener">github.com/sinmentis</a>
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                  <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">linkedin.com/in/shunlyu</a>
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
+                  <a href="mailto:lyushun0501@gmail.com" id="emailLink" data-email="lyushun0501@gmail.com">lyushun0501@gmail.com</a>
+                </li>
+              </ul>
+            </div>
           </header>
 
-          <h2>Summary</h2>
-          <p>Software Engineer with 5+ years across embedded systems, Linux
-          platforms, and large-scale infrastructure. Recently focused on
-          cloud-native development — CI/CD automation, distributed-system
-          reliability, and developer productivity. Strong debugging skills in C,
-          C++, Python, and C#, with a record of improving service stability and
-          engineering efficiency.</p>
+          <!-- Summary -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">Summary</h2>
+            <p class="rx-summary">Software Engineer with <strong>7+ years</strong> across embedded systems,
+            Linux platforms, and cloud infrastructure. Currently on the <strong>Microsoft Azure</strong> team
+            building distributed systems and infrastructure automation. Strong technical depth in
+            C, C++, C#, and Python, with a proven track record improving service reliability and
+            developer productivity across embedded and cloud platforms.</p>
+          </section>
 
-          <h2>Experience</h2>
-          <div class="role">
-            <div class="role-head">
-              <h3>Microsoft — Software Engineer</h3>
-              <span class="when">Apr 2026 – Present</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Crown Equipment Corporation — Software Engineer</h3>
-              <span class="when">Jun 2024 – Mar 2026</span>
-            </div>
-            <p class="meta">Robotics Technology Centre · Auckland</p>
-            <ul>
-              <li>Led adoption of the C#/.NET ecosystem in internal Android projects; pioneered MAUI/Android local optimizations and automated build flows.</li>
-              <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# apps, including containerized Android builds.</li>
-              <li>Automated dependency management, package publishing, and test orchestration.</li>
-              <li>Built static-analysis and performance-measurement frameworks (C++, C#, Python).</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Navico Group — Linux Platform Software Developer</h3>
-              <span class="when">May 2022 – Jun 2024</span>
-            </div>
-            <p class="meta">Auckland</p>
-            <ul>
-              <li>Designed and implemented modules on ARM-based Linux hardware; debugged bootloaders and kernels.</li>
-              <li>Introduced Docker to the development workflow.</li>
-              <li>Standardized build pipelines; containerized toolchains for embedded Linux and AOSP.</li>
-              <li>Automated provisioning and integration testing (Python/Bash).</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">Linux Kernel</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Fisher &amp; Paykel Appliances — Electrical Software Engineer</h3>
-              <span class="when">Jan 2020 – May 2022</span>
-            </div>
-            <p class="meta">Dunedin / Auckland</p>
-            <ul>
-              <li>Pioneered Docker-based development environments for UI &amp; sensing teams.</li>
-              <li>Delivered next-generation connected appliances: embedded Linux, bare-metal firmware, QT UI.</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
-            </div>
-          </div>
+          <!-- Experience -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">Experience</h2>
+            <div class="rx-roles">
 
-          <h2>Skills</h2>
-          <ul>
-            <li><strong>Languages:</strong> C, C++, C#, Python, Java, Bash</li>
-            <li><strong>Cloud &amp; DevOps:</strong> Docker, GitHub Actions, Jenkins, CI/CD, observability</li>
-            <li><strong>Platforms:</strong> Linux (kernel &amp; user space), Android AOSP, Embedded Linux, .NET MAUI</li>
-          </ul>
+              <article class="rx-role rx-role--current">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">Software Engineer, Azure Infrastructure</h3>
+                  <span class="rx-role__when">Apr 2026 – Present</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>Auckland, New Zealand</p>
+                <ul class="rx-role__points">
+                  <li>Build and operate cloud infrastructure for Microsoft Azure — designing distributed systems and services for scale, reliability, and performance.</li>
+                  <li>Develop infrastructure automation and internal tooling that streamlines provisioning, deployment, and day-to-day operations.</li>
+                  <li>Drive reliability engineering practices — observability, automated recovery, and safe, progressive rollouts across services.</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">Tech</span>
+                  <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">Distributed Systems</span>
+                </div>
+              </article>
 
-          <h2>Education</h2>
-          <ul>
-            <li>Master of Fintech and Investment Management — Lincoln University, New Zealand · Jul 2025</li>
-            <li>BE (Hons), Computer Engineering (minors: Communication &amp; Network Engineering) — University of Canterbury, New Zealand · Nov 2019</li>
-          </ul>
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">Software Engineer</h3>
+                  <span class="rx-role__when">Jun 2024 – Mar 2026</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>Robotics Technology Centre<span class="rx-role__sep">·</span>Auckland</p>
+                <ul class="rx-role__points">
+                  <li>Led adoption of the C#/.NET ecosystem in internal Android projects; pioneered MAUI/Android local optimizations and automated build flows.</li>
+                  <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# apps, including containerized Android builds.</li>
+                  <li>Automated dependency management, package publishing, and test orchestration.</li>
+                  <li>Built static-analysis and performance-measurement frameworks (C++, C#, Python).</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">Tech</span>
+                  <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                </div>
+              </article>
 
-          <h2>Selected Projects</h2>
-          <ul>
-            <li><strong>Workflow Optimization (internal):</strong> led the Jenkins → GitHub Actions migration; cut feedback-cycle time by 40%; explored AI-driven workflow analysis.</li>
-            <li><strong>Steam &amp; Microwave Oven (Fisher &amp; Paykel):</strong> control algorithms and embedded Linux UI for the company's first steam/microwave combo, concept to launch.</li>
-            <li><strong>Ultra-Wide Marine Display — <a href="https://www.simrad-yachting.com/nsx-ultrawide/">Simrad NSX Ultrawide</a>:</strong> led software integration for the first ultra-wide marine display; microprocessor-platform migration; redesigned upper-layer architecture.</li>
-          </ul>
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">Linux Platform Software Developer</h3>
+                  <span class="rx-role__when">May 2022 – Jun 2024</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>Auckland</p>
+                <ul class="rx-role__points">
+                  <li>Designed and implemented modules on ARM-based Linux hardware; debugged bootloaders and kernels for platform stability.</li>
+                  <li>Introduced Docker to the development workflow.</li>
+                  <li>Standardized build pipelines; containerized toolchains for embedded Linux and AOSP.</li>
+                  <li>Automated provisioning and integration testing (Python/Bash).</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">Tech</span>
+                  <span class="chip">Linux Kernel</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                </div>
+              </article>
+
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">Electrical Software Engineer</h3>
+                  <span class="rx-role__when">Jan 2020 – May 2022</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>Dunedin / Auckland</p>
+                <ul class="rx-role__points">
+                  <li>Pioneered Docker-based development environments for UI &amp; sensing teams.</li>
+                  <li>Delivered next-generation connected appliances: embedded Linux, bare-metal firmware, and QT UI.</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">Tech</span>
+                  <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          <!-- Skills -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">Skills</h2>
+            <div class="rx-skills">
+              <div class="rx-skill">
+                <span class="rx-skill__label">Languages</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>C</span>
+                  <span class="tech-chip"><span class="dot"></span>C++</span>
+                  <span class="tech-chip"><span class="dot"></span>C#</span>
+                  <span class="tech-chip"><span class="dot"></span>Python</span>
+                  <span class="tech-chip"><span class="dot"></span>Java</span>
+                  <span class="tech-chip"><span class="dot"></span>Bash</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">Cloud &amp; Infrastructure</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>Azure</span>
+                  <span class="tech-chip"><span class="dot"></span>Kubernetes</span>
+                  <span class="tech-chip"><span class="dot"></span>Docker</span>
+                  <span class="tech-chip"><span class="dot"></span>CI/CD</span>
+                  <span class="tech-chip"><span class="dot"></span>GitHub Actions</span>
+                  <span class="tech-chip"><span class="dot"></span>Jenkins</span>
+                  <span class="tech-chip"><span class="dot"></span>Distributed Systems</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">Platforms</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>Linux (kernel &amp; userspace)</span>
+                  <span class="tech-chip"><span class="dot"></span>Android AOSP</span>
+                  <span class="tech-chip"><span class="dot"></span>Embedded Linux</span>
+                  <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">Specializations</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>System Reliability</span>
+                  <span class="tech-chip"><span class="dot"></span>Infrastructure Automation</span>
+                  <span class="tech-chip"><span class="dot"></span>Developer Tooling</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Education -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">Education</h2>
+            <div class="rx-edu">
+              <div class="rx-edu__item">
+                <div class="rx-edu__main">
+                  <span class="rx-edu__degree">Master of Fintech and Investment Management</span>
+                  <span class="rx-edu__org"> — Lincoln University, New Zealand</span>
+                </div>
+                <span class="rx-edu__when">Jul 2025</span>
+              </div>
+              <div class="rx-edu__item">
+                <div class="rx-edu__main">
+                  <span class="rx-edu__degree">BE (Hons), Computer Engineering</span>
+                  <span class="rx-edu__org"> — University of Canterbury, New Zealand · minors: Communication &amp; Network Engineering</span>
+                </div>
+                <span class="rx-edu__when">Nov 2019</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Projects -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">Selected Projects</h2>
+            <div class="rx-projects">
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">Workflow Optimization <span class="rx-proj__tag">Internal</span></h3>
+                <p class="rx-proj__body">Led the Jenkins → GitHub Actions migration; cut feedback-cycle time by 40%; explored AI-driven workflow analysis.</p>
+              </article>
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">Steam &amp; Microwave Oven <span class="rx-proj__tag">Fisher &amp; Paykel</span></h3>
+                <p class="rx-proj__body">Control algorithms and embedded Linux UI for the company's first steam/microwave combo, from concept to launch.</p>
+              </article>
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">Ultra-Wide Marine Display <span class="rx-proj__tag">Simrad NSX</span></h3>
+                <p class="rx-proj__body">Led software integration for the first ultra-wide marine display —
+                <a href="https://www.simrad-yachting.com/nsx-ultrawide/" target="_blank" rel="noopener">Simrad NSX Ultrawide</a>;
+                microprocessor-platform migration; redesigned the upper-layer architecture.</p>
+              </article>
+            </div>
+          </section>
         </div>
 
-        <!-- ====================== 中文 ====================== -->
+        <!-- ================================================================
+             中文
+             ================================================================ -->
         <div class="lang-zh">
-          <header class="resume__header">
-            <h1>Shun Lyu</h1>
-            <p class="meta">
-              <span class="meta-item">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.75 0h2.5C10.216 0 11 .784 11 1.75V3h3.25c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25v-8.5C0 3.784.784 3 1.75 3H5V1.75C5 .784 5.784 0 6.75 0ZM5 4.5H1.75a.25.25 0 0 0-.25.25V8h13V4.75a.25.25 0 0 0-.25-.25H5Zm9.5 5H8.5v1.5h-1V9.5h-6v3.75c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Zm-5-6.5v-1.25a.25.25 0 0 0-.25-.25h-2.5a.25.25 0 0 0-.25.25V3Z"/></svg>
-                软件工程师
-              </span>
-              <span class="meta-sep" aria-hidden="true">·</span>
-              <span class="meta-item">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
-                新西兰，奥克兰
-              </span>
-              <span class="meta-sep" aria-hidden="true">·</span>
-              <a class="meta-item" href="https://github.com/sinmentis" target="_blank" rel="noopener">
-                <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-                github.com/sinmentis
-              </a>
-              <a class="meta-item" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">
-                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                in/shunlyu
-              </a>
-            </p>
+          <header class="rx-header">
+            <div class="rx-header__mark" aria-hidden="true"><span>SL</span></div>
+            <div class="rx-header__body">
+              <div class="rx-header__top">
+                <div>
+                  <span class="hx-eyebrow rx-eyebrow">简历</span>
+                  <h1 class="rx-name">Shun Lyu</h1>
+                  <p class="rx-title">软件工程师，Azure 基础设施 <span class="rx-at">@ Microsoft</span></p>
+                </div>
+                <div class="rx-actions">
+                  <button class="btn-ui btn-ui--primary" type="button" data-print>
+                    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
+                    下载 PDF
+                  </button>
+                </div>
+              </div>
+              <ul class="rx-meta">
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
+                  新西兰，奥克兰
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+                  <a href="https://github.com/sinmentis" target="_blank" rel="noopener">github.com/sinmentis</a>
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                  <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">linkedin.com/in/shunlyu</a>
+                </li>
+                <li>
+                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
+                  <a href="mailto:lyushun0501@gmail.com">lyushun0501@gmail.com</a>
+                </li>
+              </ul>
+            </div>
           </header>
 
-          <h2>概述</h2>
-          <p>拥有 5 年以上经验的软件工程师，涉足嵌入式系统、Linux 平台与大规模基础设施。
-          近期专注于云原生开发——CI/CD 自动化、分布式系统可靠性与开发者效率。具备扎实的
-          C、C++、Python、C# 调试能力，在提升服务稳定性与工程效率方面有良好记录。</p>
+          <!-- 概述 -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">概述</h2>
+            <p class="rx-summary">拥有 <strong>7 年以上</strong>经验的软件工程师，横跨嵌入式系统、Linux 平台和云基础设施。
+            目前在 <strong>微软 Azure</strong> 团队负责分布式系统和基础设施自动化。精通 C、C++、C# 和 Python，
+            在嵌入式和云平台上均有提升服务可靠性和开发者生产力的成功记录。</p>
+          </section>
 
-          <h2>工作经历</h2>
-          <div class="role">
-            <div class="role-head">
-              <h3>Microsoft — 软件工程师</h3>
-              <span class="when">2026.4 – 至今</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Crown Equipment Corporation — 软件工程师</h3>
-              <span class="when">2024.6 – 2026.3</span>
-            </div>
-            <p class="meta">机器人技术中心 · 奥克兰</p>
-            <ul>
-              <li>主导在公司内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 本地优化与自动化构建流程。</li>
-              <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
-              <li>自动化依赖管理、包发布与测试编排。</li>
-              <li>搭建跨语言的静态分析与性能度量框架（C++、C#、Python）。</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Navico Group — Linux 平台软件开发工程师</h3>
-              <span class="when">2022.5 – 2024.6</span>
-            </div>
-            <p class="meta">奥克兰</p>
-            <ul>
-              <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统；调试 bootloader 与内核以保障平台稳定性。</li>
-              <li>将 Docker 引入开发流程。</li>
-              <li>标准化构建流水线；为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
-              <li>用 Python/Bash 自动化环境准备与集成测试。</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">Linux 内核</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
-            </div>
-          </div>
-          <div class="role">
-            <div class="role-head">
-              <h3>Fisher &amp; Paykel Appliances — 电子软件工程师</h3>
-              <span class="when">2020.1 – 2022.5</span>
-            </div>
-            <p class="meta">但尼丁 / 奥克兰</p>
-            <ul>
-              <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境。</li>
-              <li>参与新一代联网家电的核心交付：嵌入式 Linux、裸机固件、QT 界面。</li>
-            </ul>
-            <div class="tech">
-              <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
-            </div>
-          </div>
+          <!-- 工作经历 -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">工作经历</h2>
+            <div class="rx-roles">
 
-          <h2>技能</h2>
-          <ul>
-            <li><strong>编程语言：</strong>C、C++、C#、Python、Java、Bash</li>
-            <li><strong>云与 DevOps：</strong>Docker、GitHub Actions、Jenkins、CI/CD、可观测性</li>
-            <li><strong>平台：</strong>Linux（内核与用户态）、Android AOSP、嵌入式 Linux、.NET MAUI</li>
-          </ul>
+              <article class="rx-role rx-role--current">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">软件工程师，Azure 基础设施</h3>
+                  <span class="rx-role__when">2026.4 – 至今</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>新西兰，奥克兰</p>
+                <ul class="rx-role__points">
+                  <li>为微软 Azure 构建并运维云基础设施——设计面向规模、可靠性与性能的分布式系统与服务。</li>
+                  <li>开发基础设施自动化与内部工具，简化资源配置、部署与日常运维流程。</li>
+                  <li>推进可靠性工程实践——可观测性、自动恢复，以及安全、渐进式的服务发布。</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">技术栈</span>
+                  <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">分布式系统</span>
+                </div>
+              </article>
 
-          <h2>教育</h2>
-          <ul>
-            <li>金融科技与投资管理硕士 — 林肯大学（新西兰）· 2025.7</li>
-            <li>工程荣誉学士，计算机工程（辅修：通信与网络工程）— 坎特伯雷大学（新西兰）· 2019.11</li>
-          </ul>
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">软件工程师</h3>
+                  <span class="rx-role__when">2024.6 – 2026.3</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>机器人技术中心<span class="rx-role__sep">·</span>奥克兰</p>
+                <ul class="rx-role__points">
+                  <li>主导在公司内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 本地优化与自动化构建流程。</li>
+                  <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
+                  <li>自动化依赖管理、包发布与测试编排。</li>
+                  <li>搭建跨语言的静态分析与性能度量框架（C++、C#、Python）。</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">技术栈</span>
+                  <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
+                </div>
+              </article>
 
-          <h2>代表项目</h2>
-          <ul>
-            <li><strong>工作流优化（内部）：</strong>主导 Jenkins → GitHub Actions 迁移；将反馈周期缩短 40%；探索 AI 驱动的工作流分析。</li>
-            <li><strong>蒸箱与微波炉（Fisher &amp; Paykel）：</strong>为公司首款蒸烤/微波一体机开发控制算法与嵌入式 Linux 界面，从概念到量产。</li>
-            <li><strong>超宽船用显示屏 — <a href="https://www.simrad-yachting.com/nsx-ultrawide/">Simrad NSX Ultrawide</a>：</strong>主导首款超宽船用显示屏的软件集成；微处理器平台迁移；重构上层软件架构。</li>
-          </ul>
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">Linux 平台软件开发工程师</h3>
+                  <span class="rx-role__when">2022.5 – 2024.6</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>奥克兰</p>
+                <ul class="rx-role__points">
+                  <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统；调试 bootloader 与内核以保障平台稳定性。</li>
+                  <li>将 Docker 引入开发流程。</li>
+                  <li>标准化构建流水线；为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
+                  <li>用 Python/Bash 自动化环境准备与集成测试。</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">技术栈</span>
+                  <span class="chip">Linux 内核</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
+                </div>
+              </article>
+
+              <article class="rx-role">
+                <div class="rx-role__head">
+                  <h3 class="rx-role__title">电子软件工程师</h3>
+                  <span class="rx-role__when">2020.1 – 2022.5</span>
+                </div>
+                <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>但尼丁 / 奥克兰</p>
+                <ul class="rx-role__points">
+                  <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境。</li>
+                  <li>参与新一代联网家电的核心交付：嵌入式 Linux、裸机固件、QT 界面。</li>
+                </ul>
+                <div class="rx-tech">
+                  <span class="rx-tech__label">技术栈</span>
+                  <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          <!-- 技能 -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">技能</h2>
+            <div class="rx-skills">
+              <div class="rx-skill">
+                <span class="rx-skill__label">编程语言</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>C</span>
+                  <span class="tech-chip"><span class="dot"></span>C++</span>
+                  <span class="tech-chip"><span class="dot"></span>C#</span>
+                  <span class="tech-chip"><span class="dot"></span>Python</span>
+                  <span class="tech-chip"><span class="dot"></span>Java</span>
+                  <span class="tech-chip"><span class="dot"></span>Bash</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">云与基础设施</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>Azure</span>
+                  <span class="tech-chip"><span class="dot"></span>Kubernetes</span>
+                  <span class="tech-chip"><span class="dot"></span>Docker</span>
+                  <span class="tech-chip"><span class="dot"></span>CI/CD</span>
+                  <span class="tech-chip"><span class="dot"></span>GitHub Actions</span>
+                  <span class="tech-chip"><span class="dot"></span>Jenkins</span>
+                  <span class="tech-chip"><span class="dot"></span>分布式系统</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">平台</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>Linux（内核与用户态）</span>
+                  <span class="tech-chip"><span class="dot"></span>Android AOSP</span>
+                  <span class="tech-chip"><span class="dot"></span>嵌入式 Linux</span>
+                  <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
+                </div>
+              </div>
+              <div class="rx-skill">
+                <span class="rx-skill__label">专长</span>
+                <div class="rx-skill__chips">
+                  <span class="tech-chip"><span class="dot"></span>系统可靠性</span>
+                  <span class="tech-chip"><span class="dot"></span>基础设施自动化</span>
+                  <span class="tech-chip"><span class="dot"></span>开发者工具</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 教育 -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">教育</h2>
+            <div class="rx-edu">
+              <div class="rx-edu__item">
+                <div class="rx-edu__main">
+                  <span class="rx-edu__degree">金融科技与投资管理硕士</span>
+                  <span class="rx-edu__org"> — 林肯大学（新西兰）</span>
+                </div>
+                <span class="rx-edu__when">2025.7</span>
+              </div>
+              <div class="rx-edu__item">
+                <div class="rx-edu__main">
+                  <span class="rx-edu__degree">工程荣誉学士，计算机工程</span>
+                  <span class="rx-edu__org"> — 坎特伯雷大学（新西兰）· 辅修：通信与网络工程</span>
+                </div>
+                <span class="rx-edu__when">2019.11</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- 代表项目 -->
+          <section class="rx-section reveal">
+            <h2 class="rx-section__title">代表项目</h2>
+            <div class="rx-projects">
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">工作流优化 <span class="rx-proj__tag">内部</span></h3>
+                <p class="rx-proj__body">主导 Jenkins → GitHub Actions 迁移；将反馈周期缩短 40%；探索 AI 驱动的工作流分析。</p>
+              </article>
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">蒸箱与微波炉 <span class="rx-proj__tag">Fisher &amp; Paykel</span></h3>
+                <p class="rx-proj__body">为公司首款蒸烤/微波一体机开发控制算法与嵌入式 Linux 界面，从概念到量产。</p>
+              </article>
+              <article class="rx-proj">
+                <h3 class="rx-proj__name">超宽船用显示屏 <span class="rx-proj__tag">Simrad NSX</span></h3>
+                <p class="rx-proj__body">主导首款超宽船用显示屏的软件集成 —
+                <a href="https://www.simrad-yachting.com/nsx-ultrawide/" target="_blank" rel="noopener">Simrad NSX Ultrawide</a>；
+                微处理器平台迁移；重构上层软件架构。</p>
+              </article>
+            </div>
+          </section>
         </div>
+
       </article>
     </div>
   </main>
 
+  <!-- ====================== Footer ====================== -->
   <footer class="footer">
     <div class="footer__inner">
-      <span>© <span id="year">2026</span> Shun Lyu</span>
+      <div class="footer__meta">
+        <span class="footer__brand">
+          <span class="brand__mark" aria-hidden="true" style="width:22px;height:22px;border-radius:6px;font-size:10px">SL</span>
+          Shun&nbsp;Lyu
+          <span class="footer__tag">· Built with care in Auckland 🇳🇿</span>
+        </span>
+        <span class="footer__updated">© <span id="year">2026</span> · Last updated <span id="updated">—</span></span>
+      </div>
       <nav class="footer__links" aria-label="Footer">
         <a href="/">Home</a>
         <a href="https://github.com/sinmentis" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:lyushun0501@gmail.com">Email</a>
       </nav>
     </div>
   </footer>
 
+  <!-- Repeating contact footer for printed pages (hidden on screen) -->
+  <div class="rx-print-foot" aria-hidden="true">
+    Shun Lyu <span class="sep">·</span> Software Engineer, Azure Infrastructure <span class="sep">·</span> Auckland, NZ <span class="sep">·</span> github.com/sinmentis <span class="sep">·</span> lyushun0501@gmail.com
+  </div>
+
+  <!-- Toast for "email copied" -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
+    <span id="toastMsg">Copied</span>
+  </div>
+
   <script>
     (function () {
-      var wrap = document.getElementById('wrap');
-      var buttons = document.querySelectorAll('.segmented button');
-      function setLang(lang) {
-        wrap.setAttribute('data-lang', lang);
-        document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
-        buttons.forEach(function (b) {
-          b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
-        });
-      }
-      buttons.forEach(function (b) {
-        b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
-      });
+      var root = document.documentElement;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Print / save as PDF
-      var printBtn = document.getElementById('printBtn');
-      if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
-
-      // App-bar hairline on scroll
+      /* ---- App-bar hairline on scroll ---- */
       var bar = document.getElementById('appbar');
       var onScroll = function () { bar.classList.toggle('is-stuck', window.scrollY > 4); };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
+
+      /* ---- Footer year + last-updated ---- */
       var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+      var upd = document.getElementById('updated');
+      if (upd) {
+        try {
+          upd.textContent = new Date(document.lastModified).toLocaleDateString('en-NZ',
+            { year: 'numeric', month: 'short', day: 'numeric' });
+        } catch (e) { upd.textContent = new Date().getFullYear(); }
+      }
+
+      /* ---- Theme toggle: system -> light -> dark ---- */
+      var toggle = document.getElementById('themeToggle');
+      var order = ['auto', 'light', 'dark'];
+      function label(mode) {
+        return 'Theme: ' + (mode === 'auto' ? 'system' : mode) + ' — click to change';
+      }
+      if (toggle) {
+        toggle.setAttribute('aria-label', label(root.getAttribute('data-color-mode') || 'auto'));
+        toggle.addEventListener('click', function () {
+          var cur = root.getAttribute('data-color-mode') || 'auto';
+          var next = order[(order.indexOf(cur) + 1) % order.length];
+          root.setAttribute('data-color-mode', next);
+          try {
+            if (next === 'auto') localStorage.removeItem('theme');
+            else localStorage.setItem('theme', next);
+          } catch (e) {}
+          toggle.setAttribute('aria-label', label(next));
+        });
+      }
+
+      /* ---- Scroll reveal ---- */
+      function showAll(els) { els.forEach(function (el) { el.classList.add('is-visible'); }); }
+      var reveals = [].slice.call(document.querySelectorAll('.reveal'));
+      var io = null;
+      if (reduce || !('IntersectionObserver' in window)) {
+        showAll(reveals);
+      } else {
+        io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      /* ---- Language toggle (EN / 中文) ---- */
+      var wrap = document.getElementById('wrap');
+      var langButtons = [].slice.call(document.querySelectorAll('.segmented button'));
+      function setLang(lang) {
+        wrap.setAttribute('data-lang', lang);
+        root.lang = (lang === 'zh' ? 'zh' : 'en');
+        langButtons.forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+        });
+        /* guarantee revealed blocks in the now-visible language are shown */
+        var active = wrap.querySelector(lang === 'zh' ? '.lang-zh' : '.lang-en');
+        if (active) showAll([].slice.call(active.querySelectorAll('.reveal')));
+      }
+      langButtons.forEach(function (b) {
+        b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
+      });
+
+      /* ---- Print / Save as PDF ---- */
+      [].slice.call(document.querySelectorAll('[data-print]')).forEach(function (btn) {
+        btn.addEventListener('click', function () { window.print(); });
+      });
+
+      /* ---- Copy email + toast ---- */
+      var toast = document.getElementById('toast');
+      var toastMsg = document.getElementById('toastMsg');
+      var toastTimer;
+      function showToast(msg) {
+        if (!toast) return;
+        toastMsg.textContent = msg;
+        toast.classList.add('is-shown');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove('is-shown'); }, 2200);
+      }
+      var emailLink = document.getElementById('emailLink');
+      if (emailLink && navigator.clipboard && navigator.clipboard.writeText) {
+        emailLink.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          navigator.clipboard.writeText(emailLink.getAttribute('data-email')).then(function () {
+            showToast('Email copied to clipboard');
+          }).catch(function () {
+            window.location.href = emailLink.getAttribute('href');
+          });
+        });
+      }
     })();
   </script>
 </body>

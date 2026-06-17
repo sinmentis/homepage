@@ -1,0 +1,501 @@
+/* ==========================================================================
+   Shun Lyu — résumé layer  (resume.css)
+   Loads after style.css + home.css. Inherits the modern type stack
+   (Inter / JetBrains Mono), the scroll-reveal system, the theme toggle,
+   buttons, badges and chips. Adds a documentation-first résumé surface:
+   a high-presence header, a clean experience timeline, a scannable skills
+   grid, and a print layout tuned for hiring managers. Every accent is a
+   thin brand-gradient detail; the body stays a flat, readable canvas.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Page shell
+   -------------------------------------------------------------------------- */
+.resume-page { padding-block: var(--sp-6) var(--sp-8); }
+
+.resume {
+  color: var(--fgColor-default, #1f2328);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+}
+
+/* Section rhythm — generous breathing room between blocks */
+.rx-section { margin-top: clamp(2.25rem, 1.6rem + 2vw, 3.25rem); }
+
+/* Section heading: gradient tick + label + hairline rule (doc-style) */
+.rx-section__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0 0 var(--sp-5);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.rx-section__title::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 1.05em;
+  border-radius: var(--radius-pill);
+  background: var(--brand-gradient);
+}
+.rx-section__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* --------------------------------------------------------------------------
+   2. Header — identity with presence
+   -------------------------------------------------------------------------- */
+.rx-header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(var(--sp-4), 3vw, var(--sp-6));
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--hairline);
+  isolation: isolate;
+  /* contain the decorative wash so it can never push horizontal scroll */
+  overflow-x: clip;
+}
+/* faint, static brand wash behind the header — a quiet echo of the hero.
+   Horizontal insets stay at 0 so the wash never bleeds past the page edge
+   (which would create a horizontal scrollbar on narrow viewports). */
+.rx-header::before {
+  content: "";
+  position: absolute;
+  inset: -40% 0 30% 0;
+  z-index: -1;
+  background:
+    radial-gradient(45% 70% at 18% 0%, var(--glow-accent), transparent 70%),
+    radial-gradient(40% 70% at 80% 0%, var(--glow-violet), transparent 72%);
+  pointer-events: none;
+}
+
+/* Choreographed entrance (CSS-only; .js is set before paint, so no flash) */
+.js .rx-header { opacity: 0; transform: translateY(14px); animation: rx-enter 0.7s var(--ease) 0.05s both; }
+@keyframes rx-enter { to { opacity: 1; transform: none; } }
+
+/* Monogram mark — matches the homepage brand mark / avatar */
+.rx-header__mark {
+  flex: none;
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-lg);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--brand-gradient);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.rx-header__body { flex: 1; min-width: 0; }
+
+.rx-header__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.rx-eyebrow { margin-bottom: var(--sp-2); }
+
+.rx-name {
+  margin: 0;
+  font-size: clamp(1.9rem, 1.45rem + 2vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  color: var(--fgColor-default, #1f2328);
+}
+.rx-title {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fgColor-default, #1f2328);
+}
+.rx-title .rx-at { color: var(--fgColor-accent, #0969da); font-weight: 700; }
+
+/* Contact / meta row */
+.rx-meta {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--fgColor-muted, #59636e);
+}
+.rx-meta li { display: inline-flex; align-items: center; gap: var(--sp-2); min-width: 0; }
+.rx-meta .icon { width: 15px; height: 15px; opacity: 0.85; flex: none; }
+.rx-meta a {
+  color: var(--fgColor-muted, #59636e);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  transition: color var(--t) var(--ease);
+}
+.rx-meta a:hover { color: var(--fgColor-accent, #0969da); text-decoration: none; }
+
+/* Header actions (Download PDF etc.) */
+.rx-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); flex: none; }
+
+/* --------------------------------------------------------------------------
+   3. Summary
+   -------------------------------------------------------------------------- */
+.rx-summary {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--fs-lead);
+  line-height: 1.65;
+  color: var(--fgColor-default, #1f2328);
+}
+.rx-summary strong { font-weight: 700; }
+
+/* --------------------------------------------------------------------------
+   4. Experience — timeline
+   -------------------------------------------------------------------------- */
+.rx-roles { margin: 0; }
+
+.rx-role {
+  position: relative;
+  padding: 0 0 var(--sp-6) clamp(var(--sp-5), 4vw, var(--sp-6));
+  border-left: 2px solid var(--hairline);
+}
+.rx-role:last-child { border-left-color: transparent; padding-bottom: 0; }
+
+/* timeline node */
+.rx-role::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--bgColor-default, #fff);
+  border: 2px solid var(--borderColor-default, #d1d9e0);
+  box-shadow: 0 0 0 4px var(--bgColor-default, #fff);
+  transition: border-color var(--t) var(--ease);
+}
+/* current role node — gradient fill + soft pulse */
+.rx-role--current::before {
+  border-color: transparent;
+  background: var(--brand-gradient);
+}
+.rx-role--current::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--fgColor-accent, #0969da);
+  opacity: 0.35;
+  animation: rx-pulse 2.4s var(--ease) infinite;
+  pointer-events: none;
+}
+@keyframes rx-pulse {
+  0% { transform: scale(0.7); opacity: 0.5; }
+  70% { transform: scale(2.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.rx-role__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2) var(--sp-4);
+  flex-wrap: wrap;
+}
+.rx-role__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  color: var(--fgColor-default, #1f2328);
+}
+.rx-role__when {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--fgColor-muted, #59636e);
+  background: var(--bgColor-muted, #f6f8fa);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 0.2rem 0.7rem;
+  white-space: nowrap;
+}
+.rx-role--current .rx-role__when {
+  color: var(--fgColor-accent, #0969da);
+  background: var(--bgColor-accent-muted, #ddf4ff);
+  border-color: var(--borderColor-accent-muted, #0969da33);
+}
+.rx-role__company {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--fgColor-muted, #59636e);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.rx-role__org { font-weight: 600; color: var(--fgColor-default, #1f2328); }
+.rx-role__sep { color: var(--borderColor-default, #d1d9e0); }
+
+.rx-role__points {
+  margin: var(--sp-3) 0 0;
+  padding-left: 1.15rem;
+}
+.rx-role__points li {
+  margin: var(--sp-2) 0;
+  line-height: 1.55;
+}
+.rx-role__points li::marker { color: var(--fgColor-accent, #0969da); }
+
+/* Per-role tech tags (compact, like the homepage project tags) */
+.rx-tech {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+.rx-tech__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fgColor-muted, #59636e);
+  margin-right: var(--sp-1);
+}
+
+/* --------------------------------------------------------------------------
+   5. Skills — scannable groups of pills
+   -------------------------------------------------------------------------- */
+.rx-skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-5) var(--sp-6);
+}
+.rx-skill__label {
+  display: block;
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fgColor-muted, #59636e);
+}
+.rx-skill__chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* --------------------------------------------------------------------------
+   6. Education
+   -------------------------------------------------------------------------- */
+.rx-edu { display: flex; flex-direction: column; gap: var(--sp-1); }
+.rx-edu__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3) var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.rx-edu__item:last-child { border-bottom: 0; }
+.rx-edu__main { min-width: 0; }
+.rx-edu__degree { font-weight: 600; color: var(--fgColor-default, #1f2328); }
+.rx-edu__org { color: var(--fgColor-muted, #59636e); }
+.rx-edu__when {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--fgColor-muted, #59636e);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   7. Projects
+   -------------------------------------------------------------------------- */
+.rx-projects { display: grid; gap: var(--sp-4); }
+.rx-proj {
+  padding-left: var(--sp-5);
+  border-left: 2px solid var(--hairline);
+}
+.rx-proj__name {
+  margin: 0 0 var(--sp-1);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.rx-proj__tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fgColor-done, #8250df);
+  background: var(--bgColor-done-muted, #fbefff);
+  border: 1px solid color-mix(in srgb, var(--fgColor-done, #8250df) 22%, transparent);
+  border-radius: var(--radius-pill);
+  padding: 0.1rem 0.5rem;
+}
+.rx-proj__body { margin: 0; color: var(--fgColor-muted, #59636e); line-height: 1.6; }
+.rx-proj__body a { font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   8. Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .rx-skills { grid-template-columns: 1fr; }
+  .rx-role__head { flex-direction: column; align-items: flex-start; gap: var(--sp-2); }
+  .rx-header__top { gap: var(--sp-3); }
+}
+@media (max-width: 460px) {
+  .rx-header { gap: var(--sp-4); }
+  .rx-header__mark { width: 54px; height: 54px; font-size: 1.3rem; }
+}
+
+/* Narrow viewports: the résumé appbar carries more than the homepage nav
+   (PDF + language toggle + theme). Drop the GitHub / LinkedIn icon links —
+   they are redundant here (repeated in the header meta row and the footer) —
+   so the bar fits small phones without overflowing. */
+@media (max-width: 480px) {
+  .appbar .nav .navlink--icon { display: none; }
+  .appbar .nav__sep { display: none; }
+}
+/* Tighter phones: the appbar PDF button duplicates the header's prominent
+   "Download PDF", so it can go. Language + theme toggles always stay. */
+@media (max-width: 400px) {
+  .appbar .nav .navlink[data-print] { display: none; }
+}
+/* Smallest phones: collapse the wordmark to just the monogram (still a home
+   link); the full name already dominates the résumé header right below. */
+@media (max-width: 360px) {
+  .appbar .brand__name { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   9. Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .js .rx-header { opacity: 1; transform: none; animation: none; }
+  .rx-role--current::after { animation: none; opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   10. Print — clean, grayscale-friendly, paginated for hiring managers
+   -------------------------------------------------------------------------- */
+.rx-print-foot { display: none; }
+
+@media print {
+  /* Hide all chrome + decorative motion */
+  .appbar,
+  .footer,
+  .rx-actions,
+  .theme-toggle,
+  .segmented,
+  .rx-role--current::after { display: none !important; }
+
+  /* CRITICAL: the scroll-reveal system leaves below-the-fold sections at
+     opacity:0 until they intersect the viewport. When printing (or exporting
+     a PDF) without first scrolling the whole page, those sections would print
+     blank. Force every revealable block fully visible for print. */
+  .reveal,
+  .js .reveal,
+  .resume .reveal { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+
+  @page { margin: 14mm 14mm 18mm; }
+
+  html, body { background: #fff !important; color: #000 !important; }
+  .resume-page { padding: 0 !important; }
+  .resume { font-size: 10.5pt; line-height: 1.5; }
+
+  /* Header: drop the wash + entrance, keep the identity crisp */
+  .rx-header { animation: none !important; opacity: 1 !important; transform: none !important; border-bottom: 1.5px solid #000; }
+  .rx-header::before { display: none !important; }
+  .rx-header__mark {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000;
+    box-shadow: none !important;
+  }
+  .rx-name { color: #000 !important; }
+  .rx-title, .rx-title .rx-at { color: #000 !important; }
+  .rx-meta, .rx-meta a { color: #000 !important; }
+
+  /* Eyebrow + section ticks → solid ink */
+  .hx-eyebrow { color: #000 !important; }
+  .hx-eyebrow::before,
+  .rx-section__title::before { background: #000 !important; }
+  .rx-section__title::after { background: #bbb !important; }
+  .rx-section__title { color: #000 !important; }
+
+  /* Timeline → grayscale */
+  .rx-role { border-left-color: #bbb !important; break-inside: avoid; }
+  .rx-role::before { border-color: #000 !important; background: #fff !important; box-shadow: 0 0 0 3px #fff !important; }
+  .rx-role--current::before { background: #000 !important; border-color: #000 !important; }
+  .rx-role__title { color: #000 !important; }
+  .rx-role__when {
+    color: #000 !important;
+    background: #fff !important;
+    border: 1px solid #999 !important;
+  }
+  .rx-role__points li::marker { color: #000 !important; }
+  .rx-proj { border-left-color: #bbb !important; break-inside: avoid; }
+  .rx-edu__item { break-inside: avoid; }
+
+  /* Chips → outline, ink text (no reliance on background fills) */
+  .chip, .tech-chip {
+    color: #000 !important;
+    background: #fff !important;
+    border: 1px solid #999 !important;
+  }
+  .tech-chip .dot { background: #000 !important; }
+  .rx-proj__tag { color: #000 !important; background: #fff !important; border-color: #999 !important; }
+
+  /* Keep headings with their content */
+  .rx-section__title, .rx-role__head, .rx-proj__name { break-after: avoid; }
+  /* Sections may flow across pages (Experience is taller than one page);
+     keep individual items intact instead of avoiding breaks on the whole
+     section, which would push tall sections off the page and leave gaps. */
+  .rx-section { margin-top: 16pt; }
+  .rx-skill { break-inside: avoid; }
+
+  a { color: #000 !important; text-decoration: none; }
+
+  /* Repeating contact footer on every printed page */
+  .rx-print-foot {
+    display: block;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    font-size: 8.5pt;
+    color: #000;
+    border-top: 1px solid #999;
+    padding-top: 3pt;
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+  .rx-print-foot .sep { color: #999; margin: 0 6px; }
+}
