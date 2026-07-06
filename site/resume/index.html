@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shun Lyu — Résumé</title>
-  <meta name="description" content="Résumé of Shun Lyu — Software Engineer, Azure Infrastructure at Microsoft. 7+ years across embedded systems, Linux platforms, and cloud infrastructure. Auckland, New Zealand.">
+  <meta name="description" content="Résumé of Shun Lyu — Software Engineer, Azure Kubernetes Service at Microsoft. 7+ years across embedded systems, Linux platforms, and cloud infrastructure. Auckland, New Zealand.">
   <meta name="author" content="Shun Lyu">
   <meta name="theme-color" content="#0969da">
 
   <!-- Open Graph / social -->
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Shun Lyu — Résumé">
-  <meta property="og:description" content="Software Engineer, Azure Infrastructure at Microsoft. 7+ years from embedded systems to cloud infrastructure. Auckland, New Zealand.">
+  <meta property="og:description" content="Software Engineer, Azure Kubernetes Service at Microsoft. 7+ years from embedded systems to cloud infrastructure. Auckland, New Zealand.">
   <meta property="og:url" content="https://shunlyu.com/resume/">
   <meta property="og:site_name" content="Shun Lyu">
 
@@ -97,7 +97,7 @@
                 <div>
                   <span class="hx-eyebrow rx-eyebrow">Résumé</span>
                   <h1 class="rx-name">Shun Lyu</h1>
-                  <p class="rx-title">Software Engineer, Azure Infrastructure <span class="rx-at">@ Microsoft</span></p>
+                  <p class="rx-title">Software Engineer, Azure Kubernetes Service <span class="rx-at">@ Microsoft</span></p>
                 </div>
                 <div class="rx-actions">
                   <button class="btn-ui btn-ui--primary" type="button" data-print>
@@ -121,7 +121,7 @@
                 </li>
                 <li>
                   <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
-                  <a href="mailto:lyushun0501@gmail.com" id="emailLink" data-email="lyushun0501@gmail.com">lyushun0501@gmail.com</a>
+                  <a href="mailto:hello@shunlyu.com" id="emailLink" data-email="hello@shunlyu.com">hello@shunlyu.com</a>
                 </li>
               </ul>
             </div>
@@ -131,10 +131,11 @@
           <section class="rx-section">
             <h2 class="rx-section__title reveal">Summary</h2>
             <p class="rx-summary reveal" style="--i:1">Software Engineer with <strong>7+ years</strong> across embedded systems,
-            Linux platforms, and cloud infrastructure. Currently on the <strong>Microsoft Azure</strong> team
-            building distributed systems and infrastructure automation. Strong technical depth in
-            C, C++, C#, and Python, with a proven track record improving service reliability and
-            developer productivity across embedded and cloud platforms.</p>
+            Linux platforms, and cloud infrastructure. Currently on the <strong>Azure Kubernetes Service</strong> team
+            at Microsoft, designing resource APIs and hardening the control-plane logic behind production
+            Kubernetes clusters. Deep technical range — from C and C++ in embedded and kernel code to C#,
+            Python, and distributed systems in the cloud — with a consistent focus on reliability, correctness,
+            and developer productivity.</p>
             <ul class="rx-stats reveal" style="--i:2" aria-label="Career at a glance">
               <li class="rx-stat">
                 <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
@@ -185,7 +186,7 @@
                   </li>
                   <li class="rx-timeline__item rx-timeline__item--current">
                     <button type="button" class="rx-timeline__node" data-target="r-en-microsoft"
-                      aria-label="2026 to Present — Software Engineer, Azure Infrastructure at Microsoft">
+                      aria-label="2026 to Present — Software Engineer, Azure Kubernetes Service at Microsoft">
                       <span class="rx-timeline__dot"></span>
                       <span class="rx-timeline__year">2026</span>
                       <span class="rx-timeline__org">Microsoft</span>
@@ -200,7 +201,7 @@
 
               <article class="rx-role rx-role--current reveal" style="--i:1" id="r-en-microsoft" tabindex="-1">
                 <div class="rx-role__head">
-                  <h3 class="rx-role__title">Software Engineer, Azure Infrastructure</h3>
+                  <h3 class="rx-role__title">Software Engineer, Azure Kubernetes Service</h3>
                   <div class="rx-role__meta">
                     <span class="rx-role__when">Apr 2026 – Present</span>
                     <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-microsoft">
@@ -213,9 +214,11 @@
                 <div class="rx-role__detail" id="d-en-microsoft">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>Build and operate cloud infrastructure for Microsoft Azure — designing distributed systems and services for scale, reliability, and performance.</li>
-                    <li>Develop infrastructure automation and internal tooling that streamlines provisioning, deployment, and day-to-day operations.</li>
-                    <li>Drive reliability engineering practices — observability, automated recovery, and safe, progressive rollouts across services.</li>
+                    <li>Designed and shipped a new Azure resource API for managing custom VM image specifications on Kubernetes clusters end to end — API contract, access control, and CRUD semantics — then implemented and reviewed 15+ production changes from design through rollout.</li>
+                    <li>Hardened cluster reliability by fixing a background reconciliation bug that could overwrite live node metadata, a deadlock in the resource-deletion path, and image-reuse logic that failed to recover from broken image builds, eliminating a class of state corruption in production.</li>
+                    <li>Added safety guardrails for a feature in preview by blocking unsupported VM configurations (e.g., confidential computing VMs) and scoping validation to the specific resource being changed, removing false-positive failures on unrelated resources.</li>
+                    <li>Improved a list API's performance and correctness at scale with a targeted database index and batched, fallback-safe metadata merging, and documented inheritance and pagination edge cases for the team.</li>
+                    <li>Led cross-team integration to exclude a subset of managed resources from an automated patching pipeline and preserve feature state across automatic upgrades, then took ownership of the related validation code.</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">Tech</span>
@@ -240,10 +243,10 @@
                 <div class="rx-role__detail" id="d-en-crown">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>Led adoption of the C#/.NET ecosystem in internal Android projects; pioneered MAUI/Android local optimizations and automated build flows.</li>
-                    <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# apps, including containerized Android builds.</li>
-                    <li>Automated dependency management, package publishing, and test orchestration.</li>
-                    <li>Built static-analysis and performance-measurement frameworks (C++, C#, Python).</li>
+                    <li>Led adoption of the C#/.NET ecosystem across internal Android projects, pioneering MAUI/Android optimizations and automated build flows.</li>
+                    <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# applications, including containerized Android builds.</li>
+                    <li>Automated dependency management, package publishing, and test orchestration, removing manual steps from the release process.</li>
+                    <li>Built static-analysis and performance-measurement frameworks across C++, C#, and Python to catch regressions before release.</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">Tech</span>
@@ -268,10 +271,10 @@
                 <div class="rx-role__detail" id="d-en-navico">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>Designed and implemented modules on ARM-based Linux hardware; debugged bootloaders and kernels for platform stability.</li>
-                    <li>Introduced Docker to the development workflow.</li>
-                    <li>Standardized build pipelines; containerized toolchains for embedded Linux and AOSP.</li>
-                    <li>Automated provisioning and integration testing (Python/Bash).</li>
+                    <li>Designed and implemented modules on ARM-based Linux hardware, debugging bootloaders and kernel issues to keep the platform stable.</li>
+                    <li>Introduced Docker to the development workflow, replacing inconsistent local setups with reproducible build environments.</li>
+                    <li>Standardized build pipelines and containerized toolchains for embedded Linux and AOSP development.</li>
+                    <li>Automated provisioning and integration testing with Python and Bash.</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">Tech</span>
@@ -296,12 +299,12 @@
                 <div class="rx-role__detail" id="d-en-fp">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>Pioneered Docker-based development environments for UI &amp; sensing teams.</li>
-                    <li>Delivered next-generation connected appliances: embedded Linux, bare-metal firmware, and QT UI.</li>
+                    <li>Pioneered Docker-based development environments for the UI and sensing teams, standardizing local setups across the group.</li>
+                    <li>Delivered next-generation connected appliances spanning embedded Linux, bare-metal firmware, and Qt UI.</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">Tech</span>
-                    <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
+                    <span class="chip">C++</span><span class="chip">Qt</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
                   </div>
                   </div>
                 </div>
@@ -390,7 +393,7 @@
                 <div>
                   <span class="hx-eyebrow rx-eyebrow">简历</span>
                   <h1 class="rx-name">Shun Lyu</h1>
-                  <p class="rx-title">软件工程师，Azure 基础设施 <span class="rx-at">@ Microsoft</span></p>
+                  <p class="rx-title">软件工程师，Azure Kubernetes Services <span class="rx-at">@ Microsoft</span></p>
                 </div>
                 <div class="rx-actions">
                   <button class="btn-ui btn-ui--primary" type="button" data-print>
@@ -414,7 +417,7 @@
                 </li>
                 <li>
                   <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
-                  <a href="mailto:lyushun0501@gmail.com">lyushun0501@gmail.com</a>
+                  <a href="mailto:hello@shunlyu.com">hello@shunlyu.com</a>
                 </li>
               </ul>
             </div>
@@ -424,8 +427,9 @@
           <section class="rx-section">
             <h2 class="rx-section__title reveal">概述</h2>
             <p class="rx-summary reveal" style="--i:1">拥有 <strong>7 年以上</strong>经验的软件工程师，横跨嵌入式系统、Linux 平台和云基础设施。
-            目前在 <strong>微软 Azure</strong> 团队负责分布式系统和基础设施自动化。精通 C、C++、C# 和 Python，
-            在嵌入式和云平台上均有提升服务可靠性和开发者生产力的成功记录。</p>
+            目前在微软 <strong>Azure Kubernetes Services</strong> 团队，负责设计资源 API 并加固支撑生产级 Kubernetes
+            集群的控制面（control plane）逻辑。技术跨度大——从嵌入式与内核领域的 C、C++，到云端的 C#、Python
+            与分布式系统——始终专注于可靠性、正确性与开发者生产力。</p>
             <ul class="rx-stats reveal" style="--i:2" aria-label="职业概览">
               <li class="rx-stat">
                 <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
@@ -476,7 +480,7 @@
                   </li>
                   <li class="rx-timeline__item rx-timeline__item--current">
                     <button type="button" class="rx-timeline__node" data-target="r-zh-microsoft"
-                      aria-label="2026 至今 — Microsoft 软件工程师，Azure 基础设施">
+                      aria-label="2026 至今 — Microsoft 软件工程师，Azure Kubernetes Services">
                       <span class="rx-timeline__dot"></span>
                       <span class="rx-timeline__year">2026</span>
                       <span class="rx-timeline__org">Microsoft</span>
@@ -491,7 +495,7 @@
 
               <article class="rx-role rx-role--current reveal" style="--i:1" id="r-zh-microsoft" tabindex="-1">
                 <div class="rx-role__head">
-                  <h3 class="rx-role__title">软件工程师，Azure 基础设施</h3>
+                  <h3 class="rx-role__title">软件工程师，Azure Kubernetes Services</h3>
                   <div class="rx-role__meta">
                     <span class="rx-role__when">2026.4 – 至今</span>
                     <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-microsoft">
@@ -504,9 +508,11 @@
                 <div class="rx-role__detail" id="d-zh-microsoft">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>为微软 Azure 构建并运维云基础设施——设计面向规模、可靠性与性能的分布式系统与服务。</li>
-                    <li>开发基础设施自动化与内部工具，简化资源配置、部署与日常运维流程。</li>
-                    <li>推进可靠性工程实践——可观测性、自动恢复，以及安全、渐进式的服务发布。</li>
+                    <li>为 Kubernetes 集群上的自定义 VM 镜像规格设计并交付了一个全新的 Azure 资源 API——从 API 契约、访问控制到增删改查语义均由本人主导设计，并在此基础上实现和评审了 15+ 个生产环境变更，覆盖从设计到上线的全过程。</li>
+                    <li>通过修复后台协调（reconciliation）逻辑中可能覆盖存活节点元数据的缺陷、资源删除路径中的死锁问题，以及镜像复用逻辑在镜像构建失败后无法正常恢复的问题，消除了生产集群中的状态损坏隐患，提升了平台可靠性。</li>
+                    <li>为预览阶段的新功能构建安全防护机制——阻止其在不支持的 VM 配置（如机密计算 VM）上启用，并将校验逻辑收窄到仅针对被修改的具体资源，避免了对无关资源的误报。</li>
+                    <li>通过增加针对性的数据库索引和带降级兜底的批量元数据合并，提升了某个大规模 list API 的性能与正确性，并为团队梳理文档记录了继承规则与分页边界情况。</li>
+                    <li>主导跨团队协作，将一部分受管资源从自动化补丁流水线中排除，并确保某功能的状态在自动升级过程中正确保留；此后成为相关校验代码的负责人。</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">技术栈</span>
@@ -531,10 +537,10 @@
                 <div class="rx-role__detail" id="d-zh-crown">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>主导在公司内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 本地优化与自动化构建流程。</li>
+                    <li>主导在内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 性能优化与自动化构建流程。</li>
                     <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
-                    <li>自动化依赖管理、包发布与测试编排。</li>
-                    <li>搭建跨语言的静态分析与性能度量框架（C++、C#、Python）。</li>
+                    <li>自动化依赖管理、包发布与测试编排，减少发布流程中的人工操作。</li>
+                    <li>搭建覆盖 C++、C#、Python 的静态分析与性能度量框架，在发布前提前发现性能与质量回归。</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">技术栈</span>
@@ -559,9 +565,9 @@
                 <div class="rx-role__detail" id="d-zh-navico">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统；调试 bootloader 与内核以保障平台稳定性。</li>
-                    <li>将 Docker 引入开发流程。</li>
-                    <li>标准化构建流水线；为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
+                    <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统，调试 bootloader 与内核问题以保障平台稳定性。</li>
+                    <li>将 Docker 引入开发流程，用可复现的构建环境替代此前不一致的本地环境。</li>
+                    <li>标准化构建流水线，为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
                     <li>用 Python/Bash 自动化环境准备与集成测试。</li>
                   </ul>
                   <div class="rx-tech">
@@ -587,12 +593,12 @@
                 <div class="rx-role__detail" id="d-zh-fp">
                   <div class="rx-role__detail-inner">
                   <ul class="rx-role__points">
-                    <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境。</li>
-                    <li>参与新一代联网家电的核心交付：嵌入式 Linux、裸机固件、QT 界面。</li>
+                    <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境，统一了团队的本地开发环境。</li>
+                    <li>交付新一代联网家电核心功能，涵盖嵌入式 Linux、裸机固件与 Qt 界面。</li>
                   </ul>
                   <div class="rx-tech">
                     <span class="rx-tech__label">技术栈</span>
-                    <span class="chip">C++</span><span class="chip">QT</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
+                    <span class="chip">C++</span><span class="chip">Qt</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
                   </div>
                   </div>
                 </div>
@@ -689,14 +695,14 @@
         <a href="/">Home</a>
         <a href="https://github.com/sinmentis" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:lyushun0501@gmail.com">Email</a>
+        <a href="mailto:hello@shunlyu.com">Email</a>
       </nav>
     </div>
   </footer>
 
   <!-- Repeating contact footer for printed pages (hidden on screen) -->
   <div class="rx-print-foot" aria-hidden="true">
-    Shun Lyu <span class="sep">·</span> Software Engineer, Azure Infrastructure <span class="sep">·</span> Auckland, NZ <span class="sep">·</span> github.com/sinmentis <span class="sep">·</span> lyushun0501@gmail.com
+    Shun Lyu <span class="sep">·</span> Software Engineer, Azure Kubernetes Service <span class="sep">·</span> Auckland, NZ <span class="sep">·</span> github.com/sinmentis <span class="sep">·</span> hello@shunlyu.com
   </div>
 
   <!-- Toast for "email copied" -->
