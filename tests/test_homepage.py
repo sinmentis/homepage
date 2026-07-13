@@ -79,5 +79,49 @@ class HomepageMarkupTests(unittest.TestCase):
         self.assertIn("family=IBM+Plex+Sans", self.html)
 
 
+class HomepageStyleTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.css = HOME_CSS.read_text(encoding="utf-8")
+
+    def test_defines_approved_theme_tokens(self):
+        required_tokens = (
+            "--page-bg: #e9e5d9",
+            "--page-fg: #222a20",
+            "--page-muted: #596055",
+            "--signal: #53663e",
+            "--page-bg: #121610",
+            "--page-fg: #e7ecdf",
+            "--page-muted: #87927f",
+            "--signal: #b7cb91",
+        )
+        lower_css = self.css.lower()
+        for token in required_tokens:
+            with self.subTest(token=token):
+                self.assertIn(token, lower_css)
+
+    def test_uses_approved_font_roles(self):
+        self.assertIn('--font-interface: "IBM Plex Mono"', self.css)
+        self.assertIn('--font-prose: "IBM Plex Sans"', self.css)
+
+    def test_supports_reduced_motion_and_mobile_layout(self):
+        self.assertIn("@media (prefers-reduced-motion: reduce)", self.css)
+        self.assertIn("@media (max-width: 760px)", self.css)
+        self.assertIn(".instrument-rail", self.css)
+        self.assertIn("position: sticky", self.css)
+
+    def test_core_content_is_not_hidden_without_enhancement_class(self):
+        hidden_reveal_rule = re.search(
+            r"(?<!has-reveal )\.reveal\s*\{[^}]*opacity\s*:\s*0",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNone(hidden_reveal_rule)
+        self.assertIn(".has-reveal .reveal", self.css)
+
+    def test_css_braces_are_balanced(self):
+        self.assertEqual(self.css.count("{"), self.css.count("}"))
+
+
 if __name__ == "__main__":
     unittest.main()
