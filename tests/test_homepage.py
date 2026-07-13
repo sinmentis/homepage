@@ -366,6 +366,17 @@ class HomepageStyleTests(unittest.TestCase):
             r"\.entry-(running|complete)[^{]*\{[^}]*pointer-events:\s*auto",
         )
 
+    def test_homepage_toast_and_reveal_rules_stay_scoped_to_home_page(self):
+        css = self.css
+        # The new systems-console toast/reveal rules must not leak onto
+        # /resume/ as bare, unscoped selectors.
+        self.assertNotRegex(css, r"(?<!home-page )(?<!\.js )\n\.toast\s*\{")
+        self.assertNotRegex(css, r"(?<!home-page )\n\.toast\.is-visible\s*\{")
+        self.assertNotRegex(css, r"(?<!home-page )\n\.has-reveal \.reveal\s*\{")
+        self.assertRegex(css, r"html\.home-page \.toast\s*\{")
+        self.assertRegex(css, r"html\.home-page \.toast\.is-visible\s*\{")
+        self.assertRegex(css, r"html\.home-page \.has-reveal \.reveal\s*\{")
+
 
 class HomepageScriptTests(unittest.TestCase):
     @classmethod
