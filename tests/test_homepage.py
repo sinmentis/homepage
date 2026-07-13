@@ -60,7 +60,7 @@ class HomepageMarkupTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_homepage_owns_its_styles(self):
-        self.assertIn('href="/home.css?v=2"', self.html)
+        self.assertIn('href="/home.css?v=3"', self.html)
         self.assertNotIn("/vendor/primer/", self.html)
         self.assertNotIn('href="/style.css', self.html)
 
