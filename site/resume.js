@@ -1,228 +1,205 @@
 (function () {
+  'use strict';
+
   var root = document.documentElement;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var themeOrder = ['auto', 'light', 'dark'];
+  var reduceMotion = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---- App-bar hairline on scroll ---- */
-  var bar = document.getElementById('appbar');
-  var onScroll = function () { bar.classList.toggle('is-stuck', window.scrollY > 4); };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  /* ---- Footer year + last-updated ---- */
-  var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-  var upd = document.getElementById('updated');
-  if (upd) {
-    try {
-      upd.textContent = new Date(document.lastModified).toLocaleDateString('en-NZ',
-        { year: 'numeric', month: 'short', day: 'numeric' });
-    } catch (e) { upd.textContent = new Date().getFullYear(); }
-  }
-
-  /* ---- Theme toggle: system -> light -> dark ---- */
-  var toggle = document.getElementById('themeToggle');
-  var order = ['auto', 'light', 'dark'];
-  function label(mode) {
-    return 'Theme: ' + (mode === 'auto' ? 'system' : mode) + ' — click to change';
-  }
-  if (toggle) {
-    toggle.setAttribute('aria-label', label(root.getAttribute('data-color-mode') || 'auto'));
-    toggle.addEventListener('click', function () {
-      var cur = root.getAttribute('data-color-mode') || 'auto';
-      var next = order[(order.indexOf(cur) + 1) % order.length];
-      root.setAttribute('data-color-mode', next);
-      try {
-        if (next === 'auto') localStorage.removeItem('theme');
-        else localStorage.setItem('theme', next);
-      } catch (e) {}
-      toggle.setAttribute('aria-label', label(next));
-    });
-  }
-
-  /* ---- Scroll reveal ---- */
-  function showAll(els) { els.forEach(function (el) { el.classList.add('is-visible'); }); }
-  var reveals = [].slice.call(document.querySelectorAll('.reveal'));
-  var io = null;
-  if (reduce || !('IntersectionObserver' in window)) {
-    showAll(reveals);
-  } else {
-    io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach(function (el) { io.observe(el); });
-  }
-
-  /* ---- Count-up stats (animate on first reveal) ---- */
-  function countUp(el) {
-    if (el.getAttribute('data-counted') === '1') return;
-    el.setAttribute('data-counted', '1');
-    var target = parseFloat(el.getAttribute('data-count')) || 0;
-    var suffix = el.getAttribute('data-suffix') || '';
-    if (reduce) { el.textContent = target + suffix; return; }
-    var dur = 1200, start = null;
-    function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-      else el.textContent = target + suffix;
+  function setTheme(mode, persist) {
+    root.setAttribute('data-color-mode', mode);
+    var label = document.querySelector('[data-theme-label]');
+    if (label) label.textContent = mode;
+    var control = document.querySelector('[data-theme-control]');
+    if (control) {
+      control.setAttribute(
+        'aria-label',
+        'Theme: ' + (mode === 'auto' ? 'system' : mode) + ' — activate to change'
+      );
     }
-    requestAnimationFrame(step);
-  }
-  var counters = [].slice.call(document.querySelectorAll('[data-count]'));
-  if (reduce || !('IntersectionObserver' in window)) {
-    counters.forEach(countUp);
-  } else {
-    var cio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); }
-      });
-    }, { threshold: 0.6 });
-    counters.forEach(function (el) { cio.observe(el); });
+    if (!persist) return;
+    try {
+      if (mode === 'auto') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', mode);
+    } catch (error) {
+      root.setAttribute('data-theme-storage', 'unavailable');
+    }
   }
 
-  /* ---- Expandable role details ---- */
-  function setRoleExpanded(role, open) {
-    if (!role) return;
-    role.classList.toggle('is-collapsed', !open);
-    var btn = role.querySelector('.rx-role__toggle');
-    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
-  [].slice.call(document.querySelectorAll('.rx-role__toggle')).forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var role = btn.closest('.rx-role');
-      setRoleExpanded(role, btn.getAttribute('aria-expanded') !== 'true');
+  function initThemeControl() {
+    var control = document.querySelector('[data-theme-control]');
+    if (!control) return;
+    setTheme(root.getAttribute('data-color-mode') || 'auto', false);
+    control.addEventListener('click', function () {
+      var current = root.getAttribute('data-color-mode') || 'auto';
+      setTheme(themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length], true);
     });
-  });
+  }
 
-  /* ---- Interactive career timeline (scrollspy + jump-to, per language) ---- */
-  var timelineApis = [];
-  function initTimeline(scope) {
-    var timeline = scope.querySelector('.rx-timeline');
-    if (!timeline) return null;
-    var scroller = timeline.querySelector('.rx-timeline__scroll');
-    var nodes = [].slice.call(timeline.querySelectorAll('.rx-timeline__node'));
-    var roles = nodes.map(function (n) { return document.getElementById(n.getAttribute('data-target')); });
-    var current = -1;
+  function setLanguage(language, persist) {
+    root.setAttribute('data-language', language);
+    root.lang = language === 'zh' ? 'zh' : 'en';
+    [].slice.call(document.querySelectorAll('[data-language-panel]')).forEach(function (panel) {
+      var panelLanguage = panel.getAttribute('data-language-panel');
+      panel.hidden = panelLanguage !== language;
+    });
+    [].slice.call(document.querySelectorAll('[data-language-control] [data-lang]')).forEach(function (button) {
+      button.setAttribute(
+        'aria-pressed',
+        button.getAttribute('data-lang') === language ? 'true' : 'false'
+      );
+    });
+    if (!persist) return;
+    try {
+      localStorage.setItem('resume-language', language);
+    } catch (error) {
+      root.setAttribute('data-language-storage', 'unavailable');
+    }
+  }
 
-    function setActive(idx) {
-      if (idx < 0 || idx === current) return;
-      current = idx;
-      nodes.forEach(function (n, i) {
-        var on = i === idx;
-        n.classList.toggle('is-active', on);
-        if (on) n.setAttribute('aria-current', 'step'); else n.removeAttribute('aria-current');
+  function initLanguageControl() {
+    var initialLanguage = root.getAttribute('data-language') === 'zh' ? 'zh' : 'en';
+    setLanguage(initialLanguage, false);
+    [].slice.call(document.querySelectorAll('[data-language-control] [data-lang]')).forEach(function (button) {
+      button.addEventListener('click', function () {
+        setLanguage(button.getAttribute('data-lang') === 'zh' ? 'zh' : 'en', true);
       });
-      roles.forEach(function (r, i) { if (r) r.classList.toggle('is-active', i === idx); });
-      if (scroller && scroller.scrollWidth > scroller.clientWidth + 4) {
-        var node = nodes[idx];
-        scroller.scrollTo({
-          left: node.offsetLeft - (scroller.clientWidth - node.offsetWidth) / 2,
-          behavior: reduce ? 'auto' : 'smooth'
-        });
+    });
+  }
+
+  function setDisclosure(button, panel, open, immediate) {
+    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    button.textContent = open
+      ? button.getAttribute('data-close-label')
+      : button.getAttribute('data-open-label');
+    if (open) {
+      panel.hidden = false;
+      panel.setAttribute('data-transition-state', 'opening');
+      if (immediate || reduceMotion) {
+        panel.setAttribute('data-open', 'true');
+        panel.removeAttribute('data-transition-state');
+        return;
+      }
+      requestAnimationFrame(function () {
+        panel.setAttribute('data-open', 'true');
+        panel.removeAttribute('data-transition-state');
+      });
+      return;
+    }
+
+    panel.removeAttribute('data-open');
+    panel.setAttribute('data-transition-state', 'closing');
+    if (immediate || reduceMotion) {
+      panel.hidden = true;
+      panel.removeAttribute('data-transition-state');
+      return;
+    }
+
+    function finishClose(event) {
+      if (event.target !== panel) return;
+      panel.removeEventListener('transitionend', finishClose);
+      if (panel.getAttribute('data-transition-state') === 'closing') {
+        panel.hidden = true;
+        panel.removeAttribute('data-transition-state');
       }
     }
-
-    function update() {
-      if (scope.offsetParent === null) return; /* hidden language — skip */
-      var bar = document.getElementById('appbar');
-      var line = (bar ? bar.offsetHeight : 56) + 96;
-      var best = null, bestTop = -Infinity, below = null, belowTop = Infinity;
-      roles.forEach(function (r) {
-        if (!r) return;
-        var top = r.getBoundingClientRect().top;
-        if (top <= line) { if (top > bestTop) { bestTop = top; best = r; } }
-        else { if (top < belowTop) { belowTop = top; below = r; } }
-      });
-      var idx = roles.indexOf(best || below);
-      if (idx >= 0) setActive(idx);
-    }
-
-    nodes.forEach(function (n, i) {
-      n.addEventListener('click', function () {
-        var r = roles[i];
-        if (!r) return;
-        setRoleExpanded(r, true);
-        setActive(i);
-        try { r.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
-        catch (e) { r.scrollIntoView(); }
-        try { r.focus({ preventScroll: true }); } catch (e) {}
-      });
-    });
-
-    /* Roving arrow-key navigation between milestones */
-    timeline.addEventListener('keydown', function (e) {
-      var i = nodes.indexOf(document.activeElement);
-      if (i === -1) return;
-      var to = -1;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') to = Math.min(i + 1, nodes.length - 1);
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = Math.max(i - 1, 0);
-      else if (e.key === 'Home') to = 0;
-      else if (e.key === 'End') to = nodes.length - 1;
-      if (to !== -1) { e.preventDefault(); nodes[to].focus(); }
-    });
-
-    return { update: update };
-  }
-  [].slice.call(document.querySelectorAll('.lang-en, .lang-zh')).forEach(function (scope) {
-    var api = initTimeline(scope);
-    if (api) timelineApis.push(api);
-  });
-  var rxTicking = false;
-  function rxSpy() { rxTicking = false; timelineApis.forEach(function (a) { a.update(); }); }
-  function rxScroll() { if (!rxTicking) { rxTicking = true; requestAnimationFrame(rxSpy); } }
-  if (timelineApis.length) {
-    window.addEventListener('scroll', rxScroll, { passive: true });
-    window.addEventListener('resize', rxScroll, { passive: true });
-    rxSpy();
+    panel.addEventListener('transitionend', finishClose);
   }
 
-  /* ---- Language toggle (EN / 中文) ---- */
-  var wrap = document.getElementById('wrap');
-  var langButtons = [].slice.call(document.querySelectorAll('.segmented button'));
-  function setLang(lang) {
-    wrap.setAttribute('data-lang', lang);
-    root.lang = (lang === 'zh' ? 'zh' : 'en');
-    langButtons.forEach(function (b) {
-      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
-    });
-    /* guarantee revealed blocks in the now-visible language are shown */
-    var active = wrap.querySelector(lang === 'zh' ? '.lang-zh' : '.lang-en');
-    if (active) showAll([].slice.call(active.querySelectorAll('.reveal')));
-    /* refresh the timeline's active milestone for the now-visible language */
-    if (typeof rxSpy === 'function') rxSpy();
-  }
-  langButtons.forEach(function (b) {
-    b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
-  });
-
-  /* ---- Print / Save as PDF ---- */
-  [].slice.call(document.querySelectorAll('[data-print]')).forEach(function (btn) {
-    btn.addEventListener('click', function () { window.print(); });
-  });
-
-  /* ---- Copy email + toast ---- */
-  var toast = document.getElementById('toast');
-  var toastMsg = document.getElementById('toastMsg');
-  var toastTimer;
-  function showToast(msg) {
-    if (!toast) return;
-    toastMsg.textContent = msg;
-    toast.classList.add('is-shown');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.classList.remove('is-shown'); }, 2200);
-  }
-  var emailLink = document.getElementById('emailLink');
-  if (emailLink && navigator.clipboard && navigator.clipboard.writeText) {
-    emailLink.addEventListener('click', function (ev) {
-      ev.preventDefault();
-      navigator.clipboard.writeText(emailLink.getAttribute('data-email')).then(function () {
-        showToast('Email copied to clipboard');
-      }).catch(function () {
-        window.location.href = emailLink.getAttribute('href');
+  function initExperienceDisclosures() {
+    var disclosures = [].slice.call(document.querySelectorAll('[data-disclosure]'));
+    if (!disclosures.length) return;
+    root.classList.add('has-disclosures');
+    disclosures.forEach(function (disclosure) {
+      var button = disclosure.querySelector('[data-disclosure-control]');
+      var panel = disclosure.querySelector('[data-disclosure-panel]');
+      if (!button || !panel) return;
+      setDisclosure(button, panel, false, true);
+      button.addEventListener('click', function () {
+        setDisclosure(
+          button,
+          panel,
+          button.getAttribute('aria-expanded') !== 'true',
+          false
+        );
       });
     });
   }
+
+  function initPrintControls() {
+    var printButtons = [].slice.call(document.querySelectorAll('[data-print]'));
+    var disclosures = [].slice.call(document.querySelectorAll('[data-disclosure]'));
+    var previousStates = [];
+
+    printButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        window.print();
+      });
+    });
+
+    window.addEventListener('beforeprint', function () {
+      previousStates = disclosures.map(function (disclosure) {
+        var button = disclosure.querySelector('[data-disclosure-control]');
+        var panel = disclosure.querySelector('[data-disclosure-panel]');
+        var open = button && button.getAttribute('aria-expanded') === 'true';
+        if (button && panel) setDisclosure(button, panel, true, true);
+        return { button: button, panel: panel, open: open };
+      });
+    });
+
+    window.addEventListener('afterprint', function () {
+      previousStates.forEach(function (state) {
+        if (state.button && state.panel) {
+          setDisclosure(state.button, state.panel, state.open, true);
+        }
+      });
+    });
+  }
+
+  function initEmailCopy() {
+    var links = [].slice.call(document.querySelectorAll('[data-email]'));
+    var toast = document.querySelector('[data-toast]');
+    var message = toast && toast.querySelector('[data-toast-message]');
+    var timer;
+
+    links.forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+        event.preventDefault();
+        navigator.clipboard.writeText(link.getAttribute('data-email')).then(function () {
+          if (!toast || !message) return;
+          message.textContent = root.lang === 'zh' ? '邮箱已复制' : 'Email copied to clipboard';
+          toast.classList.add('is-visible');
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            toast.classList.remove('is-visible');
+          }, 2200);
+        }).catch(function () {
+          window.location.href = link.getAttribute('href');
+        });
+      });
+    });
+  }
+
+  function initFooterMetadata() {
+    var year = document.getElementById('year');
+    var updated = document.getElementById('updated');
+    if (year) year.textContent = new Date().getFullYear();
+    if (!updated) return;
+    var date = new Date(document.lastModified);
+    updated.textContent = Number.isNaN(date.getTime())
+      ? String(new Date().getFullYear())
+      : date.toLocaleDateString(root.lang === 'zh' ? 'zh-CN' : 'en-NZ', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+  }
+
+  initThemeControl();
+  initLanguageControl();
+  initExperienceDisclosures();
+  initPrintControls();
+  initEmailCopy();
+  initFooterMetadata();
 })();

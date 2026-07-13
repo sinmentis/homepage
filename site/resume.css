@@ -93,20 +93,8 @@ html.resume-page :focus-visible {
   display: none !important;
 }
 
-/* Task 2->3 migration state: only the #wrap[data-lang] selectors gate
-   panel visibility. resume.js (unmodified since Task 1) never updates
-   the root data-language attribute after its initial boot-script write,
-   so a root-scoped selector paired with a data-language-panel attribute
-   selector would go stale after the first toggle and hide both panels
-   at once. Task 3 replaces this with the final root/data-panel
-   mechanism alongside a resume.js rewrite that keeps the root attribute
-   in sync. */
-#wrap[data-lang="en"] .lang-zh,
-#wrap[data-lang="zh"] .lang-en {
-  display: none;
-}
-
-.rx-role.is-collapsed .resume-role-details {
+html.resume-page[data-language="en"] [data-language-panel="zh"],
+html.resume-page[data-language="zh"] [data-language-panel="en"] {
   display: none;
 }
 
@@ -439,7 +427,52 @@ html.resume-page :focus-visible {
   transition: opacity 180ms var(--resume-ease), transform 240ms var(--resume-ease);
 }
 
-.resume-toast.is-shown,
+.resume-init .resume-identity {
+  animation: resume-enter 240ms var(--resume-ease) both;
+}
+
+@keyframes resume-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.has-disclosures .resume-role-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 260ms var(--resume-ease),
+    opacity 220ms var(--resume-ease);
+}
+
+.has-disclosures .resume-role-details-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.has-disclosures .resume-role-details[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.has-disclosures .resume-role-details[hidden] {
+  display: none !important;
+}
+
+.resume-disclosure-control:hover {
+  transform: translateY(-1px);
+}
+
+.resume-disclosure-control:active {
+  transform: translateY(1px);
+}
+
 .resume-toast.is-visible {
   opacity: 1;
   transform: translate(-50%, 0);

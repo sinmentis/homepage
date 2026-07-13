@@ -9,34 +9,60 @@ RESUME_CSS = ROOT / "site" / "resume.css"
 RESUME_JS = ROOT / "site" / "resume.js"
 
 
-class ResumeScriptExtractionTests(unittest.TestCase):
+class ResumeScriptTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.html = RESUME_INDEX.read_text(encoding="utf-8")
-        cls.js = RESUME_JS.read_text(encoding="utf-8") if RESUME_JS.exists() else ""
+        cls.js = RESUME_JS.read_text(encoding="utf-8")
 
     def test_loads_deferred_resume_script(self):
         self.assertIn('<script src="/resume.js?v=1" defer></script>', self.html)
 
     def test_large_behavior_script_is_not_inline(self):
-        self.assertNotIn("/* ---- App-bar hairline on scroll ---- */", self.html)
         self.assertNotIn("function countUp(", self.html)
         self.assertNotIn("function initTimeline(", self.html)
 
-    def test_extracted_script_preserves_current_behavior(self):
-        for fragment in (
-            "function countUp(",
-            "function initTimeline(",
-            "window.print()",
-            "navigator.clipboard.writeText",
+    def test_defines_only_final_initializers(self):
+        for name in (
+            "initThemeControl",
+            "initLanguageControl",
+            "initExperienceDisclosures",
+            "initPrintControls",
+            "initEmailCopy",
+            "initFooterMetadata",
         ):
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.js)
+            with self.subTest(name=name):
+                self.assertRegex(self.js, rf"function\s+{name}\s*\(")
+        for legacy in ("countUp", "initTimeline", "initLegacyPresentation", "IntersectionObserver"):
+            with self.subTest(legacy=legacy):
+                self.assertNotIn(legacy, self.js)
 
-    def test_preserves_current_theme_contract(self):
-        self.assertIn("['auto', 'light', 'dark']", self.js)
-        self.assertIn("localStorage.setItem('theme'", self.js)
-        self.assertIn("localStorage.removeItem('theme')", self.js)
+    def test_language_precedence_and_persistence_are_explicit(self):
+        self.assertIn("localStorage.getItem('resume-language')", self.html)
+        self.assertIn("navigator.languages", self.html)
+        self.assertIn("navigator.language", self.html)
+        self.assertIn("localStorage.setItem('resume-language'", self.js)
+        self.assertIn("root.lang = language === 'zh' ? 'zh' : 'en'", self.js)
+
+    def test_inactive_language_is_removed_from_accessibility_tree(self):
+        self.assertIn("panel.hidden = panelLanguage !== language", self.js)
+
+    def test_disclosures_are_progressive_enhancements(self):
+        self.assertNotRegex(self.html, r"data-disclosure-panel[^>]*\shidden")
+        self.assertIn("root.classList.add('has-disclosures')", self.js)
+        self.assertIn("panel.hidden = false", self.js)
+        self.assertIn("panel.hidden = true", self.js)
+        self.assertIn("panel.setAttribute('data-open', 'true')", self.js)
+        self.assertIn("panel.removeAttribute('data-open')", self.js)
+        self.assertIn("button.setAttribute('aria-expanded'", self.js)
+
+    def test_print_expands_details_without_javascript_state_loss(self):
+        self.assertIn("window.addEventListener('beforeprint'", self.js)
+        self.assertIn("window.addEventListener('afterprint'", self.js)
+
+    def test_clipboard_failure_uses_mailto(self):
+        self.assertIn("navigator.clipboard.writeText", self.js)
+        self.assertIn("window.location.href = link.getAttribute('href')", self.js)
 
 
 class ResumeMarkupTests(unittest.TestCase):
@@ -165,28 +191,22 @@ class ResumeStyleTests(unittest.TestCase):
     def test_css_braces_are_balanced(self):
         self.assertEqual(self.css.count("{"), self.css.count("}"))
 
-    def test_language_panel_visibility_is_wrap_scoped_only(self):
-        """Task 2->3 migration-state regression test.
+    def test_language_panel_visibility_is_root_scoped(self):
+        """Task 3 final mechanism: root data-language gates data-language-panel.
 
-        resume.js (unmodified since Task 1) only ever writes
-        `#wrap[data-lang]`; it never touches `html[data-language]` after
-        the boot script's one-time initial write. A CSS rule that also
-        hides `[data-language-panel]` based on
-        `html.resume-page[data-language]` goes stale after the first
-        toggle click and ends up hiding BOTH panels at once (the
-        wrap-scoped rule hides the new language's `.lang-*` class while
-        the stale root rule still hides the other language's
-        `[data-language-panel]`). Task 3 installs the final root/
-        data-panel mechanism together with a `resume.js` rewrite that
-        keeps `html[data-language]` in sync; until then, only the
-        `#wrap[data-lang]` selectors may gate panel visibility.
+        Superseded the Task 2->3 migration-state regression test now that
+        resume.js keeps `html[data-language]` in sync on every toggle click
+        and the temporary `#wrap[data-lang]` selectors have been removed.
         """
-        self.assertNotRegex(
+        self.assertIn(
+            'html.resume-page[data-language="en"] [data-language-panel="zh"]',
             self.css,
-            r"html\.resume-page\[data-language[^\]]*\]\s+\[data-language-panel",
         )
-        self.assertIn('#wrap[data-lang="en"] .lang-zh', self.css)
-        self.assertIn('#wrap[data-lang="zh"] .lang-en', self.css)
+        self.assertIn(
+            'html.resume-page[data-language="zh"] [data-language-panel="en"]',
+            self.css,
+        )
+        self.assertNotIn("#wrap[data-lang", self.css)
 
 
 if __name__ == "__main__":

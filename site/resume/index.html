@@ -60,25 +60,25 @@
 <body id="top">
   <a class="resume-skip-link" href="#resume-main">Skip to content</a>
 
-  <header class="resume-system-bar" id="appbar">
+  <header class="resume-system-bar">
     <a class="resume-home-link" href="/" aria-label="Shun Lyu, home">
       <span aria-hidden="true">&gt;</span> SL / résumé
     </a>
     <nav class="resume-controls" aria-label="Résumé controls">
-      <div class="resume-language-control segmented" data-language-control aria-label="Language">
+      <div class="resume-language-control" data-language-control aria-label="Language">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-lang="zh" aria-pressed="false">中文</button>
       </div>
       <button type="button" data-print>print / PDF</button>
-      <button id="themeToggle" type="button" data-theme-control>
+      <button type="button" data-theme-control>
         theme:<span data-theme-label>auto</span>
       </button>
     </nav>
   </header>
 
   <main id="resume-main" class="resume-main">
-    <article class="resume-document" id="wrap" data-lang="en">
-      <div class="lang-en" data-language-panel="en">
+    <article class="resume-document">
+      <div data-language-panel="en">
         <header class="resume-identity">
           <div>
             <p class="resume-label">Auckland / New Zealand</p>
@@ -106,7 +106,7 @@
           <div class="resume-section-body">
             <h2 id="experience-en">Experience</h2>
 
-            <article class="resume-role resume-role--current rx-role" id="role-en-microsoft">
+            <article class="resume-role resume-role--current" id="role-en-microsoft">
               <header class="resume-role-header">
                 <div>
                   <h3>Software Engineer, Azure Kubernetes Service</h3>
@@ -124,7 +124,7 @@
               <p class="resume-context"><span>context /</span> Azure · C# · Python · Kubernetes · CI/CD · Distributed Systems</p>
             </article>
 
-            <article class="resume-role rx-role" id="role-en-crown" data-disclosure>
+            <article class="resume-role" id="role-en-crown" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>Software Engineer</h3>
@@ -134,7 +134,7 @@
               </header>
               <p class="resume-role-summary">Build infrastructure, CI/CD, static analysis, performance measurement, and Android development workflows.</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-en-crown"
@@ -155,7 +155,7 @@
               </div>
             </article>
 
-            <article class="resume-role rx-role" id="role-en-navico" data-disclosure>
+            <article class="resume-role" id="role-en-navico" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>Linux Platform Software Developer</h3>
@@ -165,7 +165,7 @@
               </header>
               <p class="resume-role-summary">ARM Linux platforms, kernel and bootloader debugging, containerized toolchains, and integration automation.</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-en-navico"
@@ -186,7 +186,7 @@
               </div>
             </article>
 
-            <article class="resume-role rx-role" id="role-en-fp" data-disclosure>
+            <article class="resume-role" id="role-en-fp" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>Electrical Software Engineer</h3>
@@ -196,7 +196,7 @@
               </header>
               <p class="resume-role-summary">Connected appliances, embedded Linux, bare-metal firmware, Qt, and reproducible development environments.</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-en-fp"
@@ -240,7 +240,7 @@
         </section>
       </div>
 
-      <div class="lang-zh" data-language-panel="zh">
+      <div data-language-panel="zh">
         <header class="resume-identity">
           <div>
             <p class="resume-label">新西兰 / 奥克兰</p>
@@ -268,7 +268,7 @@
           <div class="resume-section-body">
             <h2 id="experience-zh">工作经历</h2>
 
-            <article class="resume-role resume-role--current rx-role" id="role-zh-microsoft">
+            <article class="resume-role resume-role--current" id="role-zh-microsoft">
               <header class="resume-role-header">
                 <div>
                   <h3>软件工程师，Azure Kubernetes Service</h3>
@@ -286,7 +286,7 @@
               <p class="resume-context"><span>技术栈 /</span> Azure · C# · Python · Kubernetes · CI/CD · 分布式系统</p>
             </article>
 
-            <article class="resume-role rx-role" id="role-zh-crown" data-disclosure>
+            <article class="resume-role" id="role-zh-crown" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>软件工程师</h3>
@@ -296,7 +296,7 @@
               </header>
               <p class="resume-role-summary">构建基础设施、CI/CD、静态分析、性能度量与 Android 开发流程。</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-zh-crown"
@@ -317,7 +317,7 @@
               </div>
             </article>
 
-            <article class="resume-role rx-role" id="role-zh-navico" data-disclosure>
+            <article class="resume-role" id="role-zh-navico" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>Linux 平台软件开发工程师</h3>
@@ -327,7 +327,7 @@
               </header>
               <p class="resume-role-summary">ARM Linux 平台、内核与 bootloader 调试、容器化工具链和集成自动化。</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-zh-navico"
@@ -348,7 +348,7 @@
               </div>
             </article>
 
-            <article class="resume-role rx-role" id="role-zh-fp" data-disclosure>
+            <article class="resume-role" id="role-zh-fp" data-disclosure>
               <header class="resume-role-header">
                 <div>
                   <h3>电子软件工程师</h3>
@@ -358,7 +358,7 @@
               </header>
               <p class="resume-role-summary">联网家电、嵌入式 Linux、裸机固件、Qt 与可复现开发环境。</p>
               <button
-                class="resume-disclosure-control rx-role__toggle"
+                class="resume-disclosure-control"
                 type="button"
                 aria-expanded="true"
                 aria-controls="details-zh-fp"
