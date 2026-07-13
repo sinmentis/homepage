@@ -61,9 +61,12 @@ class HomepageMarkupTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_homepage_owns_its_styles(self):
-        self.assertIn('href="/home.css?v=5"', self.html)
+        self.assertIn('href="/home.css?v=6"', self.html)
         self.assertNotIn("/vendor/primer/", self.html)
         self.assertNotIn('href="/style.css', self.html)
+
+    def test_homepage_requests_fresh_script_version(self):
+        self.assertIn('src="/home.js?v=2"', self.html)
 
     def test_resume_still_requests_unbumped_home_css_version(self):
         # site/resume/index.html is protected and must not be modified by
@@ -546,7 +549,7 @@ class HomepageScriptTests(unittest.TestCase):
 
     def test_loads_deferred_homepage_script(self):
         html = INDEX.read_text(encoding="utf-8")
-        self.assertRegex(html, r'<script src="/home\.js\?v=1" defer></script>')
+        self.assertRegex(html, r'<script src="/home\.js\?v=2" defer></script>')
 
     def test_keeps_progressive_enhancement_guards(self):
         required_fragments = (
@@ -578,12 +581,12 @@ class HomepageAssetTests(unittest.TestCase):
 
     def test_references_social_preview(self):
         self.assertIn(
-            '<meta property="og:image" content="https://shunlyu.com/og-home.png">',
+            '<meta property="og:image" content="https://shunlyu.com/og-home.png?v=1">',
             self.html,
         )
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', self.html)
         self.assertIn(
-            '<meta name="twitter:image" content="https://shunlyu.com/og-home.png">',
+            '<meta name="twitter:image" content="https://shunlyu.com/og-home.png?v=1">',
             self.html,
         )
 
