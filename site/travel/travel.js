@@ -113,7 +113,7 @@
 
   function initImageFailureState() {
     document.querySelectorAll('.evidence-grid img').forEach(function (image) {
-      image.addEventListener('error', function () {
+      function markFailed() {
         image.classList.add('image-failed');
         image.removeAttribute('src');
         image.setAttribute('aria-label', image.alt + '。图片加载失败，请阅读下方文字和来源。');
@@ -128,7 +128,16 @@
           note.textContent = '图片加载失败，以下文字仍可参考：';
           caption.insertBefore(note, caption.firstChild);
         }
-      });
+      }
+
+      image.addEventListener('error', markFailed);
+      // Evidence images load eagerly now (no `loading="lazy"`), so a fast
+      // same-origin failure can resolve before this deferred script attaches
+      // the listener above. Catch that already-missed event by checking the
+      // settled state directly.
+      if (image.complete && image.naturalWidth === 0 && image.getAttribute('src')) {
+        markFailed();
+      }
     });
   }
 

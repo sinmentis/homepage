@@ -73,14 +73,17 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_page_uses_local_css_js_and_local_content_images(self):
-        # Only the CSS query version bumps here (v=2 -> v=4): the print
-        # fix changes travel.css only, so bumping travel.js too would be an
-        # unnecessary cache-bust of an unchanged file. (v=3 was skipped: a
-        # pre-deploy verification probe to that exact querystring caused
-        # Cloudflare to cache stale pre-fix content under it before the
-        # real deploy landed; see final-print-fix-report.md.)
+        # travel.css stays at v=4 (unchanged by this fix). travel.js bumps
+        # v=2 -> v=3: this fix's image-error race patch (see
+        # TravelScriptTests.test_image_failure_state_also_catches_already_settled_eager_images)
+        # changes travel.js content, so it needs its own cache-bust
+        # (Cloudflare caches by full URL including querystring; see
+        # final-print-fix-report.md's "?v=3 poisoning" note for travel.css —
+        # that incident was for the CSS asset's own ?v=3, an unrelated
+        # cache key from this JS asset's ?v=3, which has never been
+        # requested).
         self.assertIn('href="/travel/travel.css?v=4"', self.html)
-        self.assertIn('src="/travel/travel.js?v=2"', self.html)
+        self.assertIn('src="/travel/travel.js?v=3"', self.html)
         image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
         self.assertTrue(image_sources)
         for source in image_sources:
@@ -142,6 +145,24 @@ class TravelPageContractTests(unittest.TestCase):
         self.assertIn('data-theme-variant="light"', block)
         self.assertIn('data-theme-variant="dark"', block)
         self.assertEqual(len(re.findall(r"<img\b", block)), 2)
+
+    def test_evidence_grid_images_load_eagerly(self):
+        # Evidence images (including both Daxigou theme variants) must not
+        # be lazy-loaded: Chromium does not force-load off-screen lazy
+        # images for print, so a user printing without first scrolling
+        # would otherwise get blank evidence boxes.
+        grid = re.search(
+            r'<div class="evidence-grid">(.*?)</div>\s*<p class="source-note">',
+            self.html,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(grid)
+        block = grid.group(1)
+        images = re.findall(r"<img\b[^>]*>", block)
+        self.assertEqual(len(images), 5)
+        for image in images:
+            with self.subTest(image=image):
+                self.assertNotIn('loading="lazy"', image)
 
     def test_decision_matrix_headers_have_scope_attributes(self):
         table = re.search(r"<table>(.*?)</table>", self.html, flags=re.DOTALL)
@@ -382,6 +403,14 @@ class TravelScriptTests(unittest.TestCase):
         # normal, non-replaced DOM node that always paints.
         self.assertIn("image-failed-note", self.js)
         self.assertIn("figure.querySelector('figcaption')", self.js)
+
+    def test_image_failure_state_also_catches_already_settled_eager_images(self):
+        # Evidence images load eagerly now (no `loading="lazy"`), so a fast
+        # same-origin failure can resolve before this deferred script
+        # attaches its 'error' listener. The handler must also detect an
+        # image that already finished failing by the time it runs.
+        self.assertIn("image.complete", self.js)
+        self.assertIn("naturalWidth === 0", self.js)
 
 
 if __name__ == "__main__":
