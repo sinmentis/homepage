@@ -47,7 +47,7 @@ Open with a short one-time boot sequence, then settle into:
 > Shun Lyu  
 > Software engineer working on Azure Kubernetes Service at Microsoft. Previously worked across embedded systems, Linux, Android, and build infrastructure.
 
-Supporting metadata may show Auckland, current focus areas, and direct paths to the résumé and GitHub. Do not use a looping typewriter, availability pill, counters, or abstract self-ratings.
+Supporting metadata shows Auckland, the current focus areas `reliability`, `automation`, and `developer tooling`, plus direct paths to the résumé and GitHub. Do not use a looping typewriter, availability pill, counters, or abstract self-ratings.
 
 ### Work now
 
@@ -90,6 +90,7 @@ Remove the current metrics, looping typed roles, gradient identity avatar, equal
 
 - Use **IBM Plex Mono** for display headings, labels, coordinates, and command-style links.
 - Use **IBM Plex Sans** for paragraphs and longer explanatory text.
+- Load both families through the site's existing Google Fonts approach and retain local system fallbacks.
 - Use large, tightly tracked monospace headings selectively. Body copy remains proportional and limited to a readable line length.
 - Use sentence case for section labels and avoid repeated all-caps headings outside small instrumentation labels.
 
@@ -130,11 +131,11 @@ Run a short boot-style reveal once on page load:
 3. Two or three status lines settle into place.
 4. The page becomes fully interactive.
 
-The sequence must be brief and must not repeat.
+The sequence must finish within 1.4 seconds, run only on the first page load, and never repeat while the visitor scrolls.
 
 ### Scroll behavior
 
-- Use CSS sticky positioning for limited panel overlap and section handoff.
+- Use CSS sticky positioning for section handoff, with no more than one pinned content panel at a time.
 - Use `IntersectionObserver` for entry states.
 - Use a passive scroll listener with `requestAnimationFrame` only where continuous progress is required for a trace or mask.
 - Draw thin SVG routes or traces when related content enters the viewport.
@@ -142,7 +143,7 @@ The sequence must be brief and must not repeat.
 
 ### Interaction
 
-- Links use underline travel, a small position change, and signal-color focus treatment.
+- Links move up by one pixel on hover, use underline travel, and retain signal-color focus treatment.
 - Pressed states move by approximately one pixel.
 - Theme changes should transition color variables without animating layout.
 
