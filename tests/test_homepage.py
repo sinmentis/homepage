@@ -9,6 +9,7 @@ INDEX = ROOT / "site" / "index.html"
 HOME_CSS = ROOT / "site" / "home.css"
 HOME_JS = ROOT / "site" / "home.js"
 OG_PNG = ROOT / "site" / "og-home.png"
+RESUME_INDEX = ROOT / "site" / "resume" / "index.html"
 
 
 class HomepageMarkupTests(unittest.TestCase):
@@ -60,9 +61,34 @@ class HomepageMarkupTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_homepage_owns_its_styles(self):
-        self.assertIn('href="/home.css?v=3"', self.html)
+        self.assertIn('href="/home.css?v=4"', self.html)
         self.assertNotIn("/vendor/primer/", self.html)
         self.assertNotIn('href="/style.css', self.html)
+
+    def test_html_element_carries_homepage_marker_class(self):
+        self.assertRegex(self.html, r'<html\b[^>]*\bclass="home-page"')
+
+    def test_resume_document_is_not_marked_as_home_page(self):
+        resume_html = RESUME_INDEX.read_text(encoding="utf-8")
+        self.assertNotRegex(resume_html, r'<html\b[^>]*\bclass="home-page"')
+
+    def test_header_nav_includes_linkedin(self):
+        nav_match = re.search(
+            r'<nav class="system-nav"[^>]*>(.*?)</nav>', self.html, flags=re.DOTALL
+        )
+        self.assertIsNotNone(nav_match, "expected a .system-nav element")
+        nav_html = nav_match.group(1)
+        self.assertIn('href="https://www.linkedin.com/in/shunlyu"', nav_html)
+        linkedin_match = re.search(
+            r'<a href="https://www\.linkedin\.com/in/shunlyu"([^>]*)>LinkedIn</a>',
+            nav_html,
+        )
+        self.assertIsNotNone(
+            linkedin_match, "expected a plain-text LinkedIn link in the header nav"
+        )
+        attrs = linkedin_match.group(1)
+        self.assertIn('target="_blank"', attrs)
+        self.assertIn('rel="noopener"', attrs)
 
     def test_preserves_accessibility_and_primary_links(self):
         self.assertIn('href="#main-content"', self.html)
@@ -109,6 +135,140 @@ class HomepageStyleTests(unittest.TestCase):
         self.assertIn("@media (max-width: 760px)", self.css)
         self.assertIn(".instrument-rail", self.css)
         self.assertIn("position: sticky", self.css)
+
+    def test_scopes_global_reset_rules_to_home_page_marker(self):
+        required_selectors = (
+            "html.home-page {",
+            'html.home-page[data-color-mode="light"]',
+            'html.home-page[data-color-mode="dark"]',
+            "html.home-page body {",
+            "html.home-page body::after {",
+            "html.home-page *,",
+            "html.home-page a {",
+            "html.home-page button {",
+            "html.home-page :focus-visible {",
+            "html.home-page ::selection {",
+            "html.home-page main {",
+        )
+        for selector in required_selectors:
+            with self.subTest(selector=selector):
+                self.assertIn(selector, self.css)
+
+    def test_reduced_motion_universal_selectors_are_scoped_to_home_page(self):
+        reduced_motion_block = re.search(
+            r"@media \(prefers-reduced-motion: reduce\)\s*\{(.*?)\n\}",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(
+            reduced_motion_block, "expected an @media (prefers-reduced-motion: reduce) block"
+        )
+        body = reduced_motion_block.group(1)
+        self.assertIn("html.home-page {", body)
+        self.assertIn("html.home-page *,", body)
+        self.assertIn("html.home-page body {", body)
+        # These bare, unscoped selectors would leak onto /resume/, which also
+        # requests home.css without the homepage marker class.
+        self.assertNotRegex(body, r"(?<!\.home-page)\n\s*html\s*\{")
+        self.assertNotRegex(body, r"(?<!\.home-page)\n\s*body\s*\{")
+        self.assertNotRegex(body, r"\n\s*\*,\n\s*\*::before,\n\s*\*::after\s*\{")
+
+    def test_restores_legacy_type_stack_for_non_home_pages(self):
+        token_block = re.search(
+            r"html:not\(\.home-page\)\s*\{([^}]*)\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(
+            token_block, "expected an html:not(.home-page) compatibility block"
+        )
+        declarations = token_block.group(1)
+        self.assertIn('--font-sans: "Inter"', declarations)
+        self.assertIn('--font-mono: "JetBrains Mono"', declarations)
+
+        body_block = re.search(
+            r"html:not\(\.home-page\)\s+body\s*\{([^}]*)\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(
+            body_block,
+            "expected an html:not(.home-page) body compatibility block",
+        )
+        body_declarations = body_block.group(1)
+        self.assertIn('font-feature-settings: "cv11", "ss01"', body_declarations)
+        self.assertIn("letter-spacing: -0.005em", body_declarations)
+
+    def test_tablet_breakpoint_collapses_two_column_layout(self):
+        tablet_block = re.search(
+            r"@media \(max-width: 1024px\)\s*\{(.*?)\n\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(
+            tablet_block, "expected an @media (max-width: 1024px) block"
+        )
+        body = tablet_block.group(1)
+        self.assertIn(".intro-shell", body)
+        self.assertIn(".console-section", body)
+        self.assertIn("grid-template-columns: 1fr", body)
+        self.assertIn(".instrument-rail", body)
+        self.assertIn("position: static", body)
+
+        mobile_block = re.search(
+            r"@media \(max-width: 760px\)\s*\{(.*?)\n\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(mobile_block)
+        mobile_body = mobile_block.group(1)
+        self.assertIn(".system-nav a:first-child", mobile_body)
+        self.assertIn(".fact-list div", mobile_body)
+        self.assertIn(".system-footer {", mobile_body)
+
+    def test_intro_title_reveals_with_horizontal_mask(self):
+        rule = re.search(
+            r"\.js \.intro-title\.boot-item\s*\{([^}]*)\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(
+            rule, "expected a dedicated .js .intro-title.boot-item rule"
+        )
+        name_match = re.search(r"animation(?:-name)?:\s*([\w-]+)", rule.group(1))
+        self.assertIsNotNone(name_match, "expected an animation name override")
+        keyframe_name = name_match.group(1)
+        self.assertNotEqual(
+            keyframe_name,
+            "boot-in",
+            "the name heading must not reuse the shared vertical boot-in mask",
+        )
+
+        keyframes = re.search(
+            r"@keyframes\s+" + re.escape(keyframe_name) + r"\s*\{(.*?)\n\}",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(keyframes, f"expected @keyframes {keyframe_name}")
+        from_block = re.search(r"from\s*\{([^}]*)\}", keyframes.group(1), flags=re.DOTALL)
+        self.assertIsNotNone(from_block)
+        clip_match = re.search(
+            r"clip-path:\s*inset\(([^)]*)\)", from_block.group(1)
+        )
+        self.assertIsNotNone(clip_match, "expected a clip-path inset() mask")
+        top, right, bottom, left = clip_match.group(1).split()
+        self.assertEqual(top, "0", "a horizontal mask must not clip the top edge")
+        self.assertEqual(bottom, "0", "a horizontal mask must not clip the bottom edge")
+        self.assertTrue(
+            right != "0" or left != "0",
+            "a horizontal mask must clip from the left or right edge",
+        )
+
+    def test_system_bar_uses_webkit_backdrop_filter_with_solid_fallback(self):
+        supports_block = re.search(
+            r"@supports[^{]*backdrop-filter[^{]*\{(.*?)\n\}", self.css, flags=re.DOTALL
+        )
+        self.assertIsNotNone(
+            supports_block, "expected an @supports backdrop-filter feature block"
+        )
+        body = supports_block.group(1)
+        self.assertIn(".system-bar", body)
+        self.assertIn("-webkit-backdrop-filter: blur(14px)", body)
+        self.assertIn("backdrop-filter: blur(14px)", body)
+
+        base_rule = re.search(r"\n\.system-bar\s*\{([^}]*)\}", self.css, flags=re.DOTALL)
+        self.assertIsNotNone(base_rule, "expected a base .system-bar rule")
+        self.assertNotIn("backdrop-filter", base_rule.group(1))
 
     def test_core_content_is_not_hidden_without_enhancement_class(self):
         hidden_reveal_rule = re.search(

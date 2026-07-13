@@ -1,4 +1,4 @@
-:root {
+html.home-page {
   color-scheme: light;
   --page-bg: #e9e5d9;
   --page-fg: #222a20;
@@ -18,7 +18,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  html.home-page {
     color-scheme: dark;
     --page-bg: #121610;
     --page-fg: #e7ecdf;
@@ -31,7 +31,7 @@
   }
 }
 
-[data-color-mode="light"] {
+html.home-page[data-color-mode="light"] {
   color-scheme: light;
   --page-bg: #e9e5d9;
   --page-fg: #222a20;
@@ -43,7 +43,7 @@
   --focus-ring: 0 0 0 3px rgba(83, 102, 62, 0.34);
 }
 
-[data-color-mode="dark"] {
+html.home-page[data-color-mode="dark"] {
   color-scheme: dark;
   --page-bg: #121610;
   --page-fg: #e7ecdf;
@@ -55,18 +55,34 @@
   --focus-ring: 0 0 0 3px rgba(183, 203, 145, 0.3);
 }
 
-*,
-*::before,
-*::after {
+/* Non-home compatibility: /resume/ still requests this stylesheet without
+   the homepage marker class. Restore the pre-redesign Inter / JetBrains
+   Mono type stack there instead of leaking homepage tokens onto it. */
+html:not(.home-page) {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
+    Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html:not(.home-page) body {
+  font-feature-settings: "cv11", "ss01";
+  letter-spacing: -0.005em;
+}
+
+html.home-page *,
+html.home-page *::before,
+html.home-page *::after {
   box-sizing: border-box;
 }
 
-html {
+html.home-page {
   scroll-behavior: smooth;
   background: var(--page-bg);
 }
 
-body {
+html.home-page body {
   margin: 0;
   min-height: 100vh;
   color: var(--page-fg);
@@ -83,7 +99,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-body::after {
+html.home-page body::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -117,26 +133,26 @@ body::after {
   }
 }
 
-a {
+html.home-page a {
   color: inherit;
   text-decoration: none;
 }
 
-a,
-button {
+html.home-page a,
+html.home-page button {
   -webkit-tap-highlight-color: transparent;
 }
 
-button {
+html.home-page button {
   font: inherit;
 }
 
-:focus-visible {
+html.home-page :focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
 
-::selection {
+html.home-page ::selection {
   color: var(--page-bg);
   background: var(--signal);
 }
@@ -165,7 +181,13 @@ button {
   min-height: var(--bar-height);
   border-bottom: 1px solid var(--hairline);
   background: color-mix(in srgb, var(--page-bg) 88%, transparent);
-  backdrop-filter: blur(14px);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .system-bar {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
 }
 
 .system-bar::after {
@@ -274,7 +296,7 @@ button {
   cursor: pointer;
 }
 
-main {
+html.home-page main {
   width: min(100%, var(--container));
   margin-inline: auto;
   padding-inline: clamp(1rem, 3vw, 2rem);
@@ -647,6 +669,23 @@ main {
   }
 }
 
+.js .intro-title.boot-item {
+  animation-name: title-mask-reveal;
+}
+
+@keyframes title-mask-reveal {
+  from {
+    opacity: 0;
+    transform: none;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0);
+  }
+}
+
 .reveal {
   opacity: 1;
   transform: none;
@@ -665,8 +704,24 @@ main {
   transform: none;
 }
 
+@media (max-width: 1024px) {
+  .intro-shell,
+  .console-section {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .instrument-rail,
+  .intro-rail {
+    position: static;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid var(--hairline);
+    border-left: 0;
+  }
+}
+
 @media (max-width: 760px) {
-  body {
+  html.home-page body {
     background-size: 30px 30px;
   }
 
@@ -684,12 +739,6 @@ main {
     display: none;
   }
 
-  .intro-shell,
-  .console-section {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
   .intro-shell {
     min-height: auto;
     padding-block: 5rem;
@@ -697,14 +746,6 @@ main {
 
   .intro-title {
     font-size: clamp(3.1rem, 18vw, 5rem);
-  }
-
-  .instrument-rail,
-  .intro-rail {
-    position: static;
-    padding: 1.25rem 0 0;
-    border-top: 1px solid var(--hairline);
-    border-left: 0;
   }
 
   .console-section {
@@ -724,20 +765,20 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html.home-page {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  html.home-page *,
+  html.home-page *::before,
+  html.home-page *::after {
     animation-duration: 0.001ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
 
-  body {
+  html.home-page body {
     background-position: 0 0;
   }
 
