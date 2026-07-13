@@ -10,6 +10,7 @@ HOME_CSS = ROOT / "site" / "home.css"
 HOME_JS = ROOT / "site" / "home.js"
 OG_PNG = ROOT / "site" / "og-home.png"
 RESUME_INDEX = ROOT / "site" / "resume" / "index.html"
+RESUME_JS = ROOT / "site" / "resume.js"
 
 
 class HomepageMarkupTests(unittest.TestCase):
@@ -377,7 +378,7 @@ class HomepageStyleTests(unittest.TestCase):
 
 class ResumeCompatibilityTests(unittest.TestCase):
     """/resume/ still loads home.css unscoped (as `/home.css?v=1`, without
-    the `.home-page` marker class) and its markup + inline script depend on
+    the `.home-page` marker class) and its markup + extracted script depend on
     several pre-redesign rules that used to live here unscoped. These tests
     read the actual resume markup and the current home.css to lock in every
     shared contract resume still consumes, restored under `html:not(.home-page)`.
@@ -387,6 +388,7 @@ class ResumeCompatibilityTests(unittest.TestCase):
     def setUpClass(cls):
         cls.css = HOME_CSS.read_text(encoding="utf-8")
         cls.resume_html = RESUME_INDEX.read_text(encoding="utf-8")
+        cls.resume_js = RESUME_JS.read_text(encoding="utf-8") if RESUME_JS.exists() else ""
 
     def test_resume_markup_uses_theme_toggle_icon_per_mode_contract(self):
         # Document the markup contract the CSS below must satisfy: three
@@ -438,9 +440,9 @@ class ResumeCompatibilityTests(unittest.TestCase):
         self.assertIn("opacity: 1", declarations)
         self.assertRegex(declarations, r"transform:\s*translate\(-50%,\s*0\)")
 
-        # The resume markup and inline script actually use this contract.
+        # The resume markup and its extracted script actually use this contract.
         self.assertIn('id="toast"', self.resume_html)
-        self.assertIn("toast.classList.add('is-shown')", self.resume_html)
+        self.assertIn("toast.classList.add('is-shown')", self.resume_js)
 
     def test_resume_reveal_hidden_visible_and_variant_contract(self):
         css = self.css
@@ -469,9 +471,9 @@ class ResumeCompatibilityTests(unittest.TestCase):
                     r"html:not\(\.home-page\)\.js\s+\." + variant + r"\s*\{",
                 )
 
-        # The resume markup and inline script actually use this contract.
+        # The resume markup and its extracted script actually use this contract.
         self.assertIn('class="rx-summary reveal"', self.resume_html)
-        self.assertIn("var reveals = [].slice.call(document.querySelectorAll('.reveal'));", self.resume_html)
+        self.assertIn("var reveals = [].slice.call(document.querySelectorAll('.reveal'));", self.resume_js)
 
     def test_shared_selector_audit_contracts_restored(self):
         # Full intersection audit beyond the three named review findings:
