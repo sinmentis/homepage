@@ -159,5 +159,51 @@ class TravelAssetTests(unittest.TestCase):
                 self.assertIn(fragment, credits)
 
 
+class TravelStyleTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.css = CSS.read_text(encoding="utf-8") if CSS.exists() else ""
+
+    def test_styles_are_scoped_to_travel_page(self):
+        required = (
+            "html.travel-page {",
+            "html.travel-page[data-color-mode=\"light\"]",
+            "html.travel-page[data-color-mode=\"dark\"]",
+            "html.travel-page body {",
+            "html.travel-page .route-controls",
+            "html.travel-page .evidence-grid",
+        )
+        for selector in required:
+            with self.subTest(selector=selector):
+                self.assertIn(selector, self.css)
+
+    def test_uses_current_homepage_tokens(self):
+        for token in (
+            "--page-bg: #e9e5d9",
+            "--page-fg: #222a20",
+            "--page-muted: #596055",
+            "--signal: #53663e",
+            "--page-bg: #121610",
+            "--page-fg: #e7ecdf",
+            "--signal: #b7cb91",
+            '--font-interface: "IBM Plex Mono"',
+            '--font-prose: "IBM Plex Sans"',
+        ):
+            with self.subTest(token=token):
+                self.assertIn(token, self.css)
+
+    def test_supports_mobile_print_and_reduced_motion(self):
+        self.assertIn("@media (max-width: 760px)", self.css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", self.css)
+        self.assertIn("@media print", self.css)
+
+    def test_avoids_gradients_and_decorative_shadows(self):
+        self.assertNotIn("linear-gradient", self.css)
+        self.assertNotIn("radial-gradient", self.css)
+        self.assertNotIn("drop-shadow", self.css)
+        self.assertEqual(self.css.count("box-shadow:"), 1)
+        self.assertIn("box-shadow: var(--focus-ring)", self.css)
+
+
 if __name__ == "__main__":
     unittest.main()
