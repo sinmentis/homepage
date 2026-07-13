@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img">
+  <title>大西沟影像证据说明</title>
+  <rect width="1200" height="760" rx="24" fill="#e9e5d9"/>
+  <g stroke="#53663e" stroke-opacity=".12">
+    <path d="M0 120H1200M0 240H1200M0 360H1200M0 480H1200M0 600H1200"/>
+    <path d="M180 0V760M360 0V760M540 0V760M720 0V760M900 0V760M1080 0V760"/>
+  </g>
+  <path d="M190 510c130-210 250-260 365-90 120-230 250-270 455 55" fill="none" stroke="#53663e" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="550" cy="250" r="42" fill="none" stroke="#53663e" stroke-width="10"/>
+  <text x="110" y="120" font-family="IBM Plex Mono, monospace" font-size="30" fill="#596055">DAXIGOU / EVIDENCE GAP</text>
+  <text x="110" y="620" font-family="IBM Plex Sans, sans-serif" font-size="42" font-weight="600" fill="#222a20">未找到许可明确的近期实景图</text>
+  <text x="110" y="680" font-family="IBM Plex Sans, sans-serif" font-size="27" fill="#596055">不使用其他地点照片代替。秋色在出发前复核。</text>
+</svg>

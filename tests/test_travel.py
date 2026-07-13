@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import struct
 import unittest
 
 
@@ -122,6 +123,40 @@ class TravelAssetTests(unittest.TestCase):
                 self.assertIn("OpenStreetMap contributors via OSRM", svg)
                 for label in labels:
                     self.assertIn(label, svg)
+
+    def test_social_preview_is_png_with_expected_dimensions(self):
+        preview = ASSETS / "og-travel.png"
+        self.assertTrue(preview.exists())
+        data = preview.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (1200, 630))
+
+    def test_destination_images_are_local_webp_files(self):
+        for name in ("tangbula.webp", "yining-ili-river.webp", "kuerdening.webp"):
+            with self.subTest(name=name):
+                data = (ASSETS / name).read_bytes()
+                self.assertEqual(data[:4], b"RIFF")
+                self.assertEqual(data[8:12], b"WEBP")
+
+    def test_daxigou_uses_an_explicit_evidence_panel(self):
+        panel = (ASSETS / "daxigou-evidence.svg").read_text(encoding="utf-8")
+        self.assertIn("未找到许可明确的近期实景图", panel)
+        self.assertIn("不使用其他地点照片代替", panel)
+
+    def test_attribution_records_exact_licences(self):
+        credits = (ASSETS / "ATTRIBUTION.md").read_text(encoding="utf-8")
+        required = (
+            "lwtt93",
+            "CC BY 2.0",
+            "Charlie Qi",
+            "CC BY-SA 4.0",
+            "George Lu",
+            "OpenStreetMap contributors via OSRM",
+        )
+        for fragment in required:
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, credits)
 
 
 if __name__ == "__main__":
