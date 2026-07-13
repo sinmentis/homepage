@@ -222,5 +222,29 @@ class HomepageScriptTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.js)
 
 
+class HomepageAssetTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.html = INDEX.read_text(encoding="utf-8")
+
+    def test_references_social_preview(self):
+        self.assertIn(
+            '<meta property="og:image" content="https://shunlyu.com/og-home.png">',
+            self.html,
+        )
+        self.assertIn('<meta name="twitter:card" content="summary_large_image">', self.html)
+        self.assertIn(
+            '<meta name="twitter:image" content="https://shunlyu.com/og-home.png">',
+            self.html,
+        )
+
+    def test_social_preview_is_1200_by_630_png(self):
+        self.assertTrue(OG_PNG.exists())
+        data = OG_PNG.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (1200, 630))
+
+
 if __name__ == "__main__":
     unittest.main()
