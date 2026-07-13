@@ -17,6 +17,7 @@
 - Licence URL: https://creativecommons.org/licenses/by-sa/4.0/
 - Source: https://commons.wikimedia.org/w/index.php?curid=96033764
 - Local derivative: `yining-ili-river.webp`, resized and converted without changing the depicted content.
+- This local derivative remains licensed under CC BY-SA 4.0, as required by the share-alike term of the source licence.
 
 ## Kuerdening
 

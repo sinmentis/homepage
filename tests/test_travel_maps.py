@@ -1,6 +1,17 @@
 import unittest
 
-from scripts.build_travel_maps import Place, RouteSegment, build_svg, project
+from scripts.build_travel_maps import (
+    DARK_PALETTE,
+    LIGHT_PALETTE,
+    Place,
+    RouteResult,
+    RouteSegment,
+    build_evidence_panel,
+    build_maps,
+    build_svg,
+    project,
+    validate_route_distance,
+)
 
 
 class TravelMapProjectionTests(unittest.TestCase):
@@ -58,6 +69,155 @@ class TravelMapSvgTests(unittest.TestCase):
         ]
         svg = build_svg("C / 唐布拉深住", places, segments)
         self.assertIn('stroke-dasharray="12 10"', svg)
+
+    def test_palette_defaults_to_light_and_paints_its_own_colors(self):
+        places = {"yining": Place("伊宁", 81.2, 43.9)}
+        svg = build_svg("A / test", places, [])
+        self.assertIn(f'fill="{LIGHT_PALETTE.bg}"', svg)
+        self.assertNotIn(DARK_PALETTE.bg, svg)
+
+    def test_dark_palette_paints_dark_colors_not_light_ones(self):
+        places = {"yining": Place("伊宁", 81.2, 43.9)}
+        svg = build_svg("A / test", places, [], palette=DARK_PALETTE)
+        self.assertIn(f'fill="{DARK_PALETTE.bg}"', svg)
+        self.assertIn(DARK_PALETTE.fg, svg)
+        self.assertIn(DARK_PALETTE.signal, svg)
+        self.assertNotIn(LIGHT_PALETTE.bg, svg)
+        self.assertNotIn(LIGHT_PALETTE.fg, svg)
+
+    def test_light_and_dark_palettes_match_travel_css_tokens(self):
+        # Pins the generator's palettes to the exact tokens documented in the
+        # design spec / travel.css so the two can't silently drift apart.
+        self.assertEqual(LIGHT_PALETTE.bg, "#e9e5d9")
+        self.assertEqual(LIGHT_PALETTE.fg, "#222a20")
+        self.assertEqual(LIGHT_PALETTE.muted, "#596055")
+        self.assertEqual(LIGHT_PALETTE.signal, "#53663e")
+        self.assertEqual(DARK_PALETTE.bg, "#121610")
+        self.assertEqual(DARK_PALETTE.fg, "#e7ecdf")
+        self.assertEqual(DARK_PALETTE.muted, "#87927f")
+        self.assertEqual(DARK_PALETTE.signal, "#b7cb91")
+
+    def test_backup_marker_color_is_driven_by_place_field_not_dict_key(self):
+        # A place keyed "kuerdening" but NOT marked as backup must get the
+        # primary marker color; a place under any other key marked backup
+        # must get the muted marker color. This proves the choice is driven
+        # by the semantic `is_backup` field, not a string comparison on key.
+        places = {
+            "kuerdening": Place("库尔德宁", 82.0, 43.4, is_backup=False),
+            "some_other_key": Place("替代地点", 81.0, 44.0, is_backup=True),
+        }
+        svg = build_svg("test", places, [])
+        self.assertIn(f'fill="{LIGHT_PALETTE.fg}" stroke="{LIGHT_PALETTE.bg}"', svg)
+        self.assertIn(f'fill="{LIGHT_PALETTE.muted}" stroke="{LIGHT_PALETTE.bg}"', svg)
+
+
+class TravelPlaceTests(unittest.TestCase):
+    def test_place_defaults_to_not_backup(self):
+        self.assertFalse(Place("伊宁", 81.2, 43.9).is_backup)
+
+    def test_place_can_be_marked_backup(self):
+        self.assertTrue(Place("库尔德宁", 82.0, 43.4, is_backup=True).is_backup)
+
+
+class TravelEvidencePanelTests(unittest.TestCase):
+    def test_evidence_panel_uses_light_palette_colors_and_required_text(self):
+        svg = build_evidence_panel(LIGHT_PALETTE)
+        self.assertIn(f'fill="{LIGHT_PALETTE.bg}"', svg)
+        self.assertIn("未找到许可明确的近期实景图", svg)
+        self.assertIn("不使用其他地点照片代替", svg)
+        self.assertNotIn(DARK_PALETTE.bg, svg)
+
+    def test_evidence_panel_uses_dark_palette_colors_and_required_text(self):
+        svg = build_evidence_panel(DARK_PALETTE)
+        self.assertIn(f'fill="{DARK_PALETTE.bg}"', svg)
+        self.assertIn("未找到许可明确的近期实景图", svg)
+        self.assertIn("不使用其他地点照片代替", svg)
+        self.assertNotIn(LIGHT_PALETTE.bg, svg)
+
+
+class TravelDistanceValidationTests(unittest.TestCase):
+    def test_accepts_distance_within_tolerance(self):
+        # Should not raise: 82 km actual vs 79 km approved is well inside the
+        # default tolerance.
+        validate_route_distance("yining -> daxigou", approved_km=79, actual_km=82)
+
+    def test_rejects_distance_outside_tolerance(self):
+        with self.assertRaises(ValueError) as ctx:
+            validate_route_distance("yining -> daxigou", approved_km=79, actual_km=120)
+        message = str(ctx.exception)
+        self.assertIn("79", message)
+        self.assertIn("120", message)
+
+    def test_tolerance_ratio_is_configurable(self):
+        # 90 km actual vs 79 km approved is a ~14% drift: rejected at the
+        # tight 5% default, accepted with an explicit, wider ratio.
+        with self.assertRaises(ValueError):
+            validate_route_distance("yining -> daxigou", approved_km=79, actual_km=90)
+        validate_route_distance(
+            "yining -> daxigou", approved_km=79, actual_km=90, tolerance_ratio=0.2
+        )
+
+
+class TravelBuildMapsTests(unittest.TestCase):
+    def _stub_fetcher(self, distances):
+        def fetcher(start, end):
+            key = (start.label, end.label)
+            return RouteResult(
+                points=((start.lon, start.lat), (end.lon, end.lat)),
+                distance_km=distances[key],
+            )
+
+        return fetcher
+
+    def test_build_maps_writes_light_and_dark_variants_for_every_route(self):
+        import tempfile
+        from pathlib import Path
+
+        distances = {
+            ("伊宁", "大西沟"): 79.0,
+            ("伊宁", "唐布拉"): 286.0,
+            ("大西沟", "唐布拉"): 359.0,
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            output_dir = Path(tmp)
+            build_maps(output_dir, fetcher=self._stub_fetcher(distances))
+            expected_files = (
+                "route-a.svg",
+                "route-a-dark.svg",
+                "route-b.svg",
+                "route-b-dark.svg",
+                "route-c.svg",
+                "route-c-dark.svg",
+                "daxigou-evidence.svg",
+                "daxigou-evidence-dark.svg",
+            )
+            for name in expected_files:
+                with self.subTest(name=name):
+                    self.assertTrue((output_dir / name).exists())
+            light = (output_dir / "route-a.svg").read_text(encoding="utf-8")
+            dark = (output_dir / "route-a-dark.svg").read_text(encoding="utf-8")
+            self.assertIn(LIGHT_PALETTE.bg, light)
+            self.assertIn(DARK_PALETTE.bg, dark)
+            self.assertNotIn(DARK_PALETTE.bg, light)
+            self.assertNotIn(LIGHT_PALETTE.bg, dark)
+
+    def test_build_maps_raises_and_writes_nothing_when_distance_drifts(self):
+        import tempfile
+        from pathlib import Path
+
+        # yining->daxigou is approved at 79 km; feed back a wildly different
+        # distance so a future route/geometry change fails loudly instead of
+        # silently publishing mismatched geometry and text.
+        distances = {
+            ("伊宁", "大西沟"): 400.0,
+            ("伊宁", "唐布拉"): 286.0,
+            ("大西沟", "唐布拉"): 359.0,
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            output_dir = Path(tmp)
+            with self.assertRaises(ValueError):
+                build_maps(output_dir, fetcher=self._stub_fetcher(distances))
+            self.assertEqual(list(output_dir.iterdir()), [])
 
 
 if __name__ == "__main__":

@@ -73,8 +73,8 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_page_uses_local_css_js_and_local_content_images(self):
-        self.assertIn('href="/travel/travel.css?v=1"', self.html)
-        self.assertIn('src="/travel/travel.js?v=1"', self.html)
+        self.assertIn('href="/travel/travel.css?v=2"', self.html)
+        self.assertIn('src="/travel/travel.js?v=2"', self.html)
         image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
         self.assertTrue(image_sources)
         for source in image_sources:
@@ -108,6 +108,41 @@ class TravelPageContractTests(unittest.TestCase):
             with self.subTest(link=link):
                 self.assertIn('target="_blank"', link)
                 self.assertIn('rel="noopener noreferrer"', link)
+
+    def test_route_map_ships_both_light_and_dark_variants(self):
+        # Both palettes must ship in the markup so CSS alone (no JS
+        # required) can select the theme-correct image for auto/light/dark.
+        figure = re.search(
+            r'<figure class="route-map">(.*?)</figure>', self.html, flags=re.DOTALL
+        )
+        self.assertIsNotNone(figure)
+        block = figure.group(1)
+        self.assertIn('src="/travel/assets/route-a.svg"', block)
+        self.assertIn('src="/travel/assets/route-a-dark.svg"', block)
+        self.assertIn('data-theme-variant="light"', block)
+        self.assertIn('data-theme-variant="dark"', block)
+        self.assertEqual(len(re.findall(r"<img\b", block)), 2)
+
+    def test_daxigou_evidence_ships_both_light_and_dark_variants(self):
+        figure = re.search(
+            r"<figure>\s*<img[^>]*daxigou-evidence(.*?)</figure>",
+            self.html,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(figure)
+        block = figure.group(0)
+        self.assertIn('src="/travel/assets/daxigou-evidence.svg"', block)
+        self.assertIn('src="/travel/assets/daxigou-evidence-dark.svg"', block)
+        self.assertIn('data-theme-variant="light"', block)
+        self.assertIn('data-theme-variant="dark"', block)
+        self.assertEqual(len(re.findall(r"<img\b", block)), 2)
+
+    def test_decision_matrix_headers_have_scope_attributes(self):
+        table = re.search(r"<table>(.*?)</table>", self.html, flags=re.DOTALL)
+        self.assertIsNotNone(table)
+        block = table.group(1)
+        self.assertEqual(len(re.findall(r'<th scope="col">', block)), 5)
+        self.assertEqual(len(re.findall(r'<th scope="row">', block)), 3)
 
 class TravelAssetTests(unittest.TestCase):
     def test_route_maps_are_static_svg_files_with_distance_labels(self):
@@ -144,6 +179,26 @@ class TravelAssetTests(unittest.TestCase):
         self.assertIn("未找到许可明确的近期实景图", panel)
         self.assertIn("不使用其他地点照片代替", panel)
 
+    def test_route_maps_and_daxigou_evidence_have_real_dark_variants(self):
+        # Each generated light asset must have a corresponding, distinctly
+        # colored dark asset (not a CSS filter) so auto/light/dark all
+        # render the theme-correct palette.
+        pairs = (
+            ("route-a.svg", "route-a-dark.svg"),
+            ("route-b.svg", "route-b-dark.svg"),
+            ("route-c.svg", "route-c-dark.svg"),
+            ("daxigou-evidence.svg", "daxigou-evidence-dark.svg"),
+        )
+        for light_name, dark_name in pairs:
+            with self.subTest(light=light_name, dark=dark_name):
+                light = (ASSETS / light_name).read_text(encoding="utf-8")
+                dark = (ASSETS / dark_name).read_text(encoding="utf-8")
+                self.assertIn("<svg", dark)
+                self.assertIn("#e9e5d9", light)
+                self.assertNotIn("#e9e5d9", dark)
+                self.assertIn("#121610", dark)
+                self.assertNotIn("#121610", light)
+
     def test_attribution_records_exact_licences(self):
         credits = (ASSETS / "ATTRIBUTION.md").read_text(encoding="utf-8")
         required = (
@@ -157,6 +212,11 @@ class TravelAssetTests(unittest.TestCase):
         for fragment in required:
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, credits)
+
+    def test_attribution_states_yining_derivative_stays_cc_by_sa(self):
+        credits = (ASSETS / "ATTRIBUTION.md").read_text(encoding="utf-8")
+        yining_section = credits.split("## Yining", 1)[1].split("## ", 1)[0]
+        self.assertIn("remains licensed under CC BY-SA 4.0", yining_section)
 
 
 class TravelStyleTests(unittest.TestCase):
@@ -218,6 +278,35 @@ class TravelStyleTests(unittest.TestCase):
             "html.travel-page .evidence-grid .image-failed-note", self.css
         )
 
+    def test_theme_variant_images_are_selected_without_javascript(self):
+        # Dark variants hide by default, then reveal via the same
+        # auto/light/dark contract as the page's own color tokens, purely
+        # through CSS attribute selectors (no script execution needed).
+        self.assertIn('img[data-theme-variant="dark"]', self.css)
+        self.assertIn(
+            'html.travel-page[data-color-mode="auto"] img[data-theme-variant="dark"]',
+            self.css,
+        )
+        self.assertIn(
+            'html.travel-page[data-color-mode="auto"] img[data-theme-variant="light"]',
+            self.css,
+        )
+        self.assertIn(
+            'html.travel-page[data-color-mode="dark"] img[data-theme-variant="light"]',
+            self.css,
+        )
+        self.assertIn(
+            'html.travel-page[data-color-mode="dark"] img[data-theme-variant="dark"]',
+            self.css,
+        )
+        # The auto-mode branch must live inside the OS dark-scheme media
+        # query, otherwise it would apply regardless of OS preference.
+        auto_index = self.css.index(
+            'html.travel-page[data-color-mode="auto"] img[data-theme-variant="dark"]'
+        )
+        media_index = self.css.rfind("@media (prefers-color-scheme: dark)", 0, auto_index)
+        self.assertNotEqual(media_index, -1)
+
 
 class TravelScriptTests(unittest.TestCase):
     @classmethod
@@ -234,12 +323,22 @@ class TravelScriptTests(unittest.TestCase):
             "/travel/assets/route-a.svg",
             "/travel/assets/route-b.svg",
             "/travel/assets/route-c.svg",
+            "/travel/assets/route-a-dark.svg",
+            "/travel/assets/route-b-dark.svg",
+            "/travel/assets/route-c-dark.svg",
             "路线 A 把长途拆开",
             "大西沟到唐布拉约 359 公里",
             "大西沟只在秋色确认后增加",
         ):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, self.js)
+
+    def test_route_switch_updates_both_light_and_dark_map_images(self):
+        # Route switching must keep both theme-variant <img> elements in
+        # sync, since CSS (not JS) decides which one is visible.
+        self.assertIn('data-theme-variant="light"', self.js)
+        self.assertIn('data-theme-variant="dark"', self.js)
+        self.assertIn("darkSrc", self.js)
 
     def test_preserves_theme_storage_contract(self):
         self.assertIn("['auto', 'light', 'dark']", self.js)

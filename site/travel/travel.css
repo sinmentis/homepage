@@ -354,6 +354,35 @@ html.travel-page .evidence-grid .image-failed-note {
   font-weight: 600;
 }
 
+/* Route maps and the Daxigou evidence panel are locally generated SVGs with
+   a real light and dark palette baked in (see scripts/build_travel_maps.py)
+   instead of a CSS filter. Both variants always ship in the markup so the
+   correct one paints with JavaScript disabled; CSS alone selects between
+   them using the same auto/light/dark contract as the color tokens above.
+   These selectors intentionally tie in specificity with `.route-map img`
+   and `.evidence-grid img` above and rely on source order to win. */
+html.travel-page img[data-theme-variant="dark"] {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html.travel-page[data-color-mode="auto"] img[data-theme-variant="light"] {
+    display: none;
+  }
+
+  html.travel-page[data-color-mode="auto"] img[data-theme-variant="dark"] {
+    display: block;
+  }
+}
+
+html.travel-page[data-color-mode="dark"] img[data-theme-variant="light"] {
+  display: none;
+}
+
+html.travel-page[data-color-mode="dark"] img[data-theme-variant="dark"] {
+  display: block;
+}
+
 html.travel-page .matrix-wrap {
   overflow-x: auto;
   border-block: 1px solid var(--hairline);

@@ -4,16 +4,19 @@
   var routeMaps = {
     'route-a': {
       src: '/travel/assets/route-a.svg',
+      darkSrc: '/travel/assets/route-a-dark.svg',
       alt: '路线 A：伊宁分别往返大西沟和唐布拉',
       caption: '路线 A 把长途拆开，但会两次回到伊宁。'
     },
     'route-b': {
       src: '/travel/assets/route-b.svg',
+      darkSrc: '/travel/assets/route-b-dark.svg',
       alt: '路线 B：伊宁到大西沟，再横穿至唐布拉后返回伊宁',
       caption: '大西沟到唐布拉约 359 公里，会形成最累的横穿日。'
     },
     'route-c': {
       src: '/travel/assets/route-c.svg',
+      darkSrc: '/travel/assets/route-c-dark.svg',
       alt: '路线 C：唐布拉为主线，大西沟为条件支线',
       caption: '大西沟只在秋色确认后增加，主线保持唐布拉深住。'
     }
@@ -56,9 +59,10 @@
 
   function initRouteControls() {
     var controls = Array.from(document.querySelectorAll('[data-route-control]'));
-    var map = document.querySelector('[data-route-map]');
+    var lightMap = document.querySelector('[data-route-map][data-theme-variant="light"]');
+    var darkMap = document.querySelector('[data-route-map][data-theme-variant="dark"]');
     var caption = document.querySelector('[data-route-map-caption]');
-    if (!controls.length || !map || !caption) {
+    if (!controls.length || !lightMap || !darkMap || !caption) {
       return;
     }
 
@@ -75,8 +79,10 @@
           control.focus();
         }
       });
-      map.src = route.src;
-      map.alt = route.alt;
+      lightMap.src = route.src;
+      lightMap.alt = route.alt;
+      darkMap.src = route.darkSrc;
+      darkMap.alt = route.alt;
       caption.textContent = route.caption;
     }
 
