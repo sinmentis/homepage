@@ -244,5 +244,60 @@ class ResumeStyleTests(unittest.TestCase):
         self.assertIn("animation", block)
 
 
+class ResumeResponsiveAndPrintTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.css = RESUME_CSS.read_text(encoding="utf-8")
+
+    def css_between(self, start, end=None):
+        self.assertIn(start, self.css)
+        body = self.css.split(start, 1)[1]
+        if end is not None:
+            self.assertIn(end, body)
+            body = body.split(end, 1)[0]
+        return body
+
+    def test_mobile_layout_becomes_single_column(self):
+        mobile = self.css_between(
+            "@media (max-width: 760px)",
+            "@media (pointer: coarse)",
+        )
+        self.assertIn(".resume-identity", mobile)
+        self.assertIn(".resume-indexed-section", mobile)
+        self.assertIn("grid-template-columns: 1fr", mobile)
+        self.assertIn(".resume-capabilities", mobile)
+
+    def test_coarse_pointer_controls_reach_44_pixels(self):
+        coarse = self.css_between(
+            "@media (pointer: coarse)",
+            "@media (prefers-reduced-motion: reduce)",
+        )
+        self.assertIn("min-height: 44px", coarse)
+        self.assertIn("min-width: 44px", coarse)
+
+    def test_reduced_motion_disables_entry_and_transitions(self):
+        reduced = self.css_between(
+            "@media (prefers-reduced-motion: reduce)",
+            "@media print",
+        )
+        self.assertIn("animation: none", reduced)
+        self.assertIn("transition: none", reduced)
+
+    def test_print_is_ink_safe_and_expands_details(self):
+        body = self.css_between("@media print")
+        self.assertIn("background: #fff", body)
+        self.assertIn("color: #000", body)
+        self.assertIn("[data-disclosure-panel]", body)
+        self.assertIn("display: block !important", body)
+        self.assertIn("[data-language-panel][hidden]", body)
+        self.assertIn("display: none !important", body)
+        self.assertIn(".resume-system-bar", body)
+        self.assertIn("display: none !important", body)
+
+    def test_print_keeps_role_entries_together(self):
+        body = self.css_between("@media print")
+        self.assertRegex(body, r"\.resume-role\s*\{[^}]*break-inside:\s*avoid")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -9,7 +9,6 @@ INDEX = ROOT / "site" / "index.html"
 HOME_CSS = ROOT / "site" / "home.css"
 HOME_JS = ROOT / "site" / "home.js"
 OG_PNG = ROOT / "site" / "og-home.png"
-RESUME_INDEX = ROOT / "site" / "resume" / "index.html"
 
 
 class HomepageMarkupTests(unittest.TestCase):
@@ -90,10 +89,6 @@ class HomepageMarkupTests(unittest.TestCase):
 
     def test_html_element_carries_homepage_marker_class(self):
         self.assertRegex(self.html, r'<html\b[^>]*\bclass="home-page"')
-
-    def test_resume_document_is_not_marked_as_home_page(self):
-        resume_html = RESUME_INDEX.read_text(encoding="utf-8")
-        self.assertNotRegex(resume_html, r'<html\b[^>]*\bclass="home-page"')
 
     def test_header_nav_includes_linkedin(self):
         nav_match = re.search(
@@ -190,33 +185,11 @@ class HomepageStyleTests(unittest.TestCase):
         self.assertIn("html.home-page {", body)
         self.assertIn("html.home-page *,", body)
         self.assertIn("html.home-page body {", body)
-        # These bare, unscoped selectors would leak onto /resume/, which also
-        # requests home.css without the homepage marker class.
+        # These bare, unscoped selectors would leak onto any other document
+        # loading home.css.
         self.assertNotRegex(body, r"(?<!\.home-page)\n\s*html\s*\{")
         self.assertNotRegex(body, r"(?<!\.home-page)\n\s*body\s*\{")
         self.assertNotRegex(body, r"\n\s*\*,\n\s*\*::before,\n\s*\*::after\s*\{")
-
-    def test_restores_legacy_type_stack_for_non_home_pages(self):
-        token_block = re.search(
-            r"html:not\(\.home-page\)\s*\{([^}]*)\}", self.css, flags=re.DOTALL
-        )
-        self.assertIsNotNone(
-            token_block, "expected an html:not(.home-page) compatibility block"
-        )
-        declarations = token_block.group(1)
-        self.assertIn('--font-sans: "Inter"', declarations)
-        self.assertIn('--font-mono: "JetBrains Mono"', declarations)
-
-        body_block = re.search(
-            r"html:not\(\.home-page\)\s+body\s*\{([^}]*)\}", self.css, flags=re.DOTALL
-        )
-        self.assertIsNotNone(
-            body_block,
-            "expected an html:not(.home-page) body compatibility block",
-        )
-        body_declarations = body_block.group(1)
-        self.assertIn('font-feature-settings: "cv11", "ss01"', body_declarations)
-        self.assertIn("letter-spacing: -0.005em", body_declarations)
 
     def test_tablet_breakpoint_collapses_two_column_layout(self):
         tablet_block = re.search(
@@ -295,10 +268,7 @@ class HomepageStyleTests(unittest.TestCase):
 
     def test_core_content_is_not_hidden_without_enhancement_class(self):
         # Homepage content must never be hidden except behind the
-        # `.has-reveal` enhancement class (set by home.js). The only other
-        # legitimate hiding gate is the resume-only `html:not(.home-page)
-        # .js .reveal` compat rule, driven by resume's own inline no-FOUC
-        # script — it can never match the homepage document.
+        # `.has-reveal` enhancement class (set by home.js).
         hidden_reveal_rule = re.search(
             r"(?<!has-reveal )(?<!\.js )\.reveal\s*\{[^}]*opacity\s*:\s*0",
             self.css,
@@ -309,6 +279,9 @@ class HomepageStyleTests(unittest.TestCase):
 
     def test_css_braces_are_balanced(self):
         self.assertEqual(self.css.count("{"), self.css.count("}"))
+
+    def test_home_css_has_no_non_home_compatibility_layer(self):
+        self.assertNotIn("html:not(.home-page)", self.css)
 
     def test_entry_lifecycle_states_drive_grid_and_scanline_power_on(self):
         def animation_from(selector):

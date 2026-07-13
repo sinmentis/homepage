@@ -478,8 +478,163 @@ html.resume-page[data-language="zh"] [data-language-panel="en"] {
   transform: translate(-50%, 0);
 }
 
+@media (max-width: 760px) {
+  html.resume-page body {
+    background-size: 30px 30px;
+  }
+
+  .resume-system-bar {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .resume-controls {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .resume-identity,
+  .resume-indexed-section {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-indexed-section {
+    gap: 1rem;
+    padding-block: 3.5rem;
+  }
+
+  .resume-section-index {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .resume-section-index span {
+    display: inline;
+  }
+
+  .resume-role-header {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-capabilities {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-education-item {
+    grid-template-columns: 4rem 1fr;
+  }
+}
+
+@media (pointer: coarse) {
+  .resume-controls button,
+  .resume-language-control button,
+  .resume-disclosure-control {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html.resume-page {
+    scroll-behavior: auto;
+  }
+
   .resume-init .resume-identity {
     animation: none;
+  }
+
+  .has-disclosures .resume-role-details,
+  .resume-disclosure-control,
+  .resume-toast {
+    transition: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 13mm 13mm 16mm;
+  }
+
+  html.resume-page,
+  html.resume-page body {
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  .resume-system-bar,
+  .resume-skip-link,
+  .resume-disclosure-control,
+  .resume-toast,
+  .resume-footer-screen-only {
+    display: none !important;
+  }
+
+  .resume-main {
+    width: 100%;
+    padding: 0;
+  }
+
+  [data-language-panel][hidden] {
+    display: none !important;
+  }
+
+  [data-disclosure-panel] {
+    display: block !important;
+  }
+
+  .resume-role-details-inner {
+    overflow: visible !important;
+  }
+
+  .resume-identity {
+    animation: none !important;
+    grid-template-columns: 1fr 15rem;
+    gap: 10mm;
+    padding-bottom: 7mm;
+    border-bottom: 1.5pt solid #24311f;
+  }
+
+  .resume-identity h1 {
+    font-size: 34pt;
+    color: #000;
+  }
+
+  .resume-indexed-section {
+    grid-template-columns: 24mm 1fr;
+    gap: 7mm;
+    padding-block: 7mm;
+    border-bottom: 0.5pt solid #aaa;
+  }
+
+  .resume-section-index span,
+  .resume-context span {
+    color: #24311f !important;
+  }
+
+  .resume-role {
+    break-inside: avoid;
+    border-left-color: #aaa;
+  }
+
+  .resume-role--current {
+    border-left-color: #24311f;
+  }
+
+  .resume-achievements li::before {
+    color: #24311f;
+  }
+
+  .resume-capabilities > div,
+  .resume-education-item {
+    break-inside: avoid;
+    border-color: #aaa;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
   }
 }
