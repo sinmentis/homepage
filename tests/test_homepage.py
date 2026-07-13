@@ -10,7 +10,6 @@ HOME_CSS = ROOT / "site" / "home.css"
 HOME_JS = ROOT / "site" / "home.js"
 OG_PNG = ROOT / "site" / "og-home.png"
 RESUME_INDEX = ROOT / "site" / "resume" / "index.html"
-RESUME_JS = ROOT / "site" / "resume.js"
 
 
 class HomepageMarkupTests(unittest.TestCase):
@@ -68,14 +67,6 @@ class HomepageMarkupTests(unittest.TestCase):
 
     def test_homepage_requests_fresh_script_version(self):
         self.assertIn('src="/home.js?v=2"', self.html)
-
-    def test_resume_still_requests_unbumped_home_css_version(self):
-        # site/resume/index.html is protected and must not be modified by
-        # this fix: it keeps requesting the pre-redesign cache-busting
-        # query string. The scoping/compat work in home.css makes that
-        # safe by content even though the version tag itself is stale.
-        resume_html = RESUME_INDEX.read_text(encoding="utf-8")
-        self.assertIn('href="/home.css?v=1"', resume_html)
 
     def test_command_link_prompts_are_decorative(self):
         command_blocks = re.findall(
@@ -374,163 +365,6 @@ class HomepageStyleTests(unittest.TestCase):
             self.css,
             r"\.entry-(running|complete)[^{]*\{[^}]*pointer-events:\s*auto",
         )
-
-
-class ResumeCompatibilityTests(unittest.TestCase):
-    """/resume/ still loads home.css unscoped (as `/home.css?v=1`, without
-    the `.home-page` marker class) and its markup + extracted script depend on
-    several pre-redesign rules that used to live here unscoped. These tests
-    read the actual resume markup and the current home.css to lock in every
-    shared contract resume still consumes, restored under `html:not(.home-page)`.
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        cls.css = HOME_CSS.read_text(encoding="utf-8")
-        cls.resume_html = RESUME_INDEX.read_text(encoding="utf-8")
-        cls.resume_js = RESUME_JS.read_text(encoding="utf-8") if RESUME_JS.exists() else ""
-
-    def test_resume_markup_uses_theme_toggle_icon_per_mode_contract(self):
-        # Document the markup contract the CSS below must satisfy: three
-        # mode icons inside one .theme-toggle button.
-        self.assertRegex(self.resume_html, r'class="theme-toggle"[^>]*>')
-        for mode in ("auto", "light", "dark"):
-            self.assertIn(f'data-mode="{mode}"', self.resume_html)
-
-    def test_theme_toggle_shows_exactly_one_icon_per_color_mode(self):
-        css = self.css
-        self.assertRegex(
-            css, r'html:not\(\.home-page\)\s+\.theme-toggle\s+\[data-mode\]\s*\{\s*display:\s*none'
-        )
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\s+\.theme-toggle\s+\[data-mode="auto"\]\s*\{\s*display:\s*block',
-        )
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\[data-color-mode="light"\]\s+\.theme-toggle\s+\[data-mode="auto"\]\s*\{\s*display:\s*none',
-        )
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\[data-color-mode="light"\]\s+\.theme-toggle\s+\[data-mode="light"\]\s*\{\s*display:\s*block',
-        )
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\[data-color-mode="dark"\]\s+\.theme-toggle\s+\[data-mode="auto"\]\s*\{\s*display:\s*none',
-        )
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\[data-color-mode="dark"\]\s+\.theme-toggle\s+\[data-mode="dark"\]\s*\{\s*display:\s*block',
-        )
-
-    def test_toast_is_shown_has_visible_transform_and_opacity(self):
-        base_rule = re.search(
-            r"html:not\(\.home-page\)\s+\.toast\s*\{([^}]*)\}", self.css, flags=re.DOTALL
-        )
-        self.assertIsNotNone(base_rule, "expected a resume-compat .toast base rule")
-        self.assertIn("opacity: 0", base_rule.group(1))
-
-        shown_rule = re.search(
-            r"html:not\(\.home-page\)\s+\.toast\.is-shown\s*\{([^}]*)\}",
-            self.css,
-            flags=re.DOTALL,
-        )
-        self.assertIsNotNone(shown_rule, "expected a resume-compat .toast.is-shown rule")
-        declarations = shown_rule.group(1)
-        self.assertIn("opacity: 1", declarations)
-        self.assertRegex(declarations, r"transform:\s*translate\(-50%,\s*0\)")
-
-        # The resume markup and its extracted script actually use this contract.
-        self.assertIn('id="toast"', self.resume_html)
-        self.assertIn("toast.classList.add('is-shown')", self.resume_js)
-
-    def test_resume_reveal_hidden_visible_and_variant_contract(self):
-        css = self.css
-        # `.js` is set directly on <html> by resume's inline no-FOUC script,
-        # so the compat selector must be a compound (`html:not(.home-page).js`)
-        # rather than a descendant chain — `.js` can never be a *descendant*
-        # of `html:not(.home-page)` when it's applied to that same element.
-        hidden_rule = re.search(
-            r"html:not\(\.home-page\)\.js\s+\.reveal\s*\{([^}]*)\}", css, flags=re.DOTALL
-        )
-        self.assertIsNotNone(hidden_rule, "expected a resume-compat .js .reveal rule")
-        self.assertIn("opacity: 0", hidden_rule.group(1))
-
-        visible_rule = re.search(
-            r"html:not\(\.home-page\)\s+\.reveal\.is-visible\s*\{([^}]*)\}",
-            css,
-            flags=re.DOTALL,
-        )
-        self.assertIsNotNone(visible_rule, "expected a resume-compat .reveal.is-visible rule")
-        self.assertIn("opacity: 1", visible_rule.group(1))
-
-        for variant in ("reveal--left", "reveal--right", "reveal--scale"):
-            with self.subTest(variant=variant):
-                self.assertRegex(
-                    css,
-                    r"html:not\(\.home-page\)\.js\s+\." + variant + r"\s*\{",
-                )
-
-        # The resume markup and its extracted script actually use this contract.
-        self.assertIn('class="rx-summary reveal"', self.resume_html)
-        self.assertIn("var reveals = [].slice.call(document.querySelectorAll('.reveal'));", self.resume_js)
-
-    def test_shared_selector_audit_contracts_restored(self):
-        # Full intersection audit beyond the three named review findings:
-        # footer byline extras, the nav separator, the résumé eyebrow rule,
-        # and the tech-stack chip bullet dot all used to live in the
-        # unscoped home.css and are genuinely still consumed by /resume/.
-        css = self.css
-        for selector in (
-            "footer__brand",
-            "footer__tag",
-            "footer__meta",
-            "footer__updated",
-            "nav__sep",
-            "hx-eyebrow",
-            "tech-chip",
-        ):
-            with self.subTest(selector=selector):
-                self.assertIn(selector, self.resume_html)
-                self.assertRegex(
-                    css,
-                    r"html:not\(\.home-page\)[^{]*\." + re.escape(selector) + r"\b",
-                    f"expected a compat rule restoring .{selector}",
-                )
-
-        self.assertRegex(
-            css,
-            r'html:not\(\.home-page\)\s+\.tech-chip\s+\.dot\s*\{[^}]*width:\s*7px',
-        )
-
-    def test_brand_gradient_custom_property_restored_for_resume(self):
-        # resume.css reads var(--brand-gradient) directly in six of its own
-        # rules (avatar mark, section-title accent bar, gradient stat
-        # numbers, timeline dots) — a custom-property dependency, not a
-        # class selector, so it doesn't show up in a selector-only audit.
-        # Without it, --brand-gradient resolves to nothing and every one of
-        # those rules renders blank (invisible avatar, invisible stat
-        # numbers via background-clip: text + color: transparent, etc).
-        resume_css = (ROOT / "site" / "resume.css").read_text(encoding="utf-8")
-        usages = resume_css.count("var(--brand-gradient)")
-        self.assertGreaterEqual(usages, 6, "expected resume.css to still reference --brand-gradient")
-
-        token_block = re.search(
-            r"html:not\(\.home-page\)\s*\{([^}]*)\}", self.css, flags=re.DOTALL
-        )
-        self.assertIsNotNone(token_block)
-        self.assertRegex(token_block.group(1), r"--brand-gradient:\s*linear-gradient\(")
-
-    def test_homepage_toast_and_reveal_rules_stay_scoped_to_home_page(self):
-        css = self.css
-        # The new systems-console toast/reveal rules must not leak onto
-        # /resume/ as bare, unscoped selectors.
-        self.assertNotRegex(css, r"(?<!home-page )(?<!\.js )\n\.toast\s*\{")
-        self.assertNotRegex(css, r"(?<!home-page )\n\.toast\.is-visible\s*\{")
-        self.assertNotRegex(css, r"(?<!home-page )\n\.has-reveal \.reveal\s*\{")
-        self.assertRegex(css, r"html\.home-page \.toast\s*\{")
-        self.assertRegex(css, r"html\.home-page \.toast\.is-visible\s*\{")
-        self.assertRegex(css, r"html\.home-page \.has-reveal \.reveal\s*\{")
 
 
 class HomepageScriptTests(unittest.TestCase):

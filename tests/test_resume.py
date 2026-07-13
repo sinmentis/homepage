@@ -165,6 +165,29 @@ class ResumeStyleTests(unittest.TestCase):
     def test_css_braces_are_balanced(self):
         self.assertEqual(self.css.count("{"), self.css.count("}"))
 
+    def test_language_panel_visibility_is_wrap_scoped_only(self):
+        """Task 2->3 migration-state regression test.
+
+        resume.js (unmodified since Task 1) only ever writes
+        `#wrap[data-lang]`; it never touches `html[data-language]` after
+        the boot script's one-time initial write. A CSS rule that also
+        hides `[data-language-panel]` based on
+        `html.resume-page[data-language]` goes stale after the first
+        toggle click and ends up hiding BOTH panels at once (the
+        wrap-scoped rule hides the new language's `.lang-*` class while
+        the stale root rule still hides the other language's
+        `[data-language-panel]`). Task 3 installs the final root/
+        data-panel mechanism together with a `resume.js` rewrite that
+        keeps `html[data-language]` in sync; until then, only the
+        `#wrap[data-lang]` selectors may gate panel visibility.
+        """
+        self.assertNotRegex(
+            self.css,
+            r"html\.resume-page\[data-language[^\]]*\]\s+\[data-language-panel",
+        )
+        self.assertIn('#wrap[data-lang="en"] .lang-zh', self.css)
+        self.assertIn('#wrap[data-lang="zh"] .lang-en', self.css)
+
 
 if __name__ == "__main__":
     unittest.main()

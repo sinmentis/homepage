@@ -93,8 +93,14 @@ html.resume-page :focus-visible {
   display: none !important;
 }
 
-html.resume-page[data-language="en"] [data-language-panel="zh"],
-html.resume-page[data-language="zh"] [data-language-panel="en"],
+/* Task 2->3 migration state: only the #wrap[data-lang] selectors gate
+   panel visibility. resume.js (unmodified since Task 1) never updates
+   the root data-language attribute after its initial boot-script write,
+   so a root-scoped selector paired with a data-language-panel attribute
+   selector would go stale after the first toggle and hide both panels
+   at once. Task 3 replaces this with the final root/data-panel
+   mechanism alongside a resume.js rewrite that keeps the root attribute
+   in sync. */
 #wrap[data-lang="en"] .lang-zh,
 #wrap[data-lang="zh"] .lang-en {
   display: none;
