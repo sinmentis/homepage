@@ -107,5 +107,22 @@ class TravelPageContractTests(unittest.TestCase):
             with self.subTest(link=link):
                 self.assertIn('target="_blank"', link)
                 self.assertIn('rel="noopener noreferrer"', link)
+
+class TravelAssetTests(unittest.TestCase):
+    def test_route_maps_are_static_svg_files_with_distance_labels(self):
+        expected = {
+            "route-a.svg": ("79 km", "286 km"),
+            "route-b.svg": ("79 km", "359 km", "286 km"),
+            "route-c.svg": ("286 km", "79 km"),
+        }
+        for name, labels in expected.items():
+            with self.subTest(name=name):
+                svg = (ASSETS / name).read_text(encoding="utf-8")
+                self.assertIn("<svg", svg)
+                self.assertIn("OpenStreetMap contributors via OSRM", svg)
+                for label in labels:
+                    self.assertIn(label, svg)
+
+
 if __name__ == "__main__":
     unittest.main()
