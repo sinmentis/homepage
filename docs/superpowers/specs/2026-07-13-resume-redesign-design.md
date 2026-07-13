@@ -1,6 +1,6 @@
 # Systems dossier résumé redesign
 
-**Status:** Approved design, pending specification review  
+**Status:** Approved design, pending specification review
 **Date:** 2026-07-13
 
 ## Goal

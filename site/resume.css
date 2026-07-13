@@ -564,6 +564,18 @@ html.resume-page[data-language="zh"] [data-language-panel="en"] {
     background: #fff !important;
   }
 
+  /* Screen dark/auto variants set --resume-signal/--resume-muted/--resume-hairline
+     via html.resume-page[data-color-mode="dark"] and the prefers-color-scheme
+     media query, both matching with the same specificity as this selector.
+     Reset them here (later in source order, matching in light/dark/auto alike)
+     so descendants relying on the tokens print with dark, ink-safe colors
+     instead of inheriting light-on-dark screen values on white paper. */
+  html.resume-page[data-color-mode] {
+    --resume-signal: #24311f;
+    --resume-muted: #3f4a3a;
+    --resume-hairline: #999;
+  }
+
   .resume-system-bar,
   .resume-skip-link,
   .resume-disclosure-control,

@@ -320,6 +320,29 @@ class ResumeResponsiveAndPrintTests(unittest.TestCase):
         body = self.css_between("@media print")
         self.assertRegex(body, r"\.resume-role\s*\{[^}]*break-inside:\s*avoid")
 
+    def test_print_resets_dark_screen_color_tokens(self):
+        """The dark and auto+dark screen variants set --resume-signal and
+        --resume-muted to light-on-dark values via `html.resume-page
+        [data-color-mode="dark"]` and `@media (prefers-color-scheme: dark)`.
+        Those selectors have higher specificity/later source order than a
+        bare `html.resume-page` rule, so the print block must reset the
+        tokens on a selector that also matches `[data-color-mode]` (any
+        value) to win the cascade in light, dark, and auto modes alike.
+        """
+        body = self.css_between("@media print")
+        self.assertRegex(
+            body,
+            r"html\.resume-page\[data-color-mode\]\s*\{[^}]*--resume-signal:\s*#24311f",
+        )
+        self.assertRegex(
+            body,
+            r"html\.resume-page\[data-color-mode\]\s*\{[^}]*--resume-muted:\s*#3f4a3a",
+        )
+        self.assertRegex(
+            body,
+            r"html\.resume-page\[data-color-mode\]\s*\{[^}]*--resume-hairline:\s*#999",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
