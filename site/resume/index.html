@@ -1,714 +1,416 @@
 <!doctype html>
-<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+<html lang="en" class="resume-page" data-color-mode="auto" data-language="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shun Lyu — Résumé</title>
-  <meta name="description" content="Résumé of Shun Lyu — Software Engineer, Azure Kubernetes Service at Microsoft. 7+ years across embedded systems, Linux platforms, and cloud infrastructure. Auckland, New Zealand.">
+  <meta name="description" content="Résumé of Shun Lyu, a software engineer working on Azure Kubernetes Service with experience across embedded systems, Linux, Android, build infrastructure, and cloud reliability.">
   <meta name="author" content="Shun Lyu">
-  <meta name="theme-color" content="#0969da">
+  <meta name="theme-color" content="#E9E5D9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121610" media="(prefers-color-scheme: dark)">
 
-  <!-- Open Graph / social -->
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Shun Lyu — Résumé">
-  <meta property="og:description" content="Software Engineer, Azure Kubernetes Service at Microsoft. 7+ years from embedded systems to cloud infrastructure. Auckland, New Zealand.">
+  <meta property="og:description" content="Software engineer working across cloud infrastructure, developer tooling, Linux, Android, and embedded systems.">
   <meta property="og:url" content="https://shunlyu.com/resume/">
   <meta property="og:site_name" content="Shun Lyu">
+  <meta property="og:image" content="https://shunlyu.com/og-home.png?v=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://shunlyu.com/og-home.png?v=1">
 
-  <!-- Inline SVG favicon (matches homepage) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230969da'/%3E%3Ctext x='16' y='22' font-family='ui-monospace,monospace' font-size='14' font-weight='700' fill='white' text-anchor='middle'%3ESL%3C/text%3E%3C/svg%3E">
-
-  <!-- Modern type — Inter / JetBrains Mono (same as homepage) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23121610'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' fill='none' stroke='%23b7cb91' stroke-width='2.5'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/resume.css?v=3">
 
-  <!-- Design system -->
-  <link rel="stylesheet" href="/vendor/primer/light.css">
-  <link rel="stylesheet" href="/vendor/primer/dark.css">
-  <link rel="stylesheet" href="/vendor/primer/primer.css">
-  <link rel="stylesheet" href="/style.css?v=3">
-  <link rel="stylesheet" href="/home.css?v=1">
-  <link rel="stylesheet" href="/resume.css?v=2">
-
-  <!-- No-FOUC: apply saved theme + enable JS-only reveal states before paint -->
   <script>
     (function () {
-      var d = document.documentElement;
-      d.classList.add('js');
+      var root = document.documentElement;
       try {
-        var m = localStorage.getItem('theme');
-        if (m === 'light' || m === 'dark') d.setAttribute('data-color-mode', m);
-      } catch (e) {}
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') {
+          root.setAttribute('data-color-mode', theme);
+        }
+      } catch (error) {
+        root.setAttribute('data-theme-storage', 'unavailable');
+      }
+
+      var language = 'en';
+      var savedLanguage = null;
+      try {
+        savedLanguage = localStorage.getItem('resume-language');
+      } catch (error) {
+        root.setAttribute('data-language-storage', 'unavailable');
+      }
+      if (savedLanguage === 'en' || savedLanguage === 'zh') {
+        language = savedLanguage;
+      } else {
+        var browserLanguages = navigator.languages || [navigator.language || 'en'];
+        language = browserLanguages.some(function (value) {
+          return /^zh(?:-|$)/i.test(value);
+        }) ? 'zh' : 'en';
+      }
+      root.setAttribute('data-language', language);
+      root.lang = language === 'zh' ? 'zh' : 'en';
+      root.classList.add('resume-init');
     })();
   </script>
 </head>
-<body>
-  <a class="visually-hidden" href="#main">Skip to content</a>
+<body id="top">
+  <a class="resume-skip-link" href="#resume-main">Skip to content</a>
 
-  <!-- ====================== App bar ====================== -->
-  <header class="appbar" id="appbar">
-    <div class="appbar__inner">
-      <a class="brand" href="/" aria-label="Shun Lyu — home">
-        <span class="brand__mark" aria-hidden="true">SL</span>
-        <span class="brand__name">Shun&nbsp;Lyu</span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <a class="navlink" href="/">
-          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.231c0-.532.242-1.035.657-1.367l5.25-4.2ZM8 1.829l-5.25 4.2a.25.25 0 0 0-.094.196v7.025c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.094a.25.25 0 0 0 .25-.25V6.225a.25.25 0 0 0-.094-.196L8 1.829Z"/></svg>
-          <span class="hide-sm">Home</span>
-        </a>
-        <a class="navlink navlink--icon" href="https://github.com/sinmentis" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-        </a>
-        <a class="navlink navlink--icon" href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-        </a>
-        <span class="nav__sep" aria-hidden="true"></span>
-        <button class="navlink" type="button" data-print aria-label="Print or save as PDF">
-          <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
-          <span class="hide-sm">PDF</span>
-        </button>
-        <div class="segmented" role="group" aria-label="Language / 语言">
-          <button type="button" data-lang="en" aria-pressed="true">EN</button>
-          <button type="button" data-lang="zh" aria-pressed="false">中文</button>
-        </div>
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme" title="Toggle theme (system / light / dark)">
-          <svg class="icon" data-mode="auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          <svg class="icon" data-mode="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-          <svg class="icon" data-mode="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-      </nav>
-    </div>
+  <header class="resume-system-bar" id="appbar">
+    <a class="resume-home-link" href="/" aria-label="Shun Lyu, home">
+      <span aria-hidden="true">&gt;</span> SL / résumé
+    </a>
+    <nav class="resume-controls" aria-label="Résumé controls">
+      <div class="resume-language-control segmented" data-language-control aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+      <button type="button" data-print>print / PDF</button>
+      <button id="themeToggle" type="button" data-theme-control>
+        theme:<span data-theme-label>auto</span>
+      </button>
+    </nav>
   </header>
 
-  <main class="site-main" id="main">
-    <div class="wrap resume-page" id="wrap" data-lang="en">
-      <article class="resume">
+  <main id="resume-main" class="resume-main">
+    <article class="resume-document" id="wrap" data-lang="en">
+      <div class="lang-en" data-language-panel="en">
+        <header class="resume-identity">
+          <div>
+            <p class="resume-label">Auckland / New Zealand</p>
+            <h1>Shun Lyu</h1>
+            <p class="resume-role-line">Software Engineer, Azure Kubernetes Service <span>@ Microsoft</span></p>
+            <p class="resume-intro">Software engineer working on Azure Kubernetes Service, with earlier work across embedded systems, Linux, Android, and build infrastructure.</p>
+          </div>
+          <dl class="resume-identity-meta">
+            <div><dt>focus</dt><dd>reliability / automation / developer tooling</dd></div>
+            <div><dt>location</dt><dd>Auckland, New Zealand</dd></div>
+            <div><dt>links</dt><dd><a href="https://github.com/sinmentis">GitHub</a> / <a href="https://www.linkedin.com/in/shunlyu">LinkedIn</a> / <a id="emailLink" href="mailto:hello@shunlyu.com" data-email="hello@shunlyu.com">email</a></dd></div>
+          </dl>
+        </header>
 
-        <!-- ================================================================
-             ENGLISH
-             ================================================================ -->
-        <div class="lang-en">
-          <header class="rx-header">
-            <div class="rx-header__mark" aria-hidden="true"><span>SL</span></div>
-            <div class="rx-header__body">
-              <div class="rx-header__top">
+        <section class="resume-indexed-section" data-section-index="01" aria-labelledby="profile-en">
+          <div class="resume-section-index"><span>01</span>Profile</div>
+          <div class="resume-section-body">
+            <h2 id="profile-en">Systems work, from devices to cloud infrastructure.</h2>
+            <p>Software Engineer with 7+ years across embedded systems, Linux platforms, developer tooling, and cloud infrastructure. Currently on the Azure Kubernetes Service team at Microsoft, working on resource APIs and control-plane reliability for production Kubernetes clusters.</p>
+          </div>
+        </section>
+
+        <section class="resume-indexed-section resume-experience" data-section-index="02" aria-labelledby="experience-en">
+          <div class="resume-section-index"><span>02</span>Experience</div>
+          <div class="resume-section-body">
+            <h2 id="experience-en">Experience</h2>
+
+            <article class="resume-role resume-role--current rx-role" id="role-en-microsoft">
+              <header class="resume-role-header">
                 <div>
-                  <span class="hx-eyebrow rx-eyebrow">Résumé</span>
-                  <h1 class="rx-name">Shun Lyu</h1>
-                  <p class="rx-title">Software Engineer, Azure Kubernetes Service <span class="rx-at">@ Microsoft</span></p>
+                  <h3>Software Engineer, Azure Kubernetes Service</h3>
+                  <p>Microsoft · Auckland, New Zealand</p>
                 </div>
-                <div class="rx-actions">
-                  <button class="btn-ui btn-ui--primary" type="button" data-print>
-                    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
-                    Download PDF
-                  </button>
-                </div>
-              </div>
-              <ul class="rx-meta">
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
-                  Auckland, New Zealand
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-                  <a href="https://github.com/sinmentis" target="_blank" rel="noopener">github.com/sinmentis</a>
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                  <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">linkedin.com/in/shunlyu</a>
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
-                  <a href="mailto:hello@shunlyu.com" id="emailLink" data-email="hello@shunlyu.com">hello@shunlyu.com</a>
-                </li>
+                <time>Apr 2026 — Present</time>
+              </header>
+              <ul class="resume-achievements">
+                <li>Designed and shipped a new Azure resource API for managing custom VM image specifications on Kubernetes clusters end to end — API contract, access control, and CRUD semantics — then implemented and reviewed 15+ production changes from design through rollout.</li>
+                <li>Hardened cluster reliability by fixing a background reconciliation bug that could overwrite live node metadata, a deadlock in the resource-deletion path, and image-reuse logic that failed to recover from broken image builds, eliminating a class of state corruption in production.</li>
+                <li>Added safety guardrails for a feature in preview by blocking unsupported VM configurations (e.g., confidential computing VMs) and scoping validation to the specific resource being changed, removing false-positive failures on unrelated resources.</li>
+                <li>Improved a list API's performance and correctness at scale with a targeted database index and batched, fallback-safe metadata merging, and documented inheritance and pagination edge cases for the team.</li>
+                <li>Led cross-team integration to exclude a subset of managed resources from an automated patching pipeline and preserve feature state across automatic upgrades, then took ownership of the related validation code.</li>
               </ul>
-            </div>
-          </header>
+              <p class="resume-context"><span>context /</span> Azure · C# · Python · Kubernetes · CI/CD · Distributed Systems</p>
+            </article>
 
-          <!-- Summary -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">Summary</h2>
-            <p class="rx-summary reveal" style="--i:1">Software Engineer with <strong>7+ years</strong> across embedded systems,
-            Linux platforms, and cloud infrastructure. Currently on the <strong>Azure Kubernetes Service</strong> team
-            at Microsoft, designing resource APIs and hardening the control-plane logic behind production
-            Kubernetes clusters. Deep technical range — from C and C++ in embedded and kernel code to C#,
-            Python, and distributed systems in the cloud — with a consistent focus on reliability, correctness,
-            and developer productivity.</p>
-            <ul class="rx-stats reveal" style="--i:2" aria-label="Career at a glance">
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
-                <span class="rx-stat__label">Years experience</span>
-              </li>
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="4">4</span>
-                <span class="rx-stat__label">Companies</span>
-              </li>
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="3">3</span>
-                <span class="rx-stat__label">Domains</span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- Experience -->
-          <section class="rx-section" id="exp-en">
-            <h2 class="rx-section__title reveal">Experience</h2>
-
-            <!-- Interactive career timeline — overview + jump-to navigation -->
-            <nav class="rx-timeline reveal" aria-label="Career timeline — select a role to jump to it">
-              <div class="rx-timeline__scroll">
-                <ol class="rx-timeline__track" style="--rx-count:4">
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-en-fp"
-                      aria-label="2020 to 2022 — Electrical Software Engineer at Fisher &amp; Paykel">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2020</span>
-                      <span class="rx-timeline__org">Fisher &amp; Paykel</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-en-navico"
-                      aria-label="2022 to 2024 — Linux Platform Software Developer at Navico Group">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2022</span>
-                      <span class="rx-timeline__org">Navico</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-en-crown"
-                      aria-label="2024 to 2026 — Software Engineer at Crown Equipment">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2024</span>
-                      <span class="rx-timeline__org">Crown</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item rx-timeline__item--current">
-                    <button type="button" class="rx-timeline__node" data-target="r-en-microsoft"
-                      aria-label="2026 to Present — Software Engineer, Azure Kubernetes Service at Microsoft">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2026</span>
-                      <span class="rx-timeline__org">Microsoft</span>
-                      <span class="rx-timeline__now">Now</span>
-                    </button>
-                  </li>
-                </ol>
-              </div>
-            </nav>
-
-            <div class="rx-roles">
-
-              <article class="rx-role rx-role--current reveal" style="--i:1" id="r-en-microsoft" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">Software Engineer, Azure Kubernetes Service</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">Apr 2026 – Present</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-microsoft">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">Toggle role details</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-en-crown" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>Software Engineer</h3>
+                  <p>Crown Equipment Corporation · Robotics Technology Centre · Auckland</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>Auckland, New Zealand</p>
-                <div class="rx-role__detail" id="d-en-microsoft">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
-                    <li>Designed and shipped a new Azure resource API for managing custom VM image specifications on Kubernetes clusters end to end — API contract, access control, and CRUD semantics — then implemented and reviewed 15+ production changes from design through rollout.</li>
-                    <li>Hardened cluster reliability by fixing a background reconciliation bug that could overwrite live node metadata, a deadlock in the resource-deletion path, and image-reuse logic that failed to recover from broken image builds, eliminating a class of state corruption in production.</li>
-                    <li>Added safety guardrails for a feature in preview by blocking unsupported VM configurations (e.g., confidential computing VMs) and scoping validation to the specific resource being changed, removing false-positive failures on unrelated resources.</li>
-                    <li>Improved a list API's performance and correctness at scale with a targeted database index and batched, fallback-safe metadata merging, and documented inheritance and pagination edge cases for the team.</li>
-                    <li>Led cross-team integration to exclude a subset of managed resources from an automated patching pipeline and preserve feature state across automatic upgrades, then took ownership of the related validation code.</li>
-                  </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">Tech</span>
-                    <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">Distributed Systems</span>
-                  </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="rx-role reveal" style="--i:2" id="r-en-crown" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">Software Engineer</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">Jun 2024 – Mar 2026</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-crown">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">Toggle role details</span>
-                    </button>
-                  </div>
-                </div>
-                <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>Robotics Technology Centre<span class="rx-role__sep">·</span>Auckland</p>
-                <div class="rx-role__detail" id="d-en-crown">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>Jun 2024 — Mar 2026</time>
+              </header>
+              <p class="resume-role-summary">Build infrastructure, CI/CD, static analysis, performance measurement, and Android development workflows.</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-en-crown"
+                data-disclosure-control
+                data-open-label="details +"
+                data-close-label="details −"
+              >details −</button>
+              <div id="details-en-crown" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>Led adoption of the C#/.NET ecosystem across internal Android projects, pioneering MAUI/Android optimizations and automated build flows.</li>
                     <li>Designed and maintained CI/CD pipelines (GitHub Actions, Jenkins) for multi-platform C++ and C# applications, including containerized Android builds.</li>
                     <li>Automated dependency management, package publishing, and test orchestration, removing manual steps from the release process.</li>
                     <li>Built static-analysis and performance-measurement frameworks across C++, C#, and Python to catch regressions before release.</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">Tech</span>
-                    <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>context /</span> C# · .NET · C++ · Python · GitHub Actions · Jenkins · Linux · Android</p>
                 </div>
-              </article>
+              </div>
+            </article>
 
-              <article class="rx-role reveal" style="--i:3" id="r-en-navico" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">Linux Platform Software Developer</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">May 2022 – Jun 2024</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-navico">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">Toggle role details</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-en-navico" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>Linux Platform Software Developer</h3>
+                  <p>Navico Group · Auckland</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>Auckland</p>
-                <div class="rx-role__detail" id="d-en-navico">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>May 2022 — Jun 2024</time>
+              </header>
+              <p class="resume-role-summary">ARM Linux platforms, kernel and bootloader debugging, containerized toolchains, and integration automation.</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-en-navico"
+                data-disclosure-control
+                data-open-label="details +"
+                data-close-label="details −"
+              >details −</button>
+              <div id="details-en-navico" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>Designed and implemented modules on ARM-based Linux hardware, debugging bootloaders and kernel issues to keep the platform stable.</li>
                     <li>Introduced Docker to the development workflow, replacing inconsistent local setups with reproducible build environments.</li>
                     <li>Standardized build pipelines and containerized toolchains for embedded Linux and AOSP development.</li>
                     <li>Automated provisioning and integration testing with Python and Bash.</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">Tech</span>
-                    <span class="chip">Linux Kernel</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>context /</span> Linux Kernel · AOSP · C · C++ · Python · Bash · Docker</p>
                 </div>
-              </article>
+              </div>
+            </article>
 
-              <article class="rx-role reveal" style="--i:4" id="r-en-fp" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">Electrical Software Engineer</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">Jan 2020 – May 2022</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-en-fp">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">Toggle role details</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-en-fp" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>Electrical Software Engineer</h3>
+                  <p>Fisher &amp; Paykel Appliances · Dunedin / Auckland</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>Dunedin / Auckland</p>
-                <div class="rx-role__detail" id="d-en-fp">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>Jan 2020 — May 2022</time>
+              </header>
+              <p class="resume-role-summary">Connected appliances, embedded Linux, bare-metal firmware, Qt, and reproducible development environments.</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-en-fp"
+                data-disclosure-control
+                data-open-label="details +"
+                data-close-label="details −"
+              >details −</button>
+              <div id="details-en-fp" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>Pioneered Docker-based development environments for the UI and sensing teams, standardizing local setups across the group.</li>
                     <li>Delivered next-generation connected appliances spanning embedded Linux, bare-metal firmware, and Qt UI.</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">Tech</span>
-                    <span class="chip">C++</span><span class="chip">Qt</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">Embedded Linux</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>context /</span> C++ · Qt · C# · Python · Docker · Bash · Embedded Linux</p>
                 </div>
-              </article>
+              </div>
+            </article>
+          </div>
+        </section>
 
+        <section class="resume-indexed-section" data-section-index="03" aria-labelledby="capabilities-en">
+          <div class="resume-section-index"><span>03</span>Capabilities</div>
+          <div class="resume-section-body">
+            <h2 id="capabilities-en">Technical context</h2>
+            <div class="resume-capabilities">
+              <div><h3>Languages</h3><p>C, C++, C#, Python, Java, Bash</p></div>
+              <div><h3>Cloud and delivery</h3><p>Azure, Kubernetes, Docker, CI/CD, GitHub Actions, Jenkins</p></div>
+              <div><h3>Platforms</h3><p>Linux kernel and user space, Android AOSP, embedded Linux, .NET MAUI, ARM</p></div>
+              <div><h3>Engineering focus</h3><p>System reliability, infrastructure automation, developer tooling, build systems</p></div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Skills -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">Skills</h2>
-            <div class="rx-skills">
-              <div class="rx-skill reveal" style="--i:1">
-                <span class="rx-skill__label">Languages</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>C</span>
-                  <span class="tech-chip"><span class="dot"></span>C++</span>
-                  <span class="tech-chip"><span class="dot"></span>C#</span>
-                  <span class="tech-chip"><span class="dot"></span>Python</span>
-                  <span class="tech-chip"><span class="dot"></span>Java</span>
-                  <span class="tech-chip"><span class="dot"></span>Bash</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:2">
-                <span class="rx-skill__label">Cloud &amp; Infrastructure</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>Azure</span>
-                  <span class="tech-chip"><span class="dot"></span>Kubernetes</span>
-                  <span class="tech-chip"><span class="dot"></span>Docker</span>
-                  <span class="tech-chip"><span class="dot"></span>CI/CD</span>
-                  <span class="tech-chip"><span class="dot"></span>GitHub Actions</span>
-                  <span class="tech-chip"><span class="dot"></span>Jenkins</span>
-                  <span class="tech-chip"><span class="dot"></span>Distributed Systems</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:3">
-                <span class="rx-skill__label">Platforms</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>Linux (kernel &amp; userspace)</span>
-                  <span class="tech-chip"><span class="dot"></span>Android AOSP</span>
-                  <span class="tech-chip"><span class="dot"></span>Embedded Linux</span>
-                  <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:4">
-                <span class="rx-skill__label">Specializations</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>System Reliability</span>
-                  <span class="tech-chip"><span class="dot"></span>Infrastructure Automation</span>
-                  <span class="tech-chip"><span class="dot"></span>Developer Tooling</span>
-                </div>
-              </div>
-            </div>
-          </section>
+        <section class="resume-indexed-section" data-section-index="04" aria-labelledby="education-en">
+          <div class="resume-section-index"><span>04</span>Education</div>
+          <div class="resume-section-body resume-education">
+            <h2 id="education-en">Education</h2>
+            <div class="resume-education-item"><time>2025</time><p><strong>Master of Fintech and Investment Management</strong><br>Lincoln University, New Zealand</p></div>
+            <div class="resume-education-item"><time>2019</time><p><strong>BE (Hons), Computer Engineering</strong><br>University of Canterbury, New Zealand · minors: Communication &amp; Network Engineering</p></div>
+          </div>
+        </section>
+      </div>
 
-          <!-- Education -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">Education</h2>
-            <div class="rx-edu">
-              <div class="rx-edu__item reveal" style="--i:1">
-                <div class="rx-edu__main">
-                  <span class="rx-edu__degree">Master of Fintech and Investment Management</span>
-                  <span class="rx-edu__org"> — Lincoln University, New Zealand</span>
-                </div>
-                <span class="rx-edu__when">Jul 2025</span>
-              </div>
-              <div class="rx-edu__item reveal" style="--i:2">
-                <div class="rx-edu__main">
-                  <span class="rx-edu__degree">BE (Hons), Computer Engineering</span>
-                  <span class="rx-edu__org"> — University of Canterbury, New Zealand · minors: Communication &amp; Network Engineering</span>
-                </div>
-                <span class="rx-edu__when">Nov 2019</span>
-              </div>
-            </div>
-          </section>
-        </div>
+      <div class="lang-zh" data-language-panel="zh">
+        <header class="resume-identity">
+          <div>
+            <p class="resume-label">新西兰 / 奥克兰</p>
+            <h1>Shun Lyu</h1>
+            <p class="resume-role-line">软件工程师，Azure Kubernetes Service <span>@ Microsoft</span></p>
+            <p class="resume-intro">目前从事 Azure Kubernetes Service 开发，此前经历涵盖嵌入式系统、Linux、Android 与构建基础设施。</p>
+          </div>
+          <dl class="resume-identity-meta">
+            <div><dt>方向</dt><dd>可靠性 / 自动化 / 开发者工具</dd></div>
+            <div><dt>地点</dt><dd>新西兰，奥克兰</dd></div>
+            <div><dt>链接</dt><dd><a href="https://github.com/sinmentis">GitHub</a> / <a href="https://www.linkedin.com/in/shunlyu">LinkedIn</a> / <a href="mailto:hello@shunlyu.com" data-email="hello@shunlyu.com">邮箱</a></dd></div>
+          </dl>
+        </header>
 
-        <!-- ================================================================
-             中文
-             ================================================================ -->
-        <div class="lang-zh">
-          <header class="rx-header">
-            <div class="rx-header__mark" aria-hidden="true"><span>SL</span></div>
-            <div class="rx-header__body">
-              <div class="rx-header__top">
+        <section class="resume-indexed-section" data-section-index="01" aria-labelledby="profile-zh">
+          <div class="resume-section-index"><span>01</span>概述</div>
+          <div class="resume-section-body">
+            <h2 id="profile-zh">从设备系统到云基础设施。</h2>
+            <p>拥有 7 年以上经验的软件工程师，经历涵盖嵌入式系统、Linux 平台、开发者工具和云基础设施。目前在微软 Azure Kubernetes Service 团队，负责资源 API 与生产级 Kubernetes 集群控制面的可靠性。</p>
+          </div>
+        </section>
+
+        <section class="resume-indexed-section resume-experience" data-section-index="02" aria-labelledby="experience-zh">
+          <div class="resume-section-index"><span>02</span>工作经历</div>
+          <div class="resume-section-body">
+            <h2 id="experience-zh">工作经历</h2>
+
+            <article class="resume-role resume-role--current rx-role" id="role-zh-microsoft">
+              <header class="resume-role-header">
                 <div>
-                  <span class="hx-eyebrow rx-eyebrow">简历</span>
-                  <h1 class="rx-name">Shun Lyu</h1>
-                  <p class="rx-title">软件工程师，Azure Kubernetes Services <span class="rx-at">@ Microsoft</span></p>
+                  <h3>软件工程师，Azure Kubernetes Service</h3>
+                  <p>Microsoft · 新西兰，奥克兰</p>
                 </div>
-                <div class="rx-actions">
-                  <button class="btn-ui btn-ui--primary" type="button" data-print>
-                    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm4.97-3.78a.75.75 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06L8.75 7.44V1.75a.75.75 0 0 0-1.5 0v5.69L5.03 5.91a.749.749 0 1 0-1.06 1.06l3.25 3.25Z"/></svg>
-                    下载 PDF
-                  </button>
-                </div>
-              </div>
-              <ul class="rx-meta">
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0-.001-4.001A2 2 0 0 0 8 9Z"/></svg>
-                  新西兰，奥克兰
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.075-.55-.17-.55-.379 0-.137.005-.5.005-.98 0-.667-.225-1.105-.485-1.327 1.595-.176 3.27-.78 3.27-3.535 0-.78-.275-1.42-.735-1.92.075-.18.32-.91-.075-1.895 0 0-.6-.193-1.965.74-.57-.16-1.18-.24-1.79-.243-.61.003-1.22.083-1.79.243-1.366-.933-1.967-.74-1.967-.74-.394.986-.149 1.716-.074 1.896-.46.5-.735 1.14-.735 1.92 0 2.748 1.67 3.36 3.26 3.54-.205.18-.39.49-.455.95-.41.185-1.445.5-2.08-.595 0 0-.375-.68-1.085-.73 0 0-.69-.01-.05.43 0 0 .465.215.785 1.03 0 0 .42 1.27 2.4.84 0 .48.005.84.005.95 0 .21-.15.46-.55.38A8.012 8.012 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-                  <a href="https://github.com/sinmentis" target="_blank" rel="noopener">github.com/sinmentis</a>
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                  <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">linkedin.com/in/shunlyu</a>
-                </li>
-                <li>
-                  <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/></svg>
-                  <a href="mailto:hello@shunlyu.com">hello@shunlyu.com</a>
-                </li>
+                <time>2026.4 — 至今</time>
+              </header>
+              <ul class="resume-achievements">
+                <li>为 Kubernetes 集群上的自定义 VM 镜像规格设计并交付了一个全新的 Azure 资源 API——从 API 契约、访问控制到增删改查语义均由本人主导设计，并在此基础上实现和评审了 15+ 个生产环境变更，覆盖从设计到上线的全过程。</li>
+                <li>通过修复后台协调（reconciliation）逻辑中可能覆盖存活节点元数据的缺陷、资源删除路径中的死锁问题，以及镜像复用逻辑在镜像构建失败后无法正常恢复的问题，消除了生产集群中的状态损坏隐患，提升了平台可靠性。</li>
+                <li>为预览阶段的新功能构建安全防护机制——阻止其在不支持的 VM 配置（如机密计算 VM）上启用，并将校验逻辑收窄到仅针对被修改的具体资源，避免了对无关资源的误报。</li>
+                <li>通过增加针对性的数据库索引和带降级兜底的批量元数据合并，提升了某个大规模 list API 的性能与正确性，并为团队梳理文档记录了继承规则与分页边界情况。</li>
+                <li>主导跨团队协作，将一部分受管资源从自动化补丁流水线中排除，并确保某功能的状态在自动升级过程中正确保留；此后成为相关校验代码的负责人。</li>
               </ul>
-            </div>
-          </header>
+              <p class="resume-context"><span>技术栈 /</span> Azure · C# · Python · Kubernetes · CI/CD · 分布式系统</p>
+            </article>
 
-          <!-- 概述 -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">概述</h2>
-            <p class="rx-summary reveal" style="--i:1">拥有 <strong>7 年以上</strong>经验的软件工程师，横跨嵌入式系统、Linux 平台和云基础设施。
-            目前在微软 <strong>Azure Kubernetes Services</strong> 团队，负责设计资源 API 并加固支撑生产级 Kubernetes
-            集群的控制面（control plane）逻辑。技术跨度大——从嵌入式与内核领域的 C、C++，到云端的 C#、Python
-            与分布式系统——始终专注于可靠性、正确性与开发者生产力。</p>
-            <ul class="rx-stats reveal" style="--i:2" aria-label="职业概览">
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="7" data-suffix="+">7</span>
-                <span class="rx-stat__label">年经验</span>
-              </li>
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="4">4</span>
-                <span class="rx-stat__label">家公司</span>
-              </li>
-              <li class="rx-stat">
-                <span class="rx-stat__num" data-count="3">3</span>
-                <span class="rx-stat__label">个领域</span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- 工作经历 -->
-          <section class="rx-section" id="exp-zh">
-            <h2 class="rx-section__title reveal">工作经历</h2>
-
-            <!-- 交互式职业时间线 — 概览 + 快速跳转 -->
-            <nav class="rx-timeline reveal" aria-label="职业时间线 — 选择某段经历可跳转">
-              <div class="rx-timeline__scroll">
-                <ol class="rx-timeline__track" style="--rx-count:4">
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-zh-fp"
-                      aria-label="2020 至 2022 — Fisher & Paykel 电子软件工程师">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2020</span>
-                      <span class="rx-timeline__org">Fisher &amp; Paykel</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-zh-navico"
-                      aria-label="2022 至 2024 — Navico Group Linux 平台软件开发工程师">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2022</span>
-                      <span class="rx-timeline__org">Navico</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item">
-                    <button type="button" class="rx-timeline__node" data-target="r-zh-crown"
-                      aria-label="2024 至 2026 — Crown Equipment 软件工程师">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2024</span>
-                      <span class="rx-timeline__org">Crown</span>
-                    </button>
-                  </li>
-                  <li class="rx-timeline__item rx-timeline__item--current">
-                    <button type="button" class="rx-timeline__node" data-target="r-zh-microsoft"
-                      aria-label="2026 至今 — Microsoft 软件工程师，Azure Kubernetes Services">
-                      <span class="rx-timeline__dot"></span>
-                      <span class="rx-timeline__year">2026</span>
-                      <span class="rx-timeline__org">Microsoft</span>
-                      <span class="rx-timeline__now">至今</span>
-                    </button>
-                  </li>
-                </ol>
-              </div>
-            </nav>
-
-            <div class="rx-roles">
-
-              <article class="rx-role rx-role--current reveal" style="--i:1" id="r-zh-microsoft" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">软件工程师，Azure Kubernetes Services</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">2026.4 – 至今</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-microsoft">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">展开 / 收起详情</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-zh-crown" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>软件工程师</h3>
+                  <p>Crown Equipment Corporation · 机器人技术中心 · 奥克兰</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Microsoft</span><span class="rx-role__sep">·</span>新西兰，奥克兰</p>
-                <div class="rx-role__detail" id="d-zh-microsoft">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
-                    <li>为 Kubernetes 集群上的自定义 VM 镜像规格设计并交付了一个全新的 Azure 资源 API——从 API 契约、访问控制到增删改查语义均由本人主导设计，并在此基础上实现和评审了 15+ 个生产环境变更，覆盖从设计到上线的全过程。</li>
-                    <li>通过修复后台协调（reconciliation）逻辑中可能覆盖存活节点元数据的缺陷、资源删除路径中的死锁问题，以及镜像复用逻辑在镜像构建失败后无法正常恢复的问题，消除了生产集群中的状态损坏隐患，提升了平台可靠性。</li>
-                    <li>为预览阶段的新功能构建安全防护机制——阻止其在不支持的 VM 配置（如机密计算 VM）上启用，并将校验逻辑收窄到仅针对被修改的具体资源，避免了对无关资源的误报。</li>
-                    <li>通过增加针对性的数据库索引和带降级兜底的批量元数据合并，提升了某个大规模 list API 的性能与正确性，并为团队梳理文档记录了继承规则与分页边界情况。</li>
-                    <li>主导跨团队协作，将一部分受管资源从自动化补丁流水线中排除，并确保某功能的状态在自动升级过程中正确保留；此后成为相关校验代码的负责人。</li>
-                  </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">技术栈</span>
-                    <span class="chip">Azure</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span><span class="chip">分布式系统</span>
-                  </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="rx-role reveal" style="--i:2" id="r-zh-crown" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">软件工程师</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">2024.6 – 2026.3</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-crown">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">展开 / 收起详情</span>
-                    </button>
-                  </div>
-                </div>
-                <p class="rx-role__company"><span class="rx-role__org">Crown Equipment Corporation</span><span class="rx-role__sep">·</span>机器人技术中心<span class="rx-role__sep">·</span>奥克兰</p>
-                <div class="rx-role__detail" id="d-zh-crown">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>2024.6 — 2026.3</time>
+              </header>
+              <p class="resume-role-summary">构建基础设施、CI/CD、静态分析、性能度量与 Android 开发流程。</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-zh-crown"
+                data-disclosure-control
+                data-open-label="详情 +"
+                data-close-label="详情 −"
+              >详情 −</button>
+              <div id="details-zh-crown" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>主导在内部 Android 项目中引入 C#/.NET 生态，率先实践 MAUI/Android 性能优化与自动化构建流程。</li>
                     <li>为多平台 C++ 与 C# 应用设计并维护 CI/CD 流水线（GitHub Actions、Jenkins），包括 Android 目标的容器化构建。</li>
                     <li>自动化依赖管理、包发布与测试编排，减少发布流程中的人工操作。</li>
                     <li>搭建覆盖 C++、C#、Python 的静态分析与性能度量框架，在发布前提前发现性能与质量回归。</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">技术栈</span>
-                    <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Linux</span><span class="chip">Android</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>技术栈 /</span> C# · .NET · C++ · Python · GitHub Actions · Jenkins · Linux · Android</p>
                 </div>
-              </article>
+              </div>
+            </article>
 
-              <article class="rx-role reveal" style="--i:3" id="r-zh-navico" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">Linux 平台软件开发工程师</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">2022.5 – 2024.6</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-navico">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">展开 / 收起详情</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-zh-navico" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>Linux 平台软件开发工程师</h3>
+                  <p>Navico Group · 奥克兰</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Navico Group</span><span class="rx-role__sep">·</span>奥克兰</p>
-                <div class="rx-role__detail" id="d-zh-navico">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>2022.5 — 2024.6</time>
+              </header>
+              <p class="resume-role-summary">ARM Linux 平台、内核与 bootloader 调试、容器化工具链和集成自动化。</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-zh-navico"
+                data-disclosure-control
+                data-open-label="详情 +"
+                data-close-label="详情 −"
+              >详情 −</button>
+              <div id="details-zh-navico" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>在基于 ARM 的 Linux 硬件上设计并实现模块与子系统，调试 bootloader 与内核问题以保障平台稳定性。</li>
                     <li>将 Docker 引入开发流程，用可复现的构建环境替代此前不一致的本地环境。</li>
                     <li>标准化构建流水线，为嵌入式 Linux 与 AOSP 开发提供容器化工具链。</li>
                     <li>用 Python/Bash 自动化环境准备与集成测试。</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">技术栈</span>
-                    <span class="chip">Linux 内核</span><span class="chip">AOSP</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">Docker</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>技术栈 /</span> Linux 内核 · AOSP · C · C++ · Python · Bash · Docker</p>
                 </div>
-              </article>
+              </div>
+            </article>
 
-              <article class="rx-role reveal" style="--i:4" id="r-zh-fp" tabindex="-1">
-                <div class="rx-role__head">
-                  <h3 class="rx-role__title">电子软件工程师</h3>
-                  <div class="rx-role__meta">
-                    <span class="rx-role__when">2020.1 – 2022.5</span>
-                    <button type="button" class="rx-role__toggle" aria-expanded="true" aria-controls="d-zh-fp">
-                      <svg class="icon rx-role__chev" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.78 6.22a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 7.28a.749.749 0 1 1 1.06-1.06L8 9.94l3.72-3.72a.75.75 0 0 1 1.06 0Z"/></svg>
-                      <span class="visually-hidden">展开 / 收起详情</span>
-                    </button>
-                  </div>
+            <article class="resume-role rx-role" id="role-zh-fp" data-disclosure>
+              <header class="resume-role-header">
+                <div>
+                  <h3>电子软件工程师</h3>
+                  <p>Fisher &amp; Paykel Appliances · 但尼丁 / 奥克兰</p>
                 </div>
-                <p class="rx-role__company"><span class="rx-role__org">Fisher &amp; Paykel Appliances</span><span class="rx-role__sep">·</span>但尼丁 / 奥克兰</p>
-                <div class="rx-role__detail" id="d-zh-fp">
-                  <div class="rx-role__detail-inner">
-                  <ul class="rx-role__points">
+                <time>2020.1 — 2022.5</time>
+              </header>
+              <p class="resume-role-summary">联网家电、嵌入式 Linux、裸机固件、Qt 与可复现开发环境。</p>
+              <button
+                class="resume-disclosure-control rx-role__toggle"
+                type="button"
+                aria-expanded="true"
+                aria-controls="details-zh-fp"
+                data-disclosure-control
+                data-open-label="详情 +"
+                data-close-label="详情 −"
+              >详情 −</button>
+              <div id="details-zh-fp" class="resume-role-details" data-disclosure-panel>
+                <div class="resume-role-details-inner">
+                  <ul class="resume-achievements">
                     <li>为 UI 与传感团队率先搭建基于 Docker 的开发环境，统一了团队的本地开发环境。</li>
                     <li>交付新一代联网家电核心功能，涵盖嵌入式 Linux、裸机固件与 Qt 界面。</li>
                   </ul>
-                  <div class="rx-tech">
-                    <span class="rx-tech__label">技术栈</span>
-                    <span class="chip">C++</span><span class="chip">Qt</span><span class="chip">C#</span><span class="chip">Python</span><span class="chip">Docker</span><span class="chip">Bash</span><span class="chip">嵌入式 Linux</span>
-                  </div>
-                  </div>
+                  <p class="resume-context"><span>技术栈 /</span> C++ · Qt · C# · Python · Docker · Bash · 嵌入式 Linux</p>
                 </div>
-              </article>
+              </div>
+            </article>
+          </div>
+        </section>
 
+        <section class="resume-indexed-section" data-section-index="03" aria-labelledby="capabilities-zh">
+          <div class="resume-section-index"><span>03</span>技能</div>
+          <div class="resume-section-body">
+            <h2 id="capabilities-zh">技术背景</h2>
+            <div class="resume-capabilities">
+              <div><h3>编程语言</h3><p>C、C++、C#、Python、Java、Bash</p></div>
+              <div><h3>云与交付</h3><p>Azure、Kubernetes、Docker、CI/CD、GitHub Actions、Jenkins</p></div>
+              <div><h3>平台</h3><p>Linux 内核与用户态、Android AOSP、嵌入式 Linux、.NET MAUI、ARM</p></div>
+              <div><h3>工程方向</h3><p>系统可靠性、基础设施自动化、开发者工具、构建系统</p></div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- 技能 -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">技能</h2>
-            <div class="rx-skills">
-              <div class="rx-skill reveal" style="--i:1">
-                <span class="rx-skill__label">编程语言</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>C</span>
-                  <span class="tech-chip"><span class="dot"></span>C++</span>
-                  <span class="tech-chip"><span class="dot"></span>C#</span>
-                  <span class="tech-chip"><span class="dot"></span>Python</span>
-                  <span class="tech-chip"><span class="dot"></span>Java</span>
-                  <span class="tech-chip"><span class="dot"></span>Bash</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:2">
-                <span class="rx-skill__label">云与基础设施</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>Azure</span>
-                  <span class="tech-chip"><span class="dot"></span>Kubernetes</span>
-                  <span class="tech-chip"><span class="dot"></span>Docker</span>
-                  <span class="tech-chip"><span class="dot"></span>CI/CD</span>
-                  <span class="tech-chip"><span class="dot"></span>GitHub Actions</span>
-                  <span class="tech-chip"><span class="dot"></span>Jenkins</span>
-                  <span class="tech-chip"><span class="dot"></span>分布式系统</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:3">
-                <span class="rx-skill__label">平台</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>Linux（内核与用户态）</span>
-                  <span class="tech-chip"><span class="dot"></span>Android AOSP</span>
-                  <span class="tech-chip"><span class="dot"></span>嵌入式 Linux</span>
-                  <span class="tech-chip"><span class="dot"></span>.NET MAUI</span>
-                </div>
-              </div>
-              <div class="rx-skill reveal" style="--i:4">
-                <span class="rx-skill__label">专长</span>
-                <div class="rx-skill__chips">
-                  <span class="tech-chip"><span class="dot"></span>系统可靠性</span>
-                  <span class="tech-chip"><span class="dot"></span>基础设施自动化</span>
-                  <span class="tech-chip"><span class="dot"></span>开发者工具</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 教育 -->
-          <section class="rx-section">
-            <h2 class="rx-section__title reveal">教育</h2>
-            <div class="rx-edu">
-              <div class="rx-edu__item reveal" style="--i:1">
-                <div class="rx-edu__main">
-                  <span class="rx-edu__degree">金融科技与投资管理硕士</span>
-                  <span class="rx-edu__org"> — 林肯大学（新西兰）</span>
-                </div>
-                <span class="rx-edu__when">2025.7</span>
-              </div>
-              <div class="rx-edu__item reveal" style="--i:2">
-                <div class="rx-edu__main">
-                  <span class="rx-edu__degree">工程荣誉学士，计算机工程</span>
-                  <span class="rx-edu__org"> — 坎特伯雷大学（新西兰）· 辅修：通信与网络工程</span>
-                </div>
-                <span class="rx-edu__when">2019.11</span>
-              </div>
-            </div>
-          </section>
-        </div>
-
-      </article>
-    </div>
+        <section class="resume-indexed-section" data-section-index="04" aria-labelledby="education-zh">
+          <div class="resume-section-index"><span>04</span>教育</div>
+          <div class="resume-section-body resume-education">
+            <h2 id="education-zh">教育</h2>
+            <div class="resume-education-item"><time>2025</time><p><strong>金融科技与投资管理硕士</strong><br>林肯大学，新西兰</p></div>
+            <div class="resume-education-item"><time>2019</time><p><strong>工程荣誉学士，计算机工程</strong><br>坎特伯雷大学，新西兰 · 辅修：通信与网络工程</p></div>
+          </div>
+        </section>
+      </div>
+    </article>
   </main>
 
-  <!-- ====================== Footer ====================== -->
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__meta">
-        <span class="footer__brand">
-          <span class="brand__mark" aria-hidden="true" style="width:22px;height:22px;border-radius:6px;font-size:10px">SL</span>
-          Shun&nbsp;Lyu
-          <span class="footer__tag">· Built with care in Auckland 🇳🇿</span>
-        </span>
-        <span class="footer__updated">© <span id="year">2026</span> · Last updated <span id="updated">—</span></span>
-      </div>
-      <nav class="footer__links" aria-label="Footer">
-        <a href="/">Home</a>
-        <a href="https://github.com/sinmentis" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:hello@shunlyu.com">Email</a>
-      </nav>
-    </div>
+  <footer class="resume-footer">
+    <span>© <span id="year">2026</span> Shun Lyu · updated <span id="updated">—</span></span>
+    <a href="/">return / home</a>
   </footer>
 
-  <!-- Repeating contact footer for printed pages (hidden on screen) -->
-  <div class="rx-print-foot" aria-hidden="true">
-    Shun Lyu <span class="sep">·</span> Software Engineer, Azure Kubernetes Service <span class="sep">·</span> Auckland, NZ <span class="sep">·</span> github.com/sinmentis <span class="sep">·</span> hello@shunlyu.com
-  </div>
-
-  <!-- Toast for "email copied" -->
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
-    <span id="toastMsg">Copied</span>
+  <div class="resume-toast" id="toast" data-toast role="status" aria-live="polite">
+    <span id="toastMsg" data-toast-message>Email copied to clipboard</span>
   </div>
 
   <script src="/resume.js?v=1" defer></script>
