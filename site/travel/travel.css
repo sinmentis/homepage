@@ -509,4 +509,18 @@ html.travel-page .evidence-grid img.image-failed {
     break-inside: avoid;
     margin-block: 2rem;
   }
+
+  /* The dark route-map/evidence SVGs bake a near-black background into the
+     image itself. Explicit dark mode and auto+OS-dark would otherwise print
+     that image as-is, wasting ink with a large dark rectangle on an
+     otherwise ink-safe page. Print always uses the light variant; the
+     `!important` is required to out-rank the screen-only
+     `data-color-mode`/`prefers-color-scheme` selection rules above. */
+  html.travel-page img[data-theme-variant="dark"] {
+    display: none !important;
+  }
+
+  html.travel-page img[data-theme-variant="light"] {
+    display: block !important;
+  }
 }

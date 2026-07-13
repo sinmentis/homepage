@@ -1,5 +1,8 @@
+import re
 import unittest
+from unittest import mock
 
+from scripts import build_travel_maps as travel_maps_module
 from scripts.build_travel_maps import (
     DARK_PALETTE,
     LIGHT_PALETTE,
@@ -218,6 +221,64 @@ class TravelBuildMapsTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build_maps(output_dir, fetcher=self._stub_fetcher(distances))
             self.assertEqual(list(output_dir.iterdir()), [])
+
+
+class TravelBuildMapsReverseCacheTests(unittest.TestCase):
+    def test_reverse_leg_reuses_single_fetch_and_reverses_point_order(self):
+        # Isolate the cache/reverse-cache branch in build_maps() (it checks
+        # `cache_key` then `reverse_key` before calling the fetcher) from the
+        # production route data, by patching the module-level PLACES/ROUTES
+        # for the duration of this test only. No production code changes.
+        import tempfile
+        from pathlib import Path
+
+        places = {
+            "alpha": Place("Alpha", 10.0, 20.0),
+            "beta": Place("Beta", 30.0, 40.0),
+        }
+        routes = {
+            "route-forward.svg": {
+                "title": "Forward",
+                "distance_note": "",
+                "segments": (("alpha", "beta", False, 100),),
+            },
+            "route-reverse.svg": {
+                "title": "Reverse",
+                "distance_note": "",
+                "segments": (("beta", "alpha", False, 100),),
+            },
+        }
+        calls = []
+
+        def fetcher(start, end):
+            calls.append((start.label, end.label))
+            return RouteResult(
+                points=((10.0, 20.0), (20.0, 30.0), (30.0, 40.0)),
+                distance_km=100.0,
+            )
+
+        with mock.patch.object(travel_maps_module, "PLACES", places), mock.patch.object(
+            travel_maps_module, "ROUTES", routes
+        ):
+            with tempfile.TemporaryDirectory() as tmp:
+                output_dir = Path(tmp)
+                build_maps(output_dir, fetcher=fetcher)
+                forward_svg = (output_dir / "route-forward.svg").read_text(encoding="utf-8")
+                reverse_svg = (output_dir / "route-reverse.svg").read_text(encoding="utf-8")
+
+        # One-direction fetch reuse + single fetch for the reverse pair: the
+        # reverse leg (beta -> alpha) must never trigger its own fetcher
+        # call; it has to reuse the alpha -> beta result already in cache.
+        self.assertEqual(calls, [("Alpha", "Beta")])
+
+        # Reversed point order/output behavior: alpha and beta are the only
+        # two places, so both routes project over an identical bounding box
+        # and render with the same scale/offset. The reverse route's
+        # polyline must therefore be the exact reverse of the forward
+        # route's polyline, not a re-fetch of the opposite direction.
+        forward_points = re.search(r'<polyline points="([^"]+)"', forward_svg).group(1).split(" ")
+        reverse_points = re.search(r'<polyline points="([^"]+)"', reverse_svg).group(1).split(" ")
+        self.assertEqual(reverse_points, list(reversed(forward_points)))
 
 
 if __name__ == "__main__":

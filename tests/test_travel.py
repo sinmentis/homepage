@@ -73,7 +73,13 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_page_uses_local_css_js_and_local_content_images(self):
-        self.assertIn('href="/travel/travel.css?v=2"', self.html)
+        # Only the CSS query version bumps here (v=2 -> v=4): the print
+        # fix changes travel.css only, so bumping travel.js too would be an
+        # unnecessary cache-bust of an unchanged file. (v=3 was skipped: a
+        # pre-deploy verification probe to that exact querystring caused
+        # Cloudflare to cache stale pre-fix content under it before the
+        # real deploy landed; see final-print-fix-report.md.)
+        self.assertIn('href="/travel/travel.css?v=4"', self.html)
         self.assertIn('src="/travel/travel.js?v=2"', self.html)
         image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
         self.assertTrue(image_sources)
@@ -306,6 +312,25 @@ class TravelStyleTests(unittest.TestCase):
         )
         media_index = self.css.rfind("@media (prefers-color-scheme: dark)", 0, auto_index)
         self.assertNotEqual(media_index, -1)
+
+    def test_print_media_forces_light_theme_variant_images(self):
+        # The dark SVGs bake a near-black background directly into the
+        # image, so printing them (explicit dark mode, or auto while the OS
+        # is in dark mode) would put a large ink-wasting dark rectangle on
+        # an otherwise ink-safe printed page. Print must always show the
+        # light variant and hide the dark one, regardless of the on-screen
+        # theme selection, so `!important` is required to out-rank the
+        # screen-only `data-color-mode`/`prefers-color-scheme` rules above.
+        self.assertIn("@media print", self.css)
+        print_block = self.css.split("@media print {", 1)[1]
+        self.assertIn('img[data-theme-variant="dark"]', print_block)
+        self.assertIn('img[data-theme-variant="light"]', print_block)
+        dark_index = print_block.index('img[data-theme-variant="dark"]')
+        light_index = print_block.index('img[data-theme-variant="light"]')
+        dark_rule = print_block[dark_index : print_block.index("}", dark_index)]
+        light_rule = print_block[light_index : print_block.index("}", light_index)]
+        self.assertIn("display: none !important", dark_rule)
+        self.assertIn("display: block !important", light_rule)
 
 
 class TravelScriptTests(unittest.TestCase):
