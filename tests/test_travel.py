@@ -205,5 +205,39 @@ class TravelStyleTests(unittest.TestCase):
         self.assertIn("box-shadow: var(--focus-ring)", self.css)
 
 
+class TravelScriptTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.js = JS.read_text(encoding="utf-8") if JS.exists() else ""
+
+    def test_defines_small_initializers(self):
+        for name in ("initThemeControl", "initRouteControls", "initImageFailureState"):
+            with self.subTest(name=name):
+                self.assertRegex(self.js, rf"function\s+{name}\s*\(")
+
+    def test_route_map_assets_and_captions_are_explicit(self):
+        for fragment in (
+            "/travel/assets/route-a.svg",
+            "/travel/assets/route-b.svg",
+            "/travel/assets/route-c.svg",
+            "路线 A 把长途拆开",
+            "大西沟到唐布拉约 359 公里",
+            "大西沟只在秋色确认后增加",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.js)
+
+    def test_preserves_theme_storage_contract(self):
+        self.assertIn("['auto', 'light', 'dark']", self.js)
+        self.assertIn("localStorage.setItem('theme'", self.js)
+        self.assertIn("localStorage.removeItem('theme')", self.js)
+
+    def test_supports_keyboard_route_navigation(self):
+        self.assertIn("ArrowRight", self.js)
+        self.assertIn("ArrowLeft", self.js)
+        self.assertIn("Home", self.js)
+        self.assertIn("End", self.js)
+
+
 if __name__ == "__main__":
     unittest.main()
