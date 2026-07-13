@@ -204,6 +204,20 @@ class TravelStyleTests(unittest.TestCase):
         self.assertEqual(self.css.count("box-shadow:"), 1)
         self.assertIn("box-shadow: var(--focus-ring)", self.css)
 
+    def test_image_failed_state_overrides_evidence_grid_object_fit(self):
+        # `.image-failed` must out-specificity `html.travel-page .evidence-grid
+        # img` (which sets object-fit: cover) so the broken-image fallback is
+        # not cropped/hidden for sighted users once an evidence photo errors.
+        self.assertIn(
+            "html.travel-page .evidence-grid img.image-failed", self.css
+        )
+        self.assertNotIn("html.travel-page .image-failed {", self.css)
+
+    def test_image_failed_note_is_styled_and_visible(self):
+        self.assertIn(
+            "html.travel-page .evidence-grid .image-failed-note", self.css
+        )
+
 
 class TravelScriptTests(unittest.TestCase):
     @classmethod
@@ -237,6 +251,13 @@ class TravelScriptTests(unittest.TestCase):
         self.assertIn("ArrowLeft", self.js)
         self.assertIn("Home", self.js)
         self.assertIn("End", self.js)
+
+    def test_image_failure_state_is_visible_to_sighted_users(self):
+        # Browsers do not reliably paint alt text inside a broken <img>
+        # (verified in Chromium), so the failure must also surface as a
+        # normal, non-replaced DOM node that always paints.
+        self.assertIn("image-failed-note", self.js)
+        self.assertIn("figure.querySelector('figcaption')", self.js)
 
 
 if __name__ == "__main__":

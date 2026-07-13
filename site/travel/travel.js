@@ -111,6 +111,17 @@
         image.classList.add('image-failed');
         image.removeAttribute('src');
         image.setAttribute('aria-label', image.alt + '。图片加载失败，请阅读下方文字和来源。');
+        // Browsers do not reliably paint alt text inside a broken <img>, so
+        // sighted users need a visible note too. figcaption is a normal
+        // (non-replaced) element and always renders.
+        var figure = image.closest('figure');
+        var caption = figure ? figure.querySelector('figcaption') : null;
+        if (caption && !caption.querySelector('.image-failed-note')) {
+          var note = document.createElement('span');
+          note.className = 'image-failed-note';
+          note.textContent = '图片加载失败，以下文字仍可参考：';
+          caption.insertBefore(note, caption.firstChild);
+        }
       });
     });
   }

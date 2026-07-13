@@ -347,6 +347,13 @@ html.travel-page .evidence-grid figcaption {
   color: var(--page-muted);
 }
 
+html.travel-page .evidence-grid .image-failed-note {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--signal);
+  font-weight: 600;
+}
+
 html.travel-page .matrix-wrap {
   overflow-x: auto;
   border-block: 1px solid var(--hairline);
@@ -397,7 +404,7 @@ html.travel-page .travel-footer {
   font-size: 0.78rem;
 }
 
-html.travel-page .image-failed {
+html.travel-page .evidence-grid img.image-failed {
   object-fit: contain;
   background: var(--panel-bg);
 }
