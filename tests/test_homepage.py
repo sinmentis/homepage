@@ -122,6 +122,62 @@ class HomepageStyleTests(unittest.TestCase):
     def test_css_braces_are_balanced(self):
         self.assertEqual(self.css.count("{"), self.css.count("}"))
 
+    def test_entry_lifecycle_states_drive_grid_and_scanline_power_on(self):
+        def animation_from(selector):
+            rule = re.search(
+                re.escape(selector) + r"\s*\{([^}]*)\}",
+                self.css,
+                flags=re.DOTALL,
+            )
+            self.assertIsNotNone(rule, f"expected rule for {selector}")
+            match = re.search(
+                r"animation:\s*([\w-]+)\s+([\d.]+)(m?s)",
+                rule.group(1),
+            )
+            self.assertIsNotNone(
+                match, f"expected animation shorthand on {selector}"
+            )
+            name, value, unit = match.groups()
+            duration_ms = float(value) * (1 if unit == "ms" else 1000)
+            return name, duration_ms
+
+        grid_keyframe, grid_duration_ms = animation_from(
+            ".entry-running .console-grid"
+        )
+        self.assertLessEqual(grid_duration_ms, 1400)
+        self.assertRegex(self.css, rf"@keyframes\s+{re.escape(grid_keyframe)}\s*\{{")
+
+        scanline_keyframe, scanline_duration_ms = animation_from(
+            ".entry-running body::after"
+        )
+        self.assertLessEqual(scanline_duration_ms, 1400)
+        self.assertRegex(
+            self.css, rf"@keyframes\s+{re.escape(scanline_keyframe)}\s*\{{"
+        )
+
+        complete_grid = re.search(
+            r"\.entry-complete\s+\.console-grid\s*\{([^}]*)\}",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(complete_grid, "expected .entry-complete .console-grid rule")
+        self.assertIn("opacity: 1", complete_grid.group(1))
+
+        complete_scanline = re.search(
+            r"\.entry-complete\s+body::after\s*\{([^}]*)\}",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(
+            complete_scanline, "expected .entry-complete body::after rule"
+        )
+        self.assertIn("opacity: 0.035", complete_scanline.group(1))
+
+        self.assertNotRegex(
+            self.css,
+            r"\.entry-(running|complete)[^{]*\{[^}]*pointer-events:\s*auto",
+        )
+
 
 class HomepageScriptTests(unittest.TestCase):
     @classmethod
