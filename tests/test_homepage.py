@@ -123,5 +123,48 @@ class HomepageStyleTests(unittest.TestCase):
         self.assertEqual(self.css.count("{"), self.css.count("}"))
 
 
+class HomepageScriptTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.js = HOME_JS.read_text(encoding="utf-8") if HOME_JS.exists() else ""
+
+    def test_defines_small_initializers(self):
+        for name in (
+            "initThemeControl",
+            "initEntrySequence",
+            "initScrollScenes",
+            "initEmailCopy",
+            "initFooterMetadata",
+        ):
+            with self.subTest(name=name):
+                self.assertRegex(self.js, rf"function\s+{name}\s*\(")
+
+    def test_loads_deferred_homepage_script(self):
+        html = INDEX.read_text(encoding="utf-8")
+        self.assertRegex(html, r'<script src="/home\.js\?v=1" defer></script>')
+
+    def test_keeps_progressive_enhancement_guards(self):
+        required_fragments = (
+            "prefers-reduced-motion: reduce",
+            "IntersectionObserver",
+            "requestAnimationFrame",
+            "navigator.clipboard",
+            "window.location.assign",
+        )
+        for fragment in required_fragments:
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.js)
+
+    def test_preserves_theme_cycle_and_storage_key(self):
+        self.assertIn("['auto', 'light', 'dark']", self.js)
+        self.assertIn("localStorage.setItem('theme'", self.js)
+        self.assertIn("localStorage.removeItem('theme')", self.js)
+
+    def test_does_not_use_legacy_animation_behaviors(self):
+        for fragment in ("data-count", "typed.textContent", "setInterval("):
+            with self.subTest(fragment=fragment):
+                self.assertNotIn(fragment, self.js)
+
+
 if __name__ == "__main__":
     unittest.main()
