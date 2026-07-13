@@ -64,6 +64,24 @@ class ResumeScriptTests(unittest.TestCase):
         self.assertIn("navigator.clipboard.writeText", self.js)
         self.assertIn("window.location.href = link.getAttribute('href')", self.js)
 
+    def test_print_control_guards_missing_print_api(self):
+        """initPrintControls must not assume window.print exists.
+
+        The control stays a plain button with no false success state when the
+        Print API is unavailable, so the click handler must check
+        `typeof window.print === 'function'` before calling it (no broad
+        try/catch swallowing the missing-API case).
+        """
+        init_print_controls = re.search(
+            r"function initPrintControls\(\)\s*\{(.*?)\n  \}",
+            self.js,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(init_print_controls)
+        body = init_print_controls.group(1)
+        self.assertIn("typeof window.print === 'function'", body)
+        self.assertNotIn("try {", body)
+
 
 class ResumeMarkupTests(unittest.TestCase):
     @classmethod
@@ -207,6 +225,23 @@ class ResumeStyleTests(unittest.TestCase):
             self.css,
         )
         self.assertNotIn("#wrap[data-lang", self.css)
+
+    def test_identity_reveal_animation_is_disabled_under_reduced_motion(self):
+        """Reveal transitions must become immediate for prefers-reduced-motion.
+
+        `.resume-init .resume-identity` runs a 240ms keyframe animation on
+        load; a reduced-motion override must neutralize it so the identity
+        block does not animate for users who ask for less motion.
+        """
+        reduced_motion_block = re.search(
+            r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{(.*)\}\s*$",
+            self.css,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(reduced_motion_block)
+        block = reduced_motion_block.group(1)
+        self.assertIn(".resume-init .resume-identity", block)
+        self.assertIn("animation", block)
 
 
 if __name__ == "__main__":

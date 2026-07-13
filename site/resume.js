@@ -133,7 +133,7 @@
 
     printButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        window.print();
+        if (typeof window.print === 'function') window.print();
       });
     });
 

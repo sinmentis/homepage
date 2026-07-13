@@ -477,3 +477,9 @@ html.resume-page[data-language="zh"] [data-language-panel="en"] {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .resume-init .resume-identity {
+    animation: none;
+  }
+}
