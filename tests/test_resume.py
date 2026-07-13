@@ -158,6 +158,21 @@ class ResumeMarkupTests(unittest.TestCase):
                 self.assertIn("data-disclosure-control", role.group(1))
                 self.assertIn("data-disclosure-panel", role.group(1))
 
+    def test_footer_home_link_is_screen_only(self):
+        """The footer's return-to-home link is screen navigation, not print content.
+
+        `site/resume.css` hides `.resume-footer-screen-only` under
+        `@media print`, so the anchor must carry that class or it prints
+        alongside the résumé content.
+        """
+        footer = re.search(r"<footer[^>]*>(.*?)</footer>", self.html, flags=re.DOTALL)
+        self.assertIsNotNone(footer)
+        home_link = re.search(
+            r'<a\s+([^>]*)href="/"[^>]*>return / home</a>', footer.group(1)
+        )
+        self.assertIsNotNone(home_link)
+        self.assertIn("resume-footer-screen-only", home_link.group(1))
+
     def test_removes_generic_portfolio_patterns(self):
         for fragment in (
             "data-count=",
@@ -232,9 +247,15 @@ class ResumeStyleTests(unittest.TestCase):
         `.resume-init .resume-identity` runs a 240ms keyframe animation on
         load; a reduced-motion override must neutralize it so the identity
         block does not animate for users who ask for less motion.
+
+        The extraction must stop at the following `@media print` block:
+        anchoring the greedy capture to end-of-file (as a prior version of
+        this test did) also swallows the print block, since both blocks end
+        in `}` and the file's last `}` closes `@media print`, not the
+        reduced-motion block.
         """
         reduced_motion_block = re.search(
-            r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{(.*)\}\s*$",
+            r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{(.*?)\n\}\s*\n\s*@media print",
             self.css,
             flags=re.DOTALL,
         )
@@ -242,6 +263,7 @@ class ResumeStyleTests(unittest.TestCase):
         block = reduced_motion_block.group(1)
         self.assertIn(".resume-init .resume-identity", block)
         self.assertIn("animation", block)
+        self.assertNotIn("@media print", block)
 
 
 class ResumeResponsiveAndPrintTests(unittest.TestCase):
