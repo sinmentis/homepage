@@ -12,6 +12,12 @@ JS = TRAVEL_DIR / "travel.js"
 HOME_INDEX = ROOT / "site" / "index.html"
 ASSETS = TRAVEL_DIR / "assets"
 
+ROUTES = {
+    "route-a": ("2026.09.12–09.18", "¥26,300–46,900"),
+    "route-b": ("2026.09.12–09.18", "¥25,150–30,300"),
+    "route-c": ("2026.09.10–09.16", "¥24,862–40,772"),
+}
+
 
 class TravelPageContractTests(unittest.TestCase):
     @classmethod
@@ -30,78 +36,10 @@ class TravelPageContractTests(unittest.TestCase):
 
     def test_page_carries_travel_marker_and_semantic_structure(self):
         self.assertRegex(self.html, r'<html\b[^>]*\bclass="travel-page"')
-        for element in ("<header", "<main", "<section", "<article", "<footer"):
+        for element in ("<header", "<main", "<section", "<footer"):
             with self.subTest(element=element):
                 self.assertIn(element, self.html)
         self.assertIn('href="#main-content"', self.html)
-
-    def test_page_publishes_dated_candidate_itinerary(self):
-        required = (
-            "2026.09.11–09.17",
-            "7 天 6 晚",
-            "候选行程",
-            "尚未预订",
-            "任何拿到链接的人都能查看",
-            "9 月 18 日 01:20",
-        )
-        for fragment in required:
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.html)
-
-    def test_concrete_flight_schedule_candidates_are_present(self):
-        required = (
-            "MU2413",
-            "GS7607",
-            "3U5040",
-            "MF3200",
-            "9H8387",
-            "G56652",
-            "11 小时 35 分",
-            "5 小时 05 分",
-            "班表已核对",
-            "价格待确认",
-        )
-        for fragment in required:
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.html)
-
-    def test_all_seven_days_remain_in_static_html(self):
-        for day in range(1, 8):
-            with self.subTest(day=day):
-                self.assertIn(f'id="day-{day}"', self.html)
-                self.assertIn(f'data-day="{day}"', self.html)
-        self.assertIn("无新增住宿夜", self.html)
-
-    def test_booking_components_are_present(self):
-        required = (
-            "伊宁希尔顿欢朋酒店",
-            "尼勒克蜂巢印象民宿",
-            "一嗨租车",
-            "两间房",
-            "大众探岳",
-            "巴彦岱一绝烤包子",
-            "特丰抓饭",
-            "地面预算",
-            "总预算",
-            "2026 年 7 月 20 日",
-            "2026 年 9 月 8 日",
-        )
-        for fragment in required:
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.html)
-
-    def test_fallbacks_cover_fragile_decisions(self):
-        required = (
-            "航班备选动作",
-            "伊宁天缘国际酒店",
-            "伊宁广仁郡亚朵酒店",
-            "独库唐布拉野奢度假酒店",
-            "携程租车 / 神州租车",
-            "馕、酸奶、水果、坚果和饮用水",
-        )
-        for fragment in required:
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.html)
 
     def test_public_page_excludes_personal_and_transactional_data(self):
         forbidden = (
@@ -121,74 +59,16 @@ class TravelPageContractTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertNotIn(fragment, self.html)
 
-    def test_static_supporting_route_map_remains(self):
-        figure = re.search(
-            r'<figure class="route-map">(.*?)</figure>',
-            self.html,
-            flags=re.DOTALL,
-        )
-        self.assertIsNotNone(figure)
-        block = figure.group(1)
-        self.assertIn('src="/travel/assets/route-a.svg"', block)
-        self.assertIn('src="/travel/assets/route-a-dark.svg"', block)
-        self.assertNotIn("data-route-control", self.html)
-
-    def test_flight_and_budget_tables_have_scoped_headers(self):
-        tables = re.findall(r"<table>(.*?)</table>", self.html, flags=re.DOTALL)
-        self.assertGreaterEqual(len(tables), 2)
-        for table in tables:
-            with self.subTest(table=table[:80]):
-                self.assertIn('scope="col"', table)
-
-    def test_flight_tables_are_wrapped_for_horizontal_scroll(self):
-        # Each flight table is forced wide (min-width) by travel.css so it can
-        # show every column without truncation, and .flight-card has no
-        # overflow handling of its own. Without a `.matrix-wrap` wrapper
-        # (mirroring `.budget-wrap`) the table has nowhere to scroll and
-        # bleeds into the neighbouring card / the page's horizontal scrollbar
-        # instead of scrolling within its own card.
-        cards = re.findall(
-            r'<article class="flight-card">(.*?)</article>', self.html, flags=re.DOTALL
-        )
-        self.assertEqual(len(cards), 2)
-        for card in cards:
-            with self.subTest(card=card[:40]):
-                self.assertRegex(card, r'<div class="matrix-wrap">\s*<table>')
-
-    def test_day_navigation_targets_all_days(self):
-        for day in range(1, 8):
-            with self.subTest(day=day):
-                self.assertIn(f'href="#day-{day}"', self.html)
-
-    def test_dynamic_information_is_labeled_with_research_date(self):
-        required = (
-            "研究更新时间：2026-07-14",
-            "不是 9 月精确日期库存",
-            "下单前复核",
-            "可取消条款待确认",
-        )
-        for fragment in required:
-            with self.subTest(fragment=fragment):
-                self.assertIn(fragment, self.html)
-
-    def test_required_places_and_backup_are_present(self):
-        for place in ("伊宁", "大西沟", "唐布拉", "库尔德宁"):
-            with self.subTest(place=place):
-                self.assertIn(place, self.html)
-
-    def test_page_uses_local_css_js_and_local_content_images(self):
+    def test_page_uses_current_css_and_js_versions(self):
         # travel.css bumps v=5 -> v=6 for the print-mode dark-token fix
         # (Cloudflare caches by full URL including querystring, so a stale
         # cached asset would otherwise keep serving the old, print-unsafe
         # dark-mode CSS indefinitely). travel.js is untouched, so its query
-        # param stays v=4.
+        # param stays v=4. Content-image coverage returns once route panels
+        # exist (Task 2+); the neutral comparison shell has no <img> tags of
+        # its own yet.
         self.assertIn('href="/travel/travel.css?v=6"', self.html)
         self.assertIn('src="/travel/travel.js?v=4"', self.html)
-        image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
-        self.assertTrue(image_sources)
-        for source in image_sources:
-            with self.subTest(source=source):
-                self.assertTrue(source.startswith("/travel/assets/"))
 
     def test_social_preview_uses_current_cache_buster(self):
         preview_url = "https://shunlyu.com/travel/assets/og-travel.png?v=3"
@@ -208,51 +88,55 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertIn('target="_blank"', link)
                 self.assertIn('rel="noopener noreferrer"', link)
 
-    def test_supporting_route_map_ships_both_light_and_dark_variants(self):
-        # Both palettes must ship in the markup so CSS alone (no JS
-        # required) can select the theme-correct image for auto/light/dark.
-        figure = re.search(
-            r'<figure class="route-map">(.*?)</figure>', self.html, flags=re.DOTALL
-        )
-        self.assertIsNotNone(figure)
-        block = figure.group(1)
-        self.assertIn('src="/travel/assets/route-a.svg"', block)
-        self.assertIn('src="/travel/assets/route-a-dark.svg"', block)
-        self.assertIn('data-theme-variant="light"', block)
-        self.assertIn('data-theme-variant="dark"', block)
-        self.assertEqual(len(re.findall(r"<img\b", block)), 2)
+    def test_page_opens_with_neutral_dense_comparison(self):
+        self.assertIn("三套完整行程", self.html)
+        self.assertIn('id="route-comparison"', self.html)
+        self.assertIn('class="comparison-shell"', self.html)
+        self.assertIn('id="comparison-title" tabindex="-1"', self.html)
+        self.assertIn('class="route-comparison-wrap"', self.html)
+        self.assertIn('class="route-comparison"', self.html)
+        self.assertNotIn("推荐 / 最稳", self.html)
+        self.assertNotIn("目前推荐 A", self.html)
+        self.assertNotIn('aria-selected="true"', self.html)
+        for label in ("班表已核对", "候选", "价格待确认", "条件项", "下单前复核"):
+            self.assertIn(label, self.html)
 
-    def test_daxigou_evidence_ships_both_light_and_dark_variants(self):
-        figure = re.search(
-            r"<figure>\s*<img[^>]*daxigou-evidence(.*?)</figure>",
+    def test_three_equal_route_choices_exist(self):
+        choices = re.findall(r'data-route-choice="(route-[abc])"', self.html)
+        self.assertEqual(choices, ["route-a", "route-b", "route-c"])
+        for route_id, (dates, budget) in ROUTES.items():
+            with self.subTest(route=route_id):
+                self.assertIn(f'href="#{route_id}-panel"', self.html)
+                self.assertIn(dates, self.html)
+                self.assertIn(budget, self.html)
+
+    def test_route_b_date_disclosure_is_in_comparison_row(self):
+        row = re.search(
+            r'<tr[^>]*data-route-row="route-b"[^>]*>(.*?)</tr>',
             self.html,
             flags=re.DOTALL,
         )
-        self.assertIsNotNone(figure)
-        block = figure.group(0)
-        self.assertIn('src="/travel/assets/daxigou-evidence.svg"', block)
-        self.assertIn('src="/travel/assets/daxigou-evidence-dark.svg"', block)
-        self.assertIn('data-theme-variant="light"', block)
-        self.assertIn('data-theme-variant="dark"', block)
-        self.assertEqual(len(re.findall(r"<img\b", block)), 2)
-
-    def test_evidence_grid_images_load_eagerly(self):
-        # Evidence images (including both Daxigou theme variants) must not
-        # be lazy-loaded: Chromium does not force-load off-screen lazy
-        # images for print, so a user printing without first scrolling
-        # would otherwise get blank evidence boxes.
-        grid = re.search(
-            r'<div class="evidence-grid">(.*?)</div>\s*<p class="source-note">',
-            self.html,
-            flags=re.DOTALL,
+        self.assertIsNotNone(row)
+        self.assertIn(
+            "个人行程 9/11 晚–9/18；新疆共同行程 9/12–9/18，7 天 6 晚",
+            row.group(1),
         )
-        self.assertIsNotNone(grid)
-        block = grid.group(1)
-        images = re.findall(r"<img\b[^>]*>", block)
-        self.assertEqual(len(images), 5)
-        for image in images:
-            with self.subTest(image=image):
-                self.assertNotIn('loading="lazy"', image)
+
+    def test_compact_tabs_start_unselected(self):
+        tabs = re.findall(r'<button\b[^>]*data-route-tab="route-[abc]"[^>]*>', self.html)
+        self.assertEqual(len(tabs), 3)
+        for tab in tabs:
+            self.assertIn('aria-selected="false"', tab)
+            self.assertIn('tabindex="-1"', tab)
+
+    def test_stale_single_route_values_are_removed(self):
+        for fragment in (
+            "2026.09.11–09.17",
+            "周三 / 周五",
+            "08:00</td><td>11:40",
+            "11 小时 35 分",
+        ):
+            self.assertNotIn(fragment, self.html)
 
 
 class TravelAssetTests(unittest.TestCase):
