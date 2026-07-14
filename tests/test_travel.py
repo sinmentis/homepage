@@ -427,6 +427,67 @@ class TravelStyleTests(unittest.TestCase):
         self.assertIn("display: none", rule)
         self.assertIn("position: static !important", rule)
 
+    def test_print_hides_skip_link_with_defensive_static_positioning(self):
+        # `.skip-link` is `position: fixed`, parked off-canvas (top: -5rem)
+        # until keyboard focus -- architecturally identical to the
+        # `.travel-bar`/`.day-nav` sticky bars above, which needed both
+        # `display: none` *and* `position: static !important` because
+        # `display: none` alone did not stop Chromium from re-rendering a
+        # fixed-position element mid-page once print pagination fragments an
+        # ancestor. Confirmed via a rasterized print PDF: without this rule,
+        # the "跳到正文" skip-link pill appeared on 12 of 13 printed pages.
+        print_block = self.css.split("@media print {", 1)[1]
+        match = re.search(
+            r"html\.travel-page \.skip-link\s*\{([^}]*)\}",
+            print_block,
+        )
+        self.assertIsNotNone(
+            match, "expected a `.skip-link` rule under @media print"
+        )
+        rule = match.group(1)
+        self.assertIn("display: none", rule)
+        self.assertIn("position: static !important", rule)
+
+    def test_print_flight_tables_render_without_horizontal_clipping(self):
+        # `.matrix-wrap` keeps `overflow-x: auto` for screen so a wide table
+        # scrolls inside its card instead of overlapping its sibling.
+        # `overflow: auto` has no interactive affordance in a paginated,
+        # static medium though -- content beyond the clip rectangle is
+        # simply never rendered onto the printed page at all. Print must
+        # relax the clip (`overflow-x: visible`), drop the table's explicit
+        # `min-width` floor so it can size to the printed page instead of
+        # its screen minimum, and give each flight card the full container
+        # width (single column) so all six columns -- including 抵达
+        # (arrival) and 备注 (remarks) -- have room to lay out without
+        # being clipped or overlapping.
+        print_block = self.css.split("@media print {", 1)[1]
+
+        grid_match = re.search(
+            r"html\.travel-page \.flight-grid\s*\{([^}]*)\}", print_block
+        )
+        self.assertIsNotNone(
+            grid_match, "expected a `.flight-grid` rule under @media print"
+        )
+        self.assertIn("grid-template-columns: 1fr", grid_match.group(1))
+
+        wrap_match = re.search(
+            r"html\.travel-page \.flight-card \.matrix-wrap\s*\{([^}]*)\}",
+            print_block,
+        )
+        self.assertIsNotNone(
+            wrap_match,
+            "expected a `.flight-card .matrix-wrap` rule under @media print",
+        )
+        self.assertIn("overflow-x: visible", wrap_match.group(1))
+
+        table_match = re.search(
+            r"html\.travel-page \.flight-card table\s*\{([^}]*)\}", print_block
+        )
+        self.assertIsNotNone(
+            table_match, "expected a `.flight-card table` rule under @media print"
+        )
+        self.assertIn("min-width: 0", table_match.group(1))
+
     def test_uses_current_homepage_tokens(self):
         for token in (
             "--page-bg: #e9e5d9",

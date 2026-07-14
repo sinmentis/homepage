@@ -607,6 +607,15 @@ html.travel-page .budget-wrap {
     position: static !important;
   }
 
+  /* `.skip-link` is the same `position: fixed`, off-canvas-until-focus
+     pattern as the sticky bars above, and needs the same defense-in-depth:
+     `display: none` alone left it re-rendering as a visible pill on nearly
+     every printed page. */
+  html.travel-page .skip-link {
+    display: none;
+    position: static !important;
+  }
+
   html.travel-page .travel-footer {
     display: none;
   }
@@ -635,6 +644,28 @@ html.travel-page .budget-wrap {
      order, which stays readable without the two-column layout. */
   html.travel-page .itinerary-day {
     display: block;
+  }
+
+  /* `.matrix-wrap` keeps `overflow-x: auto` on screen so a wide flight
+     table scrolls inside its card instead of overlapping its sibling.
+     `overflow: auto` has no interactive affordance in a paginated, static
+     medium though: content beyond the clip rectangle is simply never
+     rendered onto the printed page, silently dropping columns (including
+     抵达/备注) with no visual cue. Print instead gives each flight card the
+     full container width (single column, matching the `.itinerary-day`
+     trade-off above), relaxes the clip so nothing is cut off, and drops the
+     table's screen-only `min-width` floor so it sizes to the page instead
+     of forcing a scroll that print can't offer. */
+  html.travel-page .flight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  html.travel-page .flight-card .matrix-wrap {
+    overflow-x: visible;
+  }
+
+  html.travel-page .flight-card table {
+    min-width: 0;
   }
 
   /* The dark route-map/evidence SVGs bake a near-black background into the
