@@ -238,7 +238,8 @@ class TravelPageContractTests(unittest.TestCase):
 class TravelAssetTests(unittest.TestCase):
     def test_route_maps_are_static_svg_files_with_distance_labels(self):
         expected = {
-            "route-a.svg": ("79 km", "286 km"),
+            "route-a.svg": ("79 km", "210–230 km"),
+            "route-a-dark.svg": ("79 km", "210–230 km"),
             "route-b.svg": ("79 km", "359 km", "286 km"),
             "route-c.svg": ("286 km", "79 km"),
         }
@@ -249,6 +250,16 @@ class TravelAssetTests(unittest.TestCase):
                 self.assertIn("OpenStreetMap contributors via OSRM", svg)
                 for label in labels:
                     self.assertIn(label, svg)
+        # Route A's Yining↔Bee Town leg is canonically 210–230 km / 3–3.5h
+        # (canonical-decisions.md); the old page's stale 286 km figure must
+        # not reappear in either theme variant.
+        for name in ("route-a.svg", "route-a-dark.svg"):
+            with self.subTest(name=name):
+                svg = (ASSETS / name).read_text(encoding="utf-8")
+                self.assertNotIn(
+                    "286 km", svg,
+                    f"{name} must not contain the stale 286 km distance label",
+                )
 
     def test_social_preview_is_png_with_expected_dimensions(self):
         preview = ASSETS / "og-travel.png"
