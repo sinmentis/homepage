@@ -620,6 +620,34 @@ html.travel-page .budget-wrap {
     display: none;
   }
 
+  /* Printing must stay ink-safe regardless of the on-screen theme.
+     `html.travel-page[data-color-mode="dark"]` and the OS-driven
+     `@media (prefers-color-scheme: dark)` block both set these custom
+     properties with equal or higher selector specificity than a plain
+     print reset would otherwise have, so `!important` is required to force
+     every themed token back to its light value while printing. This
+     covers the html/body page background and text color (below), the
+     hairline borders and `--panel-bg` used by every flight/stay/booking
+     card and `.itinerary-day`, and the muted/signal text colors used by
+     captions, definitions, and status chips -- all of which previously
+     kept their dark values (and washed-out/near-black card backgrounds)
+     when printing from explicit dark mode or OS-driven auto-dark. */
+  html.travel-page {
+    color-scheme: light !important;
+    --page-bg: #ffffff !important;
+    --page-fg: #222a20 !important;
+    --page-muted: #596055 !important;
+    --signal: #53663e !important;
+    --hairline: #c9c6ba !important;
+    --panel-bg: rgba(255, 255, 255, 0.16) !important;
+  }
+
+  /* `html.travel-page` itself still carries `background: var(--page-bg)`
+     from the base rule (now light, see above), but explicitly forcing
+     both the html element and the body here keeps this rule
+     self-contained and independently correct even if the token reset
+     above is ever removed. */
+  html.travel-page,
   html.travel-page body {
     background: #fff;
     color: #000;

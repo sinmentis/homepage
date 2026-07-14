@@ -577,6 +577,61 @@ class TravelStyleTests(unittest.TestCase):
         self.assertIn("display: none !important", dark_rule)
         self.assertIn("display: block !important", light_rule)
 
+    def test_print_forces_light_background_on_html_not_just_body(self):
+        # The print rule that hardcodes a white/black page background only
+        # ever targeted `html.travel-page body`, never `html.travel-page`
+        # itself. `html.travel-page` still carries `background:
+        # var(--page-bg)` from the base rule, which is the dark token while
+        # explicit dark mode or OS-driven auto-dark is active, so the
+        # printed page showed a dark bar/margin around the (correctly
+        # forced-white) body. Both the html element and the body must be
+        # explicitly forced light for print.
+        print_block = self.css.split("@media print {", 1)[1]
+        match = re.search(
+            r"html\.travel-page,\s*\n\s*html\.travel-page body \{([^}]*)\}",
+            print_block,
+        )
+        self.assertIsNotNone(
+            match,
+            "expected a combined `html.travel-page, html.travel-page body` "
+            "rule under @media print forcing a light background",
+        )
+        self.assertIn("background: #fff", match.group(1))
+        self.assertIn("color: #000", match.group(1))
+
+    def test_print_forces_light_theme_tokens_regardless_of_dark_mode(self):
+        # Explicit dark mode (`data-color-mode="dark"`) and the OS/browser
+        # `prefers-color-scheme: dark` default both set `--page-bg`,
+        # `--page-fg`, `--page-muted`, `--signal`, `--hairline`, and
+        # `--panel-bg` to their dark values via selectors with equal or
+        # higher specificity than a plain print reset would have, so a
+        # real printed page picked up the dark `--panel-bg` on every
+        # flight/stay/booking/itinerary-day card and washed-out muted/
+        # signal text -- not just a dark html/body background. Print must
+        # force every themed token back to its light value with
+        # `!important` so cards, hairline borders, and muted/signal text
+        # stay ink-safe no matter which theme was active on screen.
+        print_block = self.css.split("@media print {", 1)[1]
+        match = re.search(r"html\.travel-page \{([^}]*)\}", print_block)
+        self.assertIsNotNone(
+            match,
+            "expected a bare `html.travel-page` token-reset rule under "
+            "@media print",
+        )
+        rule = match.group(1)
+        for declaration in (
+            "color-scheme: light",
+            "--page-bg: #ffffff",
+            "--page-fg: #222a20",
+            "--page-muted: #596055",
+            "--signal: #53663e",
+            "--hairline: #c9c6ba",
+            "--panel-bg: rgba(255, 255, 255, 0.16)",
+        ):
+            with self.subTest(declaration=declaration):
+                self.assertIn(declaration, rule)
+                self.assertIn(f"{declaration} !important", rule)
+
 
 class TravelScriptTests(unittest.TestCase):
     @classmethod
