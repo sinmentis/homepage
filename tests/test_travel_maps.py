@@ -6,6 +6,7 @@ from scripts import build_travel_maps as travel_maps_module
 from scripts.build_travel_maps import (
     DARK_PALETTE,
     LIGHT_PALETTE,
+    ROUTES,
     Place,
     RouteResult,
     RouteSegment,
@@ -279,6 +280,17 @@ class TravelBuildMapsReverseCacheTests(unittest.TestCase):
         forward_points = re.search(r'<polyline points="([^"]+)"', forward_svg).group(1).split(" ")
         reverse_points = re.search(r'<polyline points="([^"]+)"', reverse_svg).group(1).split(" ")
         self.assertEqual(reverse_points, list(reversed(forward_points)))
+
+
+class TravelRouteADistanceNoteTests(unittest.TestCase):
+    def test_route_a_distance_note_is_canonical_not_stale(self):
+        # Route A's Yining<->Bee Town (唐布拉) leg is canonically 210-230 km
+        # (canonical-decisions.md). The generator's public distance_note for
+        # route-a.svg must reflect that range, not the stale 286 km figure,
+        # or regenerating the asset would reintroduce the reviewed defect.
+        distance_note = ROUTES["route-a.svg"]["distance_note"]
+        self.assertIn("210–230 km", distance_note)
+        self.assertNotIn("286 km", distance_note)
 
 
 if __name__ == "__main__":

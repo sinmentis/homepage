@@ -88,7 +88,7 @@ PLACES = {
 ROUTES = {
     "route-a.svg": {
         "title": "A / 伊宁双翼基地型",
-        "distance_note": "伊宁↔大西沟 79 km · 伊宁↔唐布拉 286 km",
+        "distance_note": "伊宁↔大西沟 79 km · 伊宁↔唐布拉 210–230 km",
         "segments": (
             ("yining", "daxigou", False, 79),
             ("yining", "tangbula", False, 286),
