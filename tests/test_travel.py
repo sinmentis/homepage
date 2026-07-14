@@ -234,6 +234,20 @@ class TravelPageContractTests(unittest.TestCase):
             "unconfirmed 3U times must not be labeled as verified",
         )
 
+    def test_route_b_is_complete_and_canonical(self):
+        self.assert_complete_route("route-b")
+        panel = self.route_panel("route-b")
+        for fragment in (
+            "MU6903", "CZ6823", "GS7607", "约 20 分钟",
+            "商务出行者个人行程为 9 月 11 日晚至 9 月 18 日",
+            "约 300–360 公里 / 4–7 小时",
+            "不进入仙女湖高海拔段",
+            "¥25,150–30,300", "route-b.svg", "route-b-dark.svg",
+        ):
+            self.assertIn(fragment, panel)
+        self.assertNotIn("骑马上山", panel)
+        self.assertNotIn("延长至仙女湖", panel)
+
 
 class TravelAssetTests(unittest.TestCase):
     def test_route_maps_are_static_svg_files_with_distance_labels(self):
