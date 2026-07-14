@@ -60,13 +60,13 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_page_uses_current_css_and_js_versions(self):
-        # travel.css bumps v=6 -> v=7 for the dense high-density
-        # screen/print rewrite (Cloudflare caches by full URL including
+        # travel.js bumps v=4 -> v=5 for the new initRouteTabs() hash-
+        # addressable tab behavior (Cloudflare caches by full URL including
         # querystring, so a stale cached asset would otherwise keep serving
-        # the old, spacious pre-density CSS indefinitely). travel.js is
-        # untouched, so its query param stays v=4.
+        # the old, tab-less script indefinitely). travel.css is untouched
+        # by this task, so it stays at v=7.
         self.assertIn('href="/travel/travel.css?v=7"', self.html)
-        self.assertIn('src="/travel/travel.js?v=4"', self.html)
+        self.assertIn('src="/travel/travel.js?v=5"', self.html)
 
     def test_social_preview_uses_current_cache_buster(self):
         preview_url = "https://shunlyu.com/travel/assets/og-travel.png?v=3"
@@ -805,11 +805,40 @@ class TravelScriptTests(unittest.TestCase):
         cls.js = JS.read_text(encoding="utf-8") if JS.exists() else ""
 
     def test_defines_only_required_initializers(self):
-        for name in ("initThemeControl", "initImageFailureState"):
+        for name in ("initThemeControl", "initImageFailureState", "initRouteTabs"):
             with self.subTest(name=name):
                 self.assertRegex(self.js, rf"function\s+{name}\s*\(")
         self.assertNotIn("initRouteControls", self.js)
         self.assertNotIn("routeMaps", self.js)
+
+    def test_route_tabs_use_static_content_as_progressive_enhancement(self):
+        self.assertIn("data-route-enhanced", self.js)
+        self.assertIn("data-active-route", self.js)
+        self.assertNotIn("innerHTML", self.js)
+        self.assertNotIn("insertAdjacentHTML", self.js)
+        self.assertNotIn("panel.remove()", self.js)
+
+    def test_route_tabs_support_hash_and_comparison_state(self):
+        for fragment in (
+            "window.location.hash",
+            "history.replaceState",
+            "hashchange",
+            "route-a",
+            "route-b",
+            "route-c",
+            "comparison",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.js)
+        self.assertIn("-panel", self.js)
+
+    def test_route_tabs_support_keyboard_navigation(self):
+        for key in ("ArrowLeft", "ArrowRight", "Home", "End"):
+            with self.subTest(key=key):
+                self.assertIn(key, self.js)
+        self.assertIn("aria-selected", self.js)
+        self.assertIn("tabIndex", self.js)
+        self.assertIn(".focus()", self.js)
 
     def test_script_does_not_hide_itinerary_content(self):
         self.assertNotIn("data-day", self.js)
