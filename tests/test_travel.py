@@ -254,7 +254,8 @@ class TravelAssetTests(unittest.TestCase):
         expected = {
             "route-a.svg": ("79 km", "210–230 km"),
             "route-a-dark.svg": ("79 km", "210–230 km"),
-            "route-b.svg": ("79 km", "359 km", "286 km"),
+            "route-b.svg": ("79 km", "300–360 km", "220–290 km"),
+            "route-b-dark.svg": ("79 km", "300–360 km", "220–290 km"),
             "route-c.svg": ("286 km", "79 km"),
         }
         for name, labels in expected.items():
@@ -273,6 +274,24 @@ class TravelAssetTests(unittest.TestCase):
                 self.assertNotIn(
                     "286 km", svg,
                     f"{name} must not contain the stale 286 km distance label",
+                )
+        # Route B's 大西沟→唐布拉 leg is disputed between a 359 km task
+        # baseline and a ~180-200 km independent estimate; the panel's own
+        # Day 3 copy and canonical-decisions.md both resolve this as the
+        # conservative 300–360 km range. Likewise 唐布拉→伊宁 is disclosed as
+        # 220–290 km, "来源不一，下单前复核", not a bare 286 km. Neither stale
+        # bare figure may reappear in either theme variant, or the public
+        # map note would silently contradict the panel's own disclosure.
+        for name in ("route-b.svg", "route-b-dark.svg"):
+            with self.subTest(name=name):
+                svg = (ASSETS / name).read_text(encoding="utf-8")
+                self.assertNotIn(
+                    "359 km", svg,
+                    f"{name} must not contain the stale/disputed bare 359 km distance label",
+                )
+                self.assertNotIn(
+                    "286 km", svg,
+                    f"{name} must not contain the stale bare 286 km distance label",
                 )
 
     def test_social_preview_is_png_with_expected_dimensions(self):

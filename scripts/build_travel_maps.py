@@ -96,7 +96,14 @@ ROUTES = {
     },
     "route-b.svg": {
         "title": "B / 东西连续推进型",
-        "distance_note": "伊宁→大西沟 79 km · 大西沟→唐布拉 359 km · 唐布拉→伊宁 286 km",
+        # Both legs are canonically disclosed as ranges, not bare disputed
+        # figures (canonical-decisions.md §5): 大西沟→唐布拉 is disputed
+        # between this 359 km task baseline and a ~180-200 km independent
+        # estimate, resolved to the conservative 300–360 km; 唐布拉→伊宁 is
+        # disclosed as 220–290 km, "来源不一". The segment validation values
+        # below (359, 286) intentionally stay as the internal OSRM-checked
+        # baselines -- only the public label changes.
+        "distance_note": "伊宁→大西沟 79 km · 大西沟→唐布拉 300–360 km · 唐布拉→伊宁 220–290 km",
         "segments": (
             ("yining", "daxigou", False, 79),
             ("daxigou", "tangbula", False, 359),

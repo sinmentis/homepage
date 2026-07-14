@@ -293,5 +293,36 @@ class TravelRouteADistanceNoteTests(unittest.TestCase):
         self.assertNotIn("286 km", distance_note)
 
 
+class TravelRouteBDistanceNoteTests(unittest.TestCase):
+    def test_route_b_distance_note_is_canonical_not_stale(self):
+        # Route B's Qingshuihe/Huocheng->Bee Town (大西沟→唐布拉) leg is
+        # disputed between a 359 km task baseline and a ~180-200 km
+        # independent estimate; canonical-decisions.md resolves this as the
+        # conservative 300-360 km range, matching the panel's own
+        # "约 300–360 公里 / 4–7 小时" Day 3 copy. The Bee Town->Yining
+        # return leg (唐布拉→伊宁) is likewise disclosed in the panel as
+        # "约 220–290 公里，来源不一，下单前复核" rather than a bare 286 km.
+        # The generator's public distance_note for route-b.svg must reflect
+        # both ranges, not the bare, disputed 359 km / 286 km figures, or
+        # regenerating the asset would reintroduce the reviewed defect. The
+        # internal segment validation values (359, 286 km) that check the
+        # fetched OSRM geometry are a separate concern and stay unchanged.
+        distance_note = ROUTES["route-b.svg"]["distance_note"]
+        self.assertIn("79 km", distance_note)
+        self.assertIn("300–360 km", distance_note)
+        self.assertIn("220–290 km", distance_note)
+        self.assertNotIn("359 km", distance_note)
+        self.assertNotIn("286 km", distance_note)
+
+        segments_by_leg = {
+            (start, end): expected_km
+            for start, end, _optional, expected_km in ROUTES["route-b.svg"]["segments"]
+        }
+        # The internal OSRM validation values must remain the disputed
+        # baseline figures (359, 286) -- only the public label changes.
+        self.assertEqual(segments_by_leg[("daxigou", "tangbula")], 359)
+        self.assertEqual(segments_by_leg[("tangbula", "yining")], 286)
+
+
 if __name__ == "__main__":
     unittest.main()
