@@ -140,6 +140,21 @@ class TravelPageContractTests(unittest.TestCase):
             with self.subTest(table=table[:80]):
                 self.assertIn('scope="col"', table)
 
+    def test_flight_tables_are_wrapped_for_horizontal_scroll(self):
+        # Each flight table is forced wide (min-width) by travel.css so it can
+        # show every column without truncation, and .flight-card has no
+        # overflow handling of its own. Without a `.matrix-wrap` wrapper
+        # (mirroring `.budget-wrap`) the table has nowhere to scroll and
+        # bleeds into the neighbouring card / the page's horizontal scrollbar
+        # instead of scrolling within its own card.
+        cards = re.findall(
+            r'<article class="flight-card">(.*?)</article>', self.html, flags=re.DOTALL
+        )
+        self.assertEqual(len(cards), 2)
+        for card in cards:
+            with self.subTest(card=card[:40]):
+                self.assertRegex(card, r'<div class="matrix-wrap">\s*<table>')
+
     def test_day_navigation_targets_all_days(self):
         for day in range(1, 8):
             with self.subTest(day=day):
@@ -345,12 +360,72 @@ class TravelStyleTests(unittest.TestCase):
             with self.subTest(selector=selector):
                 self.assertIn(selector, mobile)
 
+    def test_grid_cards_can_shrink_below_their_table_min_content(self):
+        # `.flight-grid`/`.stay-grid`/`.booking-grid` size their two columns
+        # with `minmax(0, 1fr)`, but a grid *item*'s own default min-width is
+        # `auto`, which resolves to its content's min-content size unless the
+        # item itself opts out. A `.flight-card` containing a wide table
+        # (`min-width: 38rem`+) blows out its 1fr track regardless of the
+        # container's minmax(0, ...) unless the card explicitly sets
+        # `min-width: 0`, which is what actually lets `.matrix-wrap`'s
+        # `overflow-x: auto` take effect instead of stretching the whole
+        # page. Confirmed via a live 375px measurement: without this rule,
+        # `document.documentElement.scrollWidth` still exceeded the
+        # viewport even after wrapping the table in `.matrix-wrap`.
+        match = re.search(
+            r"html\.travel-page \.flight-card,\s*\n"
+            r"html\.travel-page \.stay-card,\s*\n"
+            r"html\.travel-page \.booking-card \{([^}]*)\}",
+            self.css,
+        )
+        self.assertIsNotNone(
+            match,
+            "expected the shared `.flight-card, .stay-card, .booking-card` padding rule",
+        )
+        self.assertIn("min-width: 0", match.group(1))
+
     def test_print_layout_keeps_itinerary_and_hides_sticky_navigation(self):
         print_block = self.css.split("@media print {", 1)[1]
         self.assertIn(".day-nav", print_block)
         self.assertIn("display: none", print_block)
         self.assertIn(".itinerary-day", print_block)
         self.assertIn("break-inside: avoid", print_block)
+
+    def test_print_itinerary_day_switches_to_block_to_avoid_chromium_fragmentation(self):
+        # `break-inside: avoid` is not reliably honored by Chromium when the
+        # element itself is `display: grid` (a documented fragmentation
+        # limitation). The print-only `.itinerary-day` rule must drop the
+        # grid layout in favor of `display: block` so each day card can no
+        # longer split across a page boundary; `grid-template-columns` alone
+        # is not sufficient defense against that pagination bug.
+        print_block = self.css.split("@media print {", 1)[1]
+        solo_rules = re.findall(
+            r"html\.travel-page \.itinerary-day \{([^}]*)\}", print_block
+        )
+        self.assertTrue(
+            solo_rules, "expected a standalone `.itinerary-day` rule under @media print"
+        )
+        solo_rule = solo_rules[-1]
+        self.assertIn("display: block", solo_rule)
+        self.assertNotIn("grid-template-columns", solo_rule)
+
+    def test_print_sticky_bars_get_defensive_static_positioning(self):
+        # `display: none` alone has been observed to be insufficient to keep
+        # `position: sticky` elements from re-rendering mid-page during
+        # Chromium's print pagination once an ancestor fragments across a
+        # page break. Add `position: static !important` as defense-in-depth
+        # alongside `display: none` for the two sticky bars.
+        print_block = self.css.split("@media print {", 1)[1]
+        match = re.search(
+            r"html\.travel-page \.travel-bar,\s*\n\s*html\.travel-page \.day-nav\s*\{([^}]*)\}",
+            print_block,
+        )
+        self.assertIsNotNone(
+            match, "expected a combined `.travel-bar, .day-nav` rule under @media print"
+        )
+        rule = match.group(1)
+        self.assertIn("display: none", rule)
+        self.assertIn("position: static !important", rule)
 
     def test_uses_current_homepage_tokens(self):
         for token in (

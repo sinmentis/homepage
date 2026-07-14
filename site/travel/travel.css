@@ -420,6 +420,14 @@ html.travel-page .flight-card,
 html.travel-page .stay-card,
 html.travel-page .booking-card {
   padding: 1.5rem;
+  /* Grid items default to `min-width: auto`, which resolves to their
+     content's min-content size unless the item itself opts out — so a
+     `.flight-card` containing a wide table still blows out its 1fr track
+     (even though `.flight-grid` uses `minmax(0, 1fr)`) unless the card can
+     shrink below that content. This is what lets `.matrix-wrap`'s
+     `overflow-x: auto` actually contain the table instead of stretching
+     the whole page. */
+  min-width: 0;
 }
 
 html.travel-page .flight-card .matrix-wrap {
@@ -587,8 +595,18 @@ html.travel-page .budget-wrap {
 }
 
 @media print {
+  /* `display: none` alone has been observed to be insufficient to keep a
+     `position: sticky` element from re-rendering mid-page once Chromium's
+     print pagination lands a page break inside a fragmented ancestor (see
+     the `.itinerary-day` fix below). Force static positioning as
+     defense-in-depth so the sticky bars cannot participate in pagination at
+     all, regardless of whether they are also hidden. */
   html.travel-page .travel-bar,
-  html.travel-page .day-nav,
+  html.travel-page .day-nav {
+    display: none;
+    position: static !important;
+  }
+
   html.travel-page .travel-footer {
     display: none;
   }
@@ -608,8 +626,15 @@ html.travel-page .budget-wrap {
     break-inside: avoid;
   }
 
+  /* `break-inside: avoid` is not reliably honored by Chromium when the
+     fragmenting element itself is `display: grid` (a documented CSS
+     fragmentation limitation). Switching the print-only `.itinerary-day` to
+     `display: block` was verified to eliminate the split entirely, so each
+     day card prints intact instead of straddling a page boundary. The day's
+     children (heading, timeline, meta, fallback) simply stack in document
+     order, which stays readable without the two-column layout. */
   html.travel-page .itinerary-day {
-    grid-template-columns: 1fr 2fr;
+    display: block;
   }
 
   /* The dark route-map/evidence SVGs bake a near-black background into the
