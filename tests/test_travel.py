@@ -60,14 +60,12 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertNotIn(fragment, self.html)
 
     def test_page_uses_current_css_and_js_versions(self):
-        # travel.css bumps v=5 -> v=6 for the print-mode dark-token fix
-        # (Cloudflare caches by full URL including querystring, so a stale
-        # cached asset would otherwise keep serving the old, print-unsafe
-        # dark-mode CSS indefinitely). travel.js is untouched, so its query
-        # param stays v=4. Content-image coverage returns once route panels
-        # exist (Task 2+); the neutral comparison shell has no <img> tags of
-        # its own yet.
-        self.assertIn('href="/travel/travel.css?v=6"', self.html)
+        # travel.css bumps v=6 -> v=7 for the dense high-density
+        # screen/print rewrite (Cloudflare caches by full URL including
+        # querystring, so a stale cached asset would otherwise keep serving
+        # the old, spacious pre-density CSS indefinitely). travel.js is
+        # untouched, so its query param stays v=4.
+        self.assertIn('href="/travel/travel.css?v=7"', self.html)
         self.assertIn('src="/travel/travel.js?v=4"', self.html)
 
     def test_social_preview_uses_current_cache_buster(self):
@@ -449,13 +447,60 @@ class TravelStyleTests(unittest.TestCase):
             "html.travel-page .status-grid",
             "html.travel-page .flight-grid",
             "html.travel-page .itinerary-day",
-            "html.travel-page .day-nav",
+            "html.travel-page .route-tabs",
             "html.travel-page .budget-wrap",
             "html.travel-page .evidence-grid",
         )
         for selector in required:
             with self.subTest(selector=selector):
                 self.assertIn(selector, self.css)
+
+    def test_dense_comparison_and_route_panels_are_scoped(self):
+        required = (
+            "html.travel-page .comparison-shell",
+            "html.travel-page .route-comparison-wrap",
+            "html.travel-page .route-comparison",
+            "html.travel-page .route-tabs",
+            'html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .route-tabs',
+            "html.travel-page .route-panel",
+            'html.travel-page[data-route-enhanced="true"][data-active-route="comparison"] .comparison-shell',
+            'html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .comparison-shell',
+            'html.travel-page[data-route-enhanced="true"][data-active-route="route-a"] #route-a-panel',
+            'html.travel-page[data-route-enhanced="true"][data-active-route="route-b"] #route-b-panel',
+            'html.travel-page[data-route-enhanced="true"][data-active-route="route-c"] #route-c-panel',
+        )
+        for selector in required:
+            with self.subTest(selector=selector):
+                self.assertIn(selector, self.css)
+
+    def test_layout_uses_dense_spacing_and_wide_comparison_width(self):
+        self.assertIn("--content-width: 90rem", self.css)
+        self.assertIn("--space-1: 0.375rem", self.css)
+        self.assertIn("--space-2: 0.625rem", self.css)
+        self.assertNotIn("min-height: 70vh", self.css)
+        self.assertNotIn("font-size: clamp(3rem", self.css)
+
+    def test_mobile_contains_comparison_and_tabs_without_page_overflow(self):
+        mobile = self.css.split("@media (max-width: 760px) {", 1)[1]
+        self.assertIn(".route-comparison-wrap", mobile)
+        self.assertIn("overflow-x: auto", mobile)
+        self.assertIn(".route-tabs", mobile)
+        self.assertIn("overflow-x: auto", mobile)
+
+    def test_print_selects_active_route_or_comparison(self):
+        print_block = self.css.split("@media print {", 1)[1]
+        for fragment in (
+            '[data-route-enhanced="true"][data-active-route="comparison"] .route-panel',
+            '[data-route-enhanced="true"][data-active-route="comparison"] .shared-appendix',
+            '[data-route-enhanced="true"][data-active-route^="route-"] .comparison-shell',
+            '[data-route-enhanced="true"][data-active-route^="route-"] .shared-appendix',
+            '[data-route-enhanced="true"][data-active-route="route-a"] .route-panel:not(#route-a-panel)',
+            '[data-route-enhanced="true"][data-active-route="route-b"] .route-panel:not(#route-b-panel)',
+            '[data-route-enhanced="true"][data-active-route="route-c"] .route-panel:not(#route-c-panel)',
+            ".route-panel + .route-panel",
+            "break-before: page",
+        ):
+            self.assertIn(fragment, print_block)
 
     def test_mobile_layout_converts_dense_grids_to_single_column(self):
         mobile = self.css.split("@media (max-width: 760px) {", 1)[1]
@@ -494,7 +539,7 @@ class TravelStyleTests(unittest.TestCase):
 
     def test_print_layout_keeps_itinerary_and_hides_sticky_navigation(self):
         print_block = self.css.split("@media print {", 1)[1]
-        self.assertIn(".day-nav", print_block)
+        self.assertIn(".route-tabs", print_block)
         self.assertIn("display: none", print_block)
         self.assertIn(".itinerary-day", print_block)
         self.assertIn("break-inside: avoid", print_block)
@@ -522,38 +567,51 @@ class TravelStyleTests(unittest.TestCase):
         # `position: sticky` elements from re-rendering mid-page during
         # Chromium's print pagination once an ancestor fragments across a
         # page break. Add `position: static !important` as defense-in-depth
-        # alongside `display: none` for the two sticky bars.
+        # alongside `display: none !important` for the sticky/fixed nav
+        # elements: the route-tabs sticky nav replaced the old single-route
+        # `.day-nav`, and is grouped with `.travel-bar` here.
         print_block = self.css.split("@media print {", 1)[1]
         match = re.search(
-            r"html\.travel-page \.travel-bar,\s*\n\s*html\.travel-page \.day-nav\s*\{([^}]*)\}",
+            r"html\.travel-page \.route-tabs,\s*\n\s*"
+            r"html\.travel-page \.travel-bar,\s*\n\s*"
+            r"html\.travel-page \.skip-link,\s*\n\s*"
+            r"html\.travel-page \.travel-footer\s*\{([^}]*)\}",
             print_block,
         )
         self.assertIsNotNone(
-            match, "expected a combined `.travel-bar, .day-nav` rule under @media print"
+            match,
+            "expected a combined `.route-tabs, .travel-bar, .skip-link, "
+            ".travel-footer` rule under @media print",
         )
         rule = match.group(1)
-        self.assertIn("display: none", rule)
+        self.assertIn("display: none !important", rule)
         self.assertIn("position: static !important", rule)
 
     def test_print_hides_skip_link_with_defensive_static_positioning(self):
         # `.skip-link` is `position: fixed`, parked off-canvas (top: -5rem)
-        # until keyboard focus -- architecturally identical to the
-        # `.travel-bar`/`.day-nav` sticky bars above, which needed both
-        # `display: none` *and* `position: static !important` because
-        # `display: none` alone did not stop Chromium from re-rendering a
-        # fixed-position element mid-page once print pagination fragments an
-        # ancestor. Confirmed via a rasterized print PDF: without this rule,
-        # the "跳到正文" skip-link pill appeared on 12 of 13 printed pages.
+        # until keyboard focus -- architecturally identical to the sticky
+        # `.travel-bar`/`.route-tabs` bars it is grouped with here, which
+        # need both `display: none !important` *and* `position: static
+        # !important` because `display: none` alone did not stop Chromium
+        # from re-rendering a fixed-position element mid-page once print
+        # pagination fragments an ancestor. Confirmed via a rasterized print
+        # PDF on the earlier single-rule version: without this rule, the
+        # "跳到正文" skip-link pill appeared on 12 of 13 printed pages.
         print_block = self.css.split("@media print {", 1)[1]
         match = re.search(
-            r"html\.travel-page \.skip-link\s*\{([^}]*)\}",
+            r"html\.travel-page \.route-tabs,\s*\n\s*"
+            r"html\.travel-page \.travel-bar,\s*\n\s*"
+            r"html\.travel-page \.skip-link,\s*\n\s*"
+            r"html\.travel-page \.travel-footer\s*\{([^}]*)\}",
             print_block,
         )
         self.assertIsNotNone(
-            match, "expected a `.skip-link` rule under @media print"
+            match,
+            "expected `.skip-link` grouped with the other hidden nav elements "
+            "under @media print",
         )
         rule = match.group(1)
-        self.assertIn("display: none", rule)
+        self.assertIn("display: none !important", rule)
         self.assertIn("position: static !important", rule)
 
     def test_print_flight_tables_render_without_horizontal_clipping(self):

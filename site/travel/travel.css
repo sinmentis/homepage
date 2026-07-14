@@ -9,8 +9,12 @@ html.travel-page {
   --focus-ring: 0 0 0 3px rgba(83, 102, 62, 0.34);
   --font-interface: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-prose: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --container: 74rem;
   --bar-height: 3.5rem;
+  --content-width: 90rem;
+  --space-1: 0.375rem;
+  --space-2: 0.625rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -63,7 +67,7 @@ html.travel-page {
 
 html.travel-page body {
   position: relative;
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 html.travel-page *,
@@ -109,7 +113,7 @@ html.travel-page .travel-bar {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem max(1rem, calc((100vw - var(--container)) / 2));
+  padding: 0.75rem max(1rem, calc((100vw - var(--content-width)) / 2));
   border-bottom: 1px solid var(--hairline);
   background: var(--page-bg);
   font-family: var(--font-interface);
@@ -146,22 +150,23 @@ html.travel-page .theme-control {
 
 html.travel-page main,
 html.travel-page .travel-footer {
-  width: min(calc(100% - 2rem), var(--container));
+  width: min(calc(100% - 2rem), var(--content-width));
   margin-inline: auto;
 }
 
+html.travel-page main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-block: var(--space-3) var(--space-4);
+}
+
 html.travel-page section {
-  margin-block: 6rem;
+  padding-block: var(--space-3);
 }
 
-html.travel-page .travel-hero {
-  max-width: 58rem;
-  padding-top: 4rem;
-}
-
-html.travel-page .console-label,
-html.travel-page .route-kicker {
-  margin: 0 0 0.75rem;
+html.travel-page .console-label {
+  margin: 0 0 var(--space-2);
   color: var(--signal);
   font-family: var(--font-interface);
   font-size: 0.78rem;
@@ -174,49 +179,27 @@ html.travel-page h2,
 html.travel-page h3 {
   margin-top: 0;
   font-family: var(--font-prose);
-  line-height: 1.12;
+  line-height: 1.15;
 }
 
 html.travel-page h1 {
-  max-width: 13ch;
-  margin-bottom: 1.5rem;
-  font-size: clamp(2.7rem, 7vw, 6.4rem);
-  letter-spacing: -0.055em;
+  max-width: 22ch;
+  margin-bottom: var(--space-3);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
 }
 
 html.travel-page h2 {
-  font-size: clamp(2rem, 4vw, 3.7rem);
-  letter-spacing: -0.04em;
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+  letter-spacing: -0.02em;
 }
 
 html.travel-page h3 {
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: 1.05rem;
 }
 
-html.travel-page .hero-copy,
 html.travel-page .section-heading {
   max-width: 46rem;
-}
-
-html.travel-page .hero-copy {
-  color: var(--page-muted);
-  font-size: clamp(1.08rem, 2vw, 1.35rem);
-}
-
-html.travel-page .constraint-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 2.5rem 0 0;
-  border-block: 1px solid var(--hairline);
-}
-
-html.travel-page .constraint-strip div {
-  padding: 1rem;
-  border-right: 1px solid var(--hairline);
-}
-
-html.travel-page .constraint-strip div:last-child {
-  border-right: 0;
 }
 
 html.travel-page dt {
@@ -229,11 +212,20 @@ html.travel-page dd {
   margin: 0.25rem 0 0;
 }
 
+html.travel-page .status-grid,
+html.travel-page .summary-status,
+html.travel-page .status-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-2) var(--space-3);
+  padding-block: var(--space-2);
+  border-block: 1px solid var(--hairline);
+}
+
 html.travel-page .route-map {
   margin: 0;
-  padding: 1rem;
+  padding: var(--space-3);
   border: 1px solid var(--hairline);
-  border-radius: 12px;
   background: var(--panel-bg);
 }
 
@@ -241,26 +233,19 @@ html.travel-page .route-map img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 html.travel-page .route-map figcaption,
-html.travel-page .source-note,
-html.travel-page .photo-credits {
-  margin-top: 0.8rem;
+html.travel-page .source-note {
+  margin-top: var(--space-2);
   color: var(--page-muted);
   font-size: 0.88rem;
-}
-
-html.travel-page .distance-note {
-  color: var(--page-muted);
-  font-size: 0.9rem;
 }
 
 html.travel-page .evidence-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
 html.travel-page .evidence-grid figure {
@@ -273,11 +258,10 @@ html.travel-page .evidence-grid img {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  border-radius: 12px;
 }
 
 html.travel-page .evidence-grid figcaption {
-  padding-block: 0.8rem 1.1rem;
+  padding-block: var(--space-2) var(--space-3);
   color: var(--page-muted);
 }
 
@@ -317,11 +301,6 @@ html.travel-page[data-color-mode="dark"] img[data-theme-variant="dark"] {
   display: block;
 }
 
-html.travel-page .matrix-wrap {
-  overflow-x: auto;
-  border-block: 1px solid var(--hairline);
-}
-
 html.travel-page table {
   width: 100%;
   border-collapse: collapse;
@@ -330,9 +309,10 @@ html.travel-page table {
 
 html.travel-page th,
 html.travel-page td {
-  padding: 0.9rem;
+  padding: var(--space-2) var(--space-3);
   border-bottom: 1px solid var(--hairline);
   text-align: left;
+  vertical-align: top;
 }
 
 html.travel-page th {
@@ -340,15 +320,11 @@ html.travel-page th {
   font-size: 0.78rem;
 }
 
-html.travel-page .sources-section {
-  max-width: 52rem;
-}
-
 html.travel-page .travel-footer {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding-block: 2rem;
+  padding-block: var(--space-3);
   border-top: 1px solid var(--hairline);
   color: var(--page-muted);
   font-family: var(--font-interface);
@@ -361,10 +337,9 @@ html.travel-page .evidence-grid img.image-failed {
 }
 
 html.travel-page .privacy-warning {
-  margin-top: 1.5rem;
-  padding: 1rem 1.1rem;
+  margin-top: var(--space-3);
+  padding: var(--space-3);
   border: 1px solid var(--signal);
-  border-radius: 12px;
   background: var(--panel-bg);
 }
 
@@ -374,29 +349,137 @@ html.travel-page .privacy-warning strong {
   font-family: var(--font-interface);
 }
 
-html.travel-page .status-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+/* --- Three-route comparison shell, styled as a flat decision table --- */
+
+html.travel-page .comparison-shell {
+  border-bottom: 1px solid var(--hairline);
+}
+
+html.travel-page .route-comparison-wrap,
+html.travel-page .matrix-wrap,
+html.travel-page .budget-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  background: var(--panel-bg);
+}
+
+html.travel-page .route-comparison {
+  min-width: 72rem;
+}
+
+html.travel-page .route-comparison th,
+html.travel-page .route-comparison td {
+  padding: 0.55rem 0.65rem;
+  vertical-align: top;
+}
+
+html.travel-page .route-comparison tbody tr:hover {
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
+}
+
+html.travel-page .route-comparison small {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--page-muted);
+}
+
+html.travel-page .route-floor,
+html.travel-page .navigation-links {
+  margin-top: var(--space-3);
+  color: var(--page-muted);
+  font-size: 0.9rem;
+}
+
+/* --- Compact route tabs and the no-JS/comparison/selected-route state
+   matrix ---
+
+   | State                | Comparison | Tabs    | Route panels    | Shared appendix |
+   |----------------------|------------|---------|-----------------|-----------------|
+   | No JavaScript        | Visible    | Hidden  | All visible     | Visible         |
+   | Enhanced comparison   | Visible    | Hidden  | All hidden      | Hidden          |
+   | Enhanced selected route | Hidden   | Visible | Exactly one     | Hidden          |
+*/
+
+html.travel-page .route-tabs {
+  display: none;
+  position: sticky;
+  top: var(--bar-height);
+  z-index: 8;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--space-2);
+  overflow-x: auto;
   border-block: 1px solid var(--hairline);
+  background: var(--page-bg);
 }
 
-html.travel-page .status-grid article {
-  padding: 1rem;
-  border-right: 1px solid var(--hairline);
+html.travel-page .route-tabs [role="tablist"] {
+  display: flex;
+  min-width: max-content;
 }
 
-html.travel-page .status-grid article:last-child {
-  border-right: 0;
+html.travel-page .route-tabs button,
+html.travel-page .route-tabs a {
+  min-height: 2.75rem;
+  padding: 0.6rem 0.85rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
 }
 
-html.travel-page .status-chip {
-  display: inline-flex;
-  padding: 0.25rem 0.55rem;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  color: var(--signal);
-  font-family: var(--font-interface);
-  font-size: 0.72rem;
+html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .route-tabs {
+  display: flex;
+}
+
+html.travel-page .route-tabs button[aria-selected="true"] {
+  border-bottom-color: var(--signal);
+  font-weight: 700;
+}
+
+html.travel-page .route-panel {
+  display: block;
+}
+
+html.travel-page[data-route-enhanced="true"] .route-panel {
+  display: none;
+}
+
+html.travel-page[data-route-enhanced="true"][data-active-route="comparison"] .comparison-shell {
+  display: block;
+}
+
+html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .comparison-shell,
+html.travel-page[data-route-enhanced="true"] .shared-appendix {
+  display: none;
+}
+
+html.travel-page[data-route-enhanced="true"][data-active-route="route-a"] #route-a-panel,
+html.travel-page[data-route-enhanced="true"][data-active-route="route-b"] #route-b-panel,
+html.travel-page[data-route-enhanced="true"][data-active-route="route-c"] #route-c-panel {
+  display: block;
+}
+
+/* --- Route panel sub-sections: ruled blocks instead of decorative cards --- */
+
+html.travel-page .route-panel > section + section {
+  border-top: 1px solid var(--hairline);
+}
+
+html.travel-page .route-status,
+html.travel-page .route-flight,
+html.travel-page .route-transfer,
+html.travel-page .route-car,
+html.travel-page .route-map,
+html.travel-page .route-itinerary,
+html.travel-page .route-stays,
+html.travel-page .route-food,
+html.travel-page .route-budget,
+html.travel-page .route-booking,
+html.travel-page .route-fallbacks,
+html.travel-page .route-sources {
+  padding-block: var(--space-4);
 }
 
 html.travel-page .flight-grid,
@@ -404,7 +487,7 @@ html.travel-page .stay-grid,
 html.travel-page .booking-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
 html.travel-page .flight-card,
@@ -412,14 +495,13 @@ html.travel-page .stay-card,
 html.travel-page .booking-card,
 html.travel-page .itinerary-day {
   border: 1px solid var(--hairline);
-  border-radius: 12px;
   background: var(--panel-bg);
 }
 
 html.travel-page .flight-card,
 html.travel-page .stay-card,
 html.travel-page .booking-card {
-  padding: 1.5rem;
+  padding: var(--space-3);
   /* Grid items default to `min-width: auto`, which resolves to their
      content's min-content size unless the item itself opts out — so a
      `.flight-card` containing a wide table still blows out its 1fr track
@@ -431,93 +513,24 @@ html.travel-page .booking-card {
 }
 
 html.travel-page .flight-card .matrix-wrap {
-  margin-inline: -1.5rem;
+  margin-top: var(--space-2);
 }
 
-html.travel-page .trust-note {
-  color: var(--page-muted);
-  font-size: 0.9rem;
-}
-
-html.travel-page .day-nav {
-  position: sticky;
-  top: calc(var(--bar-height) + 0.75rem);
-  z-index: 8;
-  display: flex;
-  width: max-content;
-  max-width: 100%;
-  gap: 0.4rem;
-  margin-block: 1.5rem;
-  padding: 0.45rem;
-  overflow-x: auto;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  background: var(--page-bg);
-}
-
-html.travel-page .day-nav a {
-  min-width: 2.5rem;
-  padding: 0.35rem 0.6rem;
-  border-radius: 999px;
-  font-family: var(--font-interface);
-  text-align: center;
-  text-decoration: none;
-}
-
-html.travel-page .day-nav a:hover {
-  background: var(--signal);
-  color: var(--page-bg);
-}
+/* --- Each day as a ruled block, not a decorative card --- */
 
 html.travel-page .itinerary-day {
   display: grid;
   grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.5fr);
-  gap: 2rem;
-  padding: 1.5rem;
-  scroll-margin-top: calc(var(--bar-height) + 5rem);
+  gap: var(--space-3);
+  padding: var(--space-3);
+  scroll-margin-top: calc(var(--bar-height) + var(--space-4));
 }
 
 html.travel-page .itinerary-day + .itinerary-day {
-  margin-top: 1rem;
-}
-
-html.travel-page .day-timeline {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-html.travel-page .day-timeline li + li {
-  margin-top: 0.45rem;
-}
-
-html.travel-page .day-meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-html.travel-page .day-meta div,
-html.travel-page .day-fallback {
-  padding: 0.75rem;
-  border-top: 1px solid var(--hairline);
-}
-
-html.travel-page .day-fallback {
-  grid-column: 1 / -1;
-  color: var(--page-muted);
-}
-
-html.travel-page .budget-wrap {
-  overflow-x: auto;
-  border-block: 1px solid var(--hairline);
+  margin-top: var(--space-2);
 }
 
 @media (max-width: 900px) {
-  html.travel-page .status-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   html.travel-page .itinerary-day {
     grid-template-columns: 1fr;
   }
@@ -532,43 +545,31 @@ html.travel-page .budget-wrap {
     display: none;
   }
 
-  html.travel-page section {
-    margin-block: 4rem;
-  }
-
-  html.travel-page .constraint-strip,
   html.travel-page .evidence-grid {
     grid-template-columns: 1fr;
-  }
-
-  html.travel-page .constraint-strip div {
-    border-right: 0;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  html.travel-page .constraint-strip div:last-child {
-    border-bottom: 0;
   }
 
   html.travel-page .travel-footer {
     flex-direction: column;
   }
 
+  html.travel-page .route-comparison-wrap,
+  html.travel-page .route-tabs,
+  html.travel-page .matrix-wrap,
+  html.travel-page .budget-wrap {
+    overflow-x: auto;
+  }
+
+  html.travel-page .route-tabs {
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+  }
+
   html.travel-page .status-grid,
   html.travel-page .flight-grid,
   html.travel-page .stay-grid,
-  html.travel-page .booking-grid,
-  html.travel-page .day-meta {
+  html.travel-page .booking-grid {
     grid-template-columns: 1fr;
-  }
-
-  html.travel-page .status-grid article {
-    border-right: 0;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  html.travel-page .status-grid article:last-child {
-    border-bottom: 0;
   }
 
   html.travel-page .itinerary-day {
@@ -596,28 +597,19 @@ html.travel-page .budget-wrap {
 
 @media print {
   /* `display: none` alone has been observed to be insufficient to keep a
-     `position: sticky` element from re-rendering mid-page once Chromium's
-     print pagination lands a page break inside a fragmented ancestor (see
-     the `.itinerary-day` fix below). Force static positioning as
-     defense-in-depth so the sticky bars cannot participate in pagination at
-     all, regardless of whether they are also hidden. */
+     `position: sticky`/`position: fixed` element from re-rendering mid-page
+     once Chromium's print pagination lands a page break inside a
+     fragmented ancestor (see the `.itinerary-day` fix below). Force static
+     positioning as defense-in-depth so the sticky/fixed nav elements
+     cannot participate in pagination at all, regardless of whether they
+     are also hidden. `.route-tabs` is the sticky per-route nav; `.skip-link`
+     is the same off-canvas-until-focus pattern as the sticky bars. */
+  html.travel-page .route-tabs,
   html.travel-page .travel-bar,
-  html.travel-page .day-nav {
-    display: none;
-    position: static !important;
-  }
-
-  /* `.skip-link` is the same `position: fixed`, off-canvas-until-focus
-     pattern as the sticky bars above, and needs the same defense-in-depth:
-     `display: none` alone left it re-rendering as a visible pill on nearly
-     every printed page. */
-  html.travel-page .skip-link {
-    display: none;
-    position: static !important;
-  }
-
+  html.travel-page .skip-link,
   html.travel-page .travel-footer {
-    display: none;
+    display: none !important;
+    position: static !important;
   }
 
   /* Printing must stay ink-safe regardless of the on-screen theme.
@@ -653,11 +645,6 @@ html.travel-page .budget-wrap {
     color: #000;
   }
 
-  html.travel-page section {
-    margin-block: 2rem;
-  }
-
-  html.travel-page .itinerary-day,
   html.travel-page .flight-card,
   html.travel-page .stay-card {
     break-inside: avoid;
@@ -665,13 +652,14 @@ html.travel-page .budget-wrap {
 
   /* `break-inside: avoid` is not reliably honored by Chromium when the
      fragmenting element itself is `display: grid` (a documented CSS
-     fragmentation limitation). Switching the print-only `.itinerary-day` to
-     `display: block` was verified to eliminate the split entirely, so each
-     day card prints intact instead of straddling a page boundary. The day's
-     children (heading, timeline, meta, fallback) simply stack in document
-     order, which stays readable without the two-column layout. */
+     fragmentation limitation). The print-only `.itinerary-day` rule must
+     drop the grid layout in favor of `display: block` so each day card
+     can no longer split across a page boundary; the day's children
+     (heading, facts) simply stack in document order, which stays
+     readable without the two-column layout. */
   html.travel-page .itinerary-day {
     display: block;
+    break-inside: avoid;
   }
 
   /* `.matrix-wrap` keeps `overflow-x: auto` on screen so a wide flight
@@ -708,5 +696,30 @@ html.travel-page .budget-wrap {
 
   html.travel-page img[data-theme-variant="light"] {
     display: block !important;
+  }
+
+  /* Three-state print behavior, matching the on-screen state matrix:
+     no-JS prints every route back to back (each gets its own page); an
+     enhanced comparison print shows only the comparison table; an
+     enhanced selected-route print shows only that route's full
+     itinerary. `.shared-appendix` only ever prints in the no-JS state. */
+  html.travel-page[data-route-enhanced="true"][data-active-route="comparison"] .route-panel {
+    display: none !important;
+  }
+
+  html.travel-page[data-route-enhanced="true"][data-active-route="comparison"] .shared-appendix,
+  html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .comparison-shell,
+  html.travel-page[data-route-enhanced="true"][data-active-route^="route-"] .shared-appendix {
+    display: none !important;
+  }
+
+  html.travel-page[data-route-enhanced="true"][data-active-route="route-a"] .route-panel:not(#route-a-panel),
+  html.travel-page[data-route-enhanced="true"][data-active-route="route-b"] .route-panel:not(#route-b-panel),
+  html.travel-page[data-route-enhanced="true"][data-active-route="route-c"] .route-panel:not(#route-c-panel) {
+    display: none !important;
+  }
+
+  html.travel-page:not([data-route-enhanced="true"]) .route-panel + .route-panel {
+    break-before: page;
   }
 }
