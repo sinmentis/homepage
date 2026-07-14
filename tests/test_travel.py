@@ -248,6 +248,70 @@ class TravelPageContractTests(unittest.TestCase):
         self.assertNotIn("骑马上山", panel)
         self.assertNotIn("延长至仙女湖", panel)
 
+    def test_route_c_is_complete_and_canonical(self):
+        self.assert_complete_route("route-c")
+        panel = self.route_panel("route-c")
+        for fragment in (
+            "C848", "14:08 / 14:17", "16:30 以后",
+            "CZ6853", "优先候选", "技术经停待确认",
+            "14:00 方案降级为备选", "约 4–4.5 小时可用时间",
+            "不抵达仙女湖", "湿滑溪流石面",
+            "¥24,862–40,772", "约 ¥1,000–2,300",
+            "route-c.svg", "route-c-dark.svg",
+        ):
+            self.assertIn(fragment, panel)
+        self.assertRegex(
+            panel,
+            r"CZ6853[\s\S]{0,500}下单前复核",
+            "CZ6853 must carry its own nearby verification warning",
+        )
+
+    def test_all_three_static_panels_are_independent(self):
+        for route_id in ROUTES:
+            self.assert_complete_route(route_id)
+        ids = re.findall(r'\bid="([^"]+)"', self.html)
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_all_operational_tables_have_scoped_column_headers(self):
+        tables = re.findall(r"<table\b[^>]*>(.*?)</table>", self.html, flags=re.DOTALL)
+        self.assertGreaterEqual(len(tables), 10)
+        for table in tables:
+            with self.subTest(table=table[:80]):
+                self.assertIn('scope="col"', table)
+
+    def test_all_flight_tables_have_local_scroll_wrappers(self):
+        flight_sections = re.findall(
+            r'<section\b[^>]*class="route-flight[^"]*"[^>]*>(.*?)</section>',
+            self.html,
+            flags=re.DOTALL,
+        )
+        self.assertEqual(len(flight_sections), 3)
+        for section in flight_sections:
+            self.assertRegex(section, r'<div class="matrix-wrap">\s*<table\b')
+
+    def test_all_content_images_are_local_and_theme_pairs_are_complete(self):
+        image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
+        self.assertTrue(image_sources)
+        for source in image_sources:
+            self.assertTrue(source.startswith("/travel/assets/"), source)
+        for route_id in ROUTES:
+            panel = self.route_panel(route_id)
+            self.assertIn(f'src="/travel/assets/{route_id}.svg"', panel)
+            self.assertIn(f'src="/travel/assets/{route_id}-dark.svg"', panel)
+
+    def test_shared_evidence_keeps_theme_variants_and_eager_loading(self):
+        appendix = re.search(
+            r'<aside class="shared-appendix"[^>]*>(.*?)</aside>',
+            self.html,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(appendix)
+        block = appendix.group(1)
+        self.assertIn("daxigou-evidence.svg", block)
+        self.assertIn("daxigou-evidence-dark.svg", block)
+        for image in re.findall(r"<img\b[^>]*>", block):
+            self.assertNotIn('loading="lazy"', image)
+
 
 class TravelAssetTests(unittest.TestCase):
     def test_route_maps_are_static_svg_files_with_distance_labels(self):
