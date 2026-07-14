@@ -190,6 +190,11 @@ class TravelPageContractTests(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertTrue(source.startswith("/travel/assets/"))
 
+    def test_social_preview_uses_current_cache_buster(self):
+        preview_url = "https://shunlyu.com/travel/assets/og-travel.png?v=3"
+        self.assertIn(f'<meta property="og:image" content="{preview_url}">', self.html)
+        self.assertIn(f'<meta name="twitter:image" content="{preview_url}">', self.html)
+
     def test_external_sources_and_navigation_links_are_safe(self):
         self.assertIn('href="https://www.amap.com/"', self.html)
         self.assertIn('href="https://map.baidu.com/"', self.html)
