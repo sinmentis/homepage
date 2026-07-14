@@ -138,6 +138,102 @@ class TravelPageContractTests(unittest.TestCase):
         ):
             self.assertNotIn(fragment, self.html)
 
+    def route_panel(self, route_id):
+        match = re.search(
+            rf'<section\s+class="route-panel"\s+id="{route_id}-panel"\s+'
+            rf'data-route-panel="{route_id}"\s+role="tabpanel"\s+'
+            rf'aria-labelledby="{route_id}-tab">(.*?)</section>\s*<!-- /{route_id} -->',
+            self.html,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(match, route_id)
+        return match.group(1)
+
+    def route_section(self, route_id, section_name):
+        panel = self.route_panel(route_id)
+        match = re.search(
+            rf'<section\s+class="route-{section_name}"\s+'
+            rf'aria-labelledby="{route_id}-{section_name}-title">(.*?)'
+            rf'</section>\s*<!-- /{route_id}-{section_name} -->',
+            panel,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(match, f"{route_id} {section_name}")
+        block = match.group(1)
+        self.assertIn(f'id="{route_id}-{section_name}-title"', block)
+        self.assertTrue(re.sub(r"<[^>]+>", "", block).strip())
+        return block
+
+    def assert_complete_route(self, route_id):
+        panel = self.route_panel(route_id)
+        section_names = (
+            "status", "flight", "transfer", "car", "map", "itinerary",
+            "stays", "food", "budget", "booking", "fallbacks", "sources",
+        )
+        sections = {
+            section_name: self.route_section(route_id, section_name)
+            for section_name in section_names
+        }
+        positions = [
+            panel.index(f'class="route-{section_name}"')
+            for section_name in section_names
+        ]
+        self.assertEqual(positions, sorted(positions), f"{route_id} section order")
+        section_fields = {
+            "status": ("研究更新时间：2026-07-14", "候选", "尚未预订"),
+            "flight": ("去程", "返程", "价格待确认", "下单前复核"),
+            "transfer": ("接驳", "时间", "备选"),
+            "car": ("取车", "还车", "驾驶者", "保险"),
+            "map": ("距离", f"{route_id}.svg", f"{route_id}-dark.svg"),
+            "stays": ("两间房", "主选", "备选", "可取消"),
+            "food": ("早餐", "午餐", "晚餐", "清淡"),
+            "budget": ("地面", "交通", "总计"),
+            "booking": ("预订截止", "取消"),
+            "fallbacks": ("天气", "路况", "库存", "疲劳"),
+            "sources": ("href=\"https://", "班表已核对", "候选", "下单前复核"),
+        }
+        for section_name, required_fragments in section_fields.items():
+            for fragment in required_fragments:
+                self.assertIn(fragment, sections[section_name])
+        for day in range(1, 8):
+            article = re.search(
+                rf'<article\s+class="itinerary-day"\s+id="{route_id}-day-{day}"\s+'
+                rf'data-day="{day}">(.*?)</article>',
+                sections["itinerary"],
+                flags=re.DOTALL,
+            )
+            self.assertIsNotNone(article, f"{route_id} day {day}")
+            for label in ("时间", "餐食", "驾驶", "体力", "备选"):
+                self.assertIn(label, article.group(1))
+        dates, budget = ROUTES[route_id]
+        for fragment in (
+            dates,
+            budget,
+            "可取消",
+            "预订截止",
+            "下单前复核",
+        ):
+            self.assertIn(fragment, panel)
+        for forbidden_reference in ("同 A", "同 B", "同 C", "见上方", "共用前述"):
+            self.assertNotIn(forbidden_reference, panel)
+
+    def test_route_a_is_complete_and_canonical(self):
+        self.assert_complete_route("route-a")
+        panel = self.route_panel("route-a")
+        for fragment in (
+            "GS7607", "周二、周四、周六",
+            "6 小时 14 分计划间隔", "约 5–5.5 小时可用时间",
+            "西安住宿一晚", "约 210–230 公里 / 3–3.5 小时",
+            "每日西安—伊宁航线走廊", "具体航班号与时刻下单前复核",
+            "¥26,300–46,900", "route-a.svg", "route-a-dark.svg",
+        ):
+            self.assertIn(fragment, panel)
+        self.assertNotRegex(
+            panel,
+            r"3U50(?:39|40)[\s\S]{0,300}班表已核对",
+            "unconfirmed 3U times must not be labeled as verified",
+        )
+
 
 class TravelAssetTests(unittest.TestCase):
     def test_route_maps_are_static_svg_files_with_distance_labels(self):
