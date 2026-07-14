@@ -320,7 +320,8 @@ class TravelAssetTests(unittest.TestCase):
             "route-a-dark.svg": ("79 km", "210–230 km"),
             "route-b.svg": ("79 km", "300–360 km", "220–290 km"),
             "route-b-dark.svg": ("79 km", "300–360 km", "220–290 km"),
-            "route-c.svg": ("286 km", "79 km"),
+            "route-c.svg": ("分段行驶", "79 km"),
+            "route-c-dark.svg": ("分段行驶", "79 km"),
         }
         for name, labels in expected.items():
             with self.subTest(name=name):
@@ -356,6 +357,22 @@ class TravelAssetTests(unittest.TestCase):
                 self.assertNotIn(
                     "286 km", svg,
                     f"{name} must not contain the stale bare 286 km distance label",
+                )
+        # Route C's Yining<->Bee Town (伊宁↔唐布拉) leg is split across two
+        # separate transfer days (Day 2 outbound, Day 6 return) rather than
+        # driven as a single 286 km day -- the panel's own #route-comparison
+        # row and #route-c-map figcaption both state "无单一长途驾驶日" /
+        # "全程无单一长途驾驶日". The public map label must say so too
+        # ("分段行驶"), not restate the bare 286 km figure that would
+        # contradict that claim. The internal OSRM segment-validation value
+        # (286) is a separate concern and stays unchanged in the generator.
+        for name in ("route-c.svg", "route-c-dark.svg"):
+            with self.subTest(name=name):
+                svg = (ASSETS / name).read_text(encoding="utf-8")
+                self.assertNotIn(
+                    "286 km", svg,
+                    f"{name} must not contain the bare 286 km distance label "
+                    "that contradicts the panel's 无单一长途驾驶日 claim",
                 )
 
     def test_social_preview_is_png_with_expected_dimensions(self):

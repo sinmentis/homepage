@@ -112,7 +112,17 @@ ROUTES = {
     },
     "route-c.svg": {
         "title": "C / 唐布拉深住型",
-        "distance_note": "伊宁↔唐布拉 286 km · 大西沟条件支线 79 km",
+        # The Yining<->Bee Town (伊宁↔唐布拉) movement is never driven as a
+        # single 286 km day on this route: it is split across Day 2
+        # (outbound) and Day 6 (return), matching #route-comparison's own
+        # "无单一长途驾驶日" row and the panel's #route-c-map figcaption
+        # ("全程无单一长途驾驶日"). The public label must say so ("分段行驶"),
+        # not restate the bare 286 km figure, or the generated map would
+        # keep contradicting the panel/comparison-table claim. The segment
+        # validation value below (286) intentionally stays as the internal
+        # OSRM-checked baseline for the fetched geometry -- only the public
+        # label changes.
+        "distance_note": "伊宁↔唐布拉 分段行驶 · 大西沟条件支线 79 km",
         "segments": (
             ("yining", "tangbula", False, 286),
             ("yining", "daxigou", True, 79),

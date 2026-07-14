@@ -324,5 +324,32 @@ class TravelRouteBDistanceNoteTests(unittest.TestCase):
         self.assertEqual(segments_by_leg[("tangbula", "yining")], 286)
 
 
+class TravelRouteCDistanceNoteTests(unittest.TestCase):
+    def test_route_c_distance_note_is_canonical_not_stale(self):
+        # Route C's Yining<->Bee Town (伊宁↔唐布拉) leg is not driven as a
+        # single 286 km day: the movement is split across Day 2 (outbound)
+        # and Day 6 (return), matching the panel's own #route-comparison row
+        # ("无单一长途驾驶日") and the #route-c-map figcaption
+        # ("全程无单一长途驾驶日"). The generator's public distance_note for
+        # route-c.svg must say so ("分段行驶"), not restate the bare,
+        # single-day-implying 286 km figure, or regenerating the asset would
+        # reintroduce the reviewed map/panel contradiction. The internal
+        # segment validation value (286 km, checked against fetched OSRM
+        # geometry) is a separate concern and stays unchanged.
+        distance_note = ROUTES["route-c.svg"]["distance_note"]
+        self.assertIn("分段行驶", distance_note)
+        self.assertIn("79 km", distance_note)
+        self.assertNotIn("286 km", distance_note)
+
+        segments_by_leg = {
+            (start, end): expected_km
+            for start, end, _optional, expected_km in ROUTES["route-c.svg"]["segments"]
+        }
+        # The internal OSRM validation values must remain the approved
+        # baseline figures (286, 79) -- only the public label changes.
+        self.assertEqual(segments_by_leg[("yining", "tangbula")], 286)
+        self.assertEqual(segments_by_leg[("yining", "daxigou")], 79)
+
+
 if __name__ == "__main__":
     unittest.main()
