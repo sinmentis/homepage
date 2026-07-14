@@ -69,7 +69,7 @@ class TravelPageContractTests(unittest.TestCase):
         self.assertIn('src="/travel/travel.js?v=5"', self.html)
 
     def test_social_preview_uses_current_cache_buster(self):
-        preview_url = "https://shunlyu.com/travel/assets/og-travel.png?v=3"
+        preview_url = "https://shunlyu.com/travel/assets/og-travel.png?v=4"
         self.assertIn(f'<meta property="og:image" content="{preview_url}">', self.html)
         self.assertIn(f'<meta name="twitter:image" content="{preview_url}">', self.html)
 
@@ -380,6 +380,17 @@ class TravelAssetTests(unittest.TestCase):
         self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
         width, height = struct.unpack(">II", data[16:24])
         self.assertEqual((width, height), (1200, 630))
+
+    def test_social_preview_describes_three_complete_plans(self):
+        svg = (ASSETS / "og-travel.svg").read_text(encoding="utf-8")
+        for fragment in (
+            "NORTHERN XINJIANG",
+            "3 COMPLETE PLANS",
+            "A BASE · B CONTINUOUS · C DEEP STAY",
+            "NOT BOOKED",
+        ):
+            self.assertIn(fragment, svg)
+        self.assertNotIn("飞机、住宿、每天怎么走", svg)
 
     def test_destination_images_are_local_webp_files(self):
         for name in ("tangbula.webp", "yining-ili-river.webp", "kuerdening.webp"):

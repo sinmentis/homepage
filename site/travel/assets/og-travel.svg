@@ -4,10 +4,10 @@
     <path d="M0 90H1200M0 180H1200M0 270H1200M0 360H1200M0 450H1200M0 540H1200"/>
     <path d="M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630"/>
   </g>
-  <text x="72" y="96" font-family="IBM Plex Mono, monospace" font-size="28" fill="#87927f">SL / TRAVEL / CANDIDATE ITINERARY</text>
-  <text x="72" y="220" font-family="IBM Plex Sans, sans-serif" font-size="68" font-weight="600" fill="#e7ecdf">北疆伊犁 7 天</text>
-  <text x="72" y="300" font-family="IBM Plex Sans, sans-serif" font-size="54" font-weight="500" fill="#e7ecdf">飞机、住宿、每天怎么走。</text>
-  <text x="72" y="370" font-family="IBM Plex Mono, monospace" font-size="25" fill="#87927f">2026.09.11–09.17 · NOT BOOKED</text>
+  <text x="72" y="96" font-family="IBM Plex Mono, monospace" font-size="28" fill="#87927f">NORTHERN XINJIANG</text>
+  <text x="72" y="220" font-family="IBM Plex Sans, sans-serif" font-size="68" font-weight="600" fill="#e7ecdf">3 COMPLETE PLANS</text>
+  <text x="72" y="300" font-family="IBM Plex Sans, sans-serif" font-size="54" font-weight="500" fill="#e7ecdf">A BASE · B CONTINUOUS · C DEEP STAY</text>
+  <text x="72" y="370" font-family="IBM Plex Mono, monospace" font-size="25" fill="#87927f">NOT BOOKED</text>
   <path d="M96 480C280 350 380 520 560 385S850 315 1090 440" fill="none" stroke="#b7cb91" stroke-width="10" stroke-linecap="round"/>
   <circle cx="96" cy="480" r="12" fill="#b7cb91"/>
   <circle cx="560" cy="385" r="12" fill="#b7cb91"/>
