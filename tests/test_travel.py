@@ -177,14 +177,12 @@ class TravelPageContractTests(unittest.TestCase):
                 self.assertIn(place, self.html)
 
     def test_page_uses_local_css_js_and_local_content_images(self):
-        # travel.css bumps v=4 -> v=5 and travel.js bumps v=3 -> v=4: this
-        # task's markup change (route-decision panels replaced by the dated
-        # itinerary) needs matching style/script updates in Tasks 3 and 4,
-        # so both cache-busting query params move together even though the
-        # CSS/JS file contents are untouched here (Cloudflare caches by full
-        # URL including querystring, so a stale cached asset would otherwise
-        # keep serving the old route-decision styling/behavior).
-        self.assertIn('href="/travel/travel.css?v=5"', self.html)
+        # travel.css bumps v=5 -> v=6 for the print-mode dark-token fix
+        # (Cloudflare caches by full URL including querystring, so a stale
+        # cached asset would otherwise keep serving the old, print-unsafe
+        # dark-mode CSS indefinitely). travel.js is untouched, so its query
+        # param stays v=4.
+        self.assertIn('href="/travel/travel.css?v=6"', self.html)
         self.assertIn('src="/travel/travel.js?v=4"', self.html)
         image_sources = re.findall(r'<img\b[^>]*\bsrc="([^"]+)"', self.html)
         self.assertTrue(image_sources)
