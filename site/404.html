@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-color-mode="auto" class="home-page">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — Page not found · Shun Lyu</title>
+  <meta name="description" content="The page you requested does not exist.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#E9E5D9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121610" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23121610'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' fill='none' stroke='%23b7cb91' stroke-width='2.5' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/home.css?v=6">
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          root.setAttribute('data-color-mode', savedTheme);
+        }
+      } catch (error) {
+        root.setAttribute('data-theme-storage', 'unavailable');
+      }
+    })();
+  </script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="system-bar">
+    <div class="system-bar__inner">
+      <a class="system-id" href="/" aria-label="Shun Lyu, home">
+        <span class="system-id__prompt" aria-hidden="true">&gt;</span>
+        <span>SL / HOME</span>
+      </a>
+
+      <nav class="system-nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/resume/">Résumé</a>
+        <a href="https://github.com/sinmentis" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/shunlyu" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="theme-control" type="button" data-theme-control>
+          theme:<span data-theme-label>auto</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="intro-shell" aria-labelledby="notfound-title">
+      <div class="console-grid" aria-hidden="true"></div>
+
+      <div class="intro-main">
+        <p class="console-label boot-item" style="--boot-delay:80ms">Error / 404</p>
+        <h1 id="notfound-title" class="intro-title boot-item" style="--boot-delay:180ms">
+          <span aria-hidden="true">&gt;</span> 404<span class="cursor-mark" aria-hidden="true">_</span>
+        </h1>
+        <p class="intro-copy boot-item" style="--boot-delay:320ms">
+          No route matches this address. The page you requested does not exist, or has moved.
+        </p>
+
+        <div class="command-links boot-item" style="--boot-delay:460ms">
+          <a href="/"><span aria-hidden="true">&gt;</span> return /home</a>
+          <a href="/resume/"><span aria-hidden="true">&gt;</span> open /resume</a>
+        </div>
+      </div>
+
+      <aside class="instrument-rail intro-rail" aria-label="Status">
+        <p class="rail-title">Status</p>
+        <p>Requested path not found on this host.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="system-footer">
+    <div>
+      <span>© <span id="year">2026</span> Shun Lyu</span>
+    </div>
+    <a href="/">return /home</a>
+  </footer>
+
+  <script src="/home.js?v=2" defer></script>
+</body>
+</html>
